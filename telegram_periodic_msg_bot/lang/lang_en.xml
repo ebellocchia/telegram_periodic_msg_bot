@@ -1,0 +1,129 @@
+<?xml version="1.0"?>
+<translation>
+    <!-- Help command message -->
+    <sentence id="HELP_CMD">**HELP**
+Hi {name},
+welcome to the Telegram Price Bot.
+Here is the list of supported commands.
+
+/help : show this message
+/alive : show if bot is active
+/set_test_mode __true/false__ : enable/disable test mode
+/is_test_mode : show if test mode is enabled
+/message_task_start __PERIOD_HOURS MSG_ID MSG__ : start a message task in the current chat (the message shall be in a new line)
+/message_task_stop __MSG_ID__ : stop the specified message task in the current chat
+/message_task_stop_all : stop all message tasks in the current chat
+/message_task_pause __MSG_ID__ : pause the specified message task in the current chat
+/message_task_resume __MSG_ID__ : resume the specified message task in the current chat
+/message_task_get __MSG_ID__ : show the message set for the specified message task in the current chat
+/message_task_set __MSG_ID MSG__ : set the message of the specified message task in the current chat (the message shall be in a new line)
+/message_task_delete_last_msg __MSG_ID true/false__ : enable/disable the deletion of last messages for the specified message task in the current chat
+/message_task_info : show the list of active message tasks in the current chat</sentence>
+    <!-- Alive command message -->
+    <sentence id="ALIVE_CMD">**STATUS**
+✅ The bot is alive.</sentence>
+
+    <!-- Set test mode command enabled message -->
+    <sentence id="SET_TEST_MODE_EN_CMD">**TEST MODE**
+✅ Test mode enabled.</sentence>
+    <!-- Set test mode command disabled message -->
+    <sentence id="SET_TEST_MODE_DIS_CMD">**TEST MODE**
+✅ Test mode disabled.</sentence>
+
+    <!-- Is test mode command enabled message -->
+    <sentence id="IS_TEST_MODE_EN_CMD">**TEST MODE**
+Test mode is currently enabled.</sentence>
+    <!-- Is test mode command disabled message -->
+    <sentence id="IS_TEST_MODE_DIS_CMD">**TEST MODE**
+Test mode is currently disabled.</sentence>
+
+    <!-- Start message task ok message -->
+    <sentence id="MESSAGE_TASK_START_OK_CMD">**TASK CONTROL**
+✅ Message task successfully started.
+
+Parameters:
+- Period: __{period}h__
+- Message ID: __{msg_id}__</sentence>
+
+    <!-- Stop message task ok message -->
+    <sentence id="MESSAGE_TASK_STOP_OK_CMD">**TASK CONTROL**
+✅ Message task __{msg_id}__ successfully stopped.</sentence>
+
+    <!-- Stop all message tasks message -->
+    <sentence id="MESSAGE_TASK_STOP_ALL_CMD">**TASK CONTROL**
+✅ All message tasks successfully stopped.</sentence>
+
+    <!-- Pause message task ok message -->
+    <sentence id="MESSAGE_TASK_PAUSE_OK_CMD">**TASK CONTROL**
+✅ Message task __{msg_id}__ successfully paused.</sentence>
+
+    <!-- Resume message task ok message -->
+    <sentence id="MESSAGE_TASK_RESUME_OK_CMD">**TASK CONTROL**
+✅ Message task __{msg_id}__ successfully resumed.</sentence>
+
+    <!-- Get message task message (ok) -->
+    <sentence id="MESSAGE_TASK_GET_OK_CMD">**TASK CONTROL**
+Message set for task __{msg_id}__:
+
+{msg}</sentence>
+    <!-- Get message task message (no) -->
+    <sentence id="MESSAGE_TASK_GET_NO_CMD">**TASK CONTROL**
+No message set for task __{msg_id}__.</sentence>
+
+    <!-- Set message task message (ok) -->
+    <sentence id="MESSAGE_TASK_SET_OK_CMD">**TASK CONTROL**
+✅ Message successfully set for task __{msg_id}__.</sentence>
+
+    <!-- Delete last message ok message -->
+    <sentence id="MESSAGE_TASK_DELETE_LAST_MSG_OK_CMD">**TASK CONTROL**
+✅ Message task __{msg_id}__ delete last message set to: {flag}.</sentence>
+
+    <!-- Message task info message -->
+    <sentence id="MESSAGE_TASK_INFO_CMD">**TASKS INFO**
+Number of active tasks in this chat: **{tasks_num}**
+Tasks list:
+{tasks_list}</sentence>
+    <!-- Message task info no task message -->
+    <sentence id="MESSAGE_TASK_INFO_NO_TASK_CMD">**TASKS INFO**
+No task is active in this chat.</sentence>
+
+    <!-- Bot welcome message -->
+    <sentence id="BOT_WELCOME_MSG">Hi!
+Thanks for choosing the **Telegram Periodic Message Bot**.
+Use __/help__ to see the list of supported commands.
+Do not forget to **make me administrator of the group** or I won't work properly.</sentence>
+
+    <!-- Generic error message -->
+    <sentence id="GENERIC_ERR_MSG">**ERROR**
+❌ An error occurred while executing command.</sentence>
+    <!-- Authorized-only users message -->
+    <sentence id="AUTH_ONLY_ERR_MSG">**ERROR**
+❌ You are not authorized to use the command.</sentence>
+    <!-- Group-only error message -->
+    <sentence id="GROUP_ONLY_ERR_MSG">**ERROR**
+❌ This command can be executed only in the chat group.</sentence>
+    <!-- Parameter error message -->
+    <sentence id="PARAM_ERR_MSG">**ERROR**
+❌ Invalid parameters.</sentence>
+    <!-- Message error message -->
+    <sentence id="MESSAGE_ERR_MSG">**ERROR**
+❌ Invalid message.</sentence>
+    <!-- Task already existent error message -->
+    <sentence id="TASK_EXISTENT_ERR_MSG">**ERROR**
+❌ Message task __{msg_id}__ is already active in this chat. Stop the task to start a new one with the same ID again.</sentence>
+    <!-- Task not existent error message -->
+    <sentence id="TASK_NOT_EXISTENT_ERR_MSG">**ERROR**
+❌ Message task __{msg_id}__ is not active in this chat.</sentence>
+    <!-- Task period error message -->
+    <sentence id="TASK_PERIOD_ERR_MSG">**ERROR**
+❌ Period shall be between 1 and 24.</sentence>
+    <!-- Maximum tasks error message -->
+    <sentence id="MAX_TASK_ERR_MSG">**ERROR**
+❌ Maximum number of tasks reached. Stop some tasks to start new ones.</sentence>
+    <!-- Single task information message -->
+    <sentence id="SINGLE_TASK_INFO_MSG">- ID: __{msg_id}__, period: __{period}h__, state: __{state}__</sentence>
+    <!-- Task running message -->
+    <sentence id="TASK_RUNNING_MSG">runnnig</sentence>
+    <!-- Task paused message -->
+    <sentence id="TASK_PAUSED_MSG">paused</sentence>
+</translation>

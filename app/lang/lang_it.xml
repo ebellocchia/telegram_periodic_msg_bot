@@ -1,0 +1,128 @@
+<?xml version="1.0"?>
+<translation>
+    <!-- Help command message -->
+    <sentence id="HELP_CMD">**MENU DI AIUTO**
+Ciao {name},
+benvenuto nel Telegram Price Bot.
+Qui trovi la lista dei comandi supportati.
+
+/start : mostra questo messaggio
+/help : mostra questo messaggio
+/alive : mostra se il bot è attivo
+/set_test_mode __true/false__ : attiva/disattiva la modalità di test
+/is_test_mode : mostra se la modalità di test è attiva
+/message_task_start __PERIOD_HOURS MSG_ID MSG__ : avvia un task di avviso nella chat corrente (il messaggio deve essere su una linea a capo)
+/message_task_stop __MSG_ID__ : ferma il task specificato nella chat corrente
+/message_task_stop_all : ferma tutti i task nella chat corrente
+/message_task_pause __MSG_ID__ : mette in pausa il task specificato nella chat corrente
+/message_task_resume __MSG_ID__ : riavvia il task specificato nella chat corrente
+/message_task_get __MSG_ID__ : mostra il messaggio impostato per il task specificato nella chat corrente
+/message_task_set __MSG_ID MSG__ : imposta il messaggio del task specificato nella chat corrente (il messaggio deve essere su una linea a capo)
+/message_task_delete_last_msg __MSG_ID true/false__ : attiva/disattiva la rimozione degli ultimi messaggi inviati per il task specificato nella chat corrente
+/message_task_info : mostra la lista di tutti i task attivi nella chat corrente</sentence>
+    <!-- Alive command message -->
+    <sentence id="ALIVE_CMD">**STATO**
+✅ Il bot è attivo.</sentence>
+
+    <!-- Set test mode command enabled message -->
+    <sentence id="SET_TEST_MODE_EN_CMD">**MODALITÀ TEST**
+✅ Modalità di test attivata.</sentence>
+    <!-- Set test mode command disabled message -->
+    <sentence id="SET_TEST_MODE_DIS_CMD">**MODALITÀ TEST**
+✅ Modalità di test disattivata.</sentence>
+
+    <!-- Is test mode command enabled message -->
+    <sentence id="IS_TEST_MODE_EN_CMD">**MODALITÀ TEST**
+La modalità di test è attualmente attivata.</sentence>
+    <!-- Is test mode command disabled message -->
+    <sentence id="IS_TEST_MODE_DIS_CMD">**MODALITÀ TEST**
+La modalità di test è attualmente disattivata.</sentence>
+
+    <!-- Start price task ok message -->
+    <sentence id="MESSAGE_TASK_START_OK_CMD">**CONTROLLO TASK**
+✅ Task di avviso avviato con successo.
+
+Parametri:
+- Periodo: __{period}h__
+- ID messaggio: __{msg_id}__</sentence>
+
+    <!-- Stop price task ok message -->
+    <sentence id="MESSAGE_TASK_STOP_OK_CMD">**CONTROLLO TASK**
+✅ Task di avviso __{msg_id}__ fermato con successo.</sentence>
+
+    <!-- Stop all price tasks message -->
+    <sentence id="MESSAGE_TASK_STOP_ALL_CMD">**CONTROLLO TASK**
+✅ Tutti i task di avviso fermati con successo.</sentence>
+
+    <!-- Pause price task ok message -->
+    <sentence id="MESSAGE_TASK_PAUSE_OK_CMD">**CONTROLLO TASK**
+✅ Task di avviso __{msg_id}__ messo in pausa con successo.</sentence>
+
+    <!-- Resume price task ok message -->
+    <sentence id="MESSAGE_TASK_RESUME_OK_CMD">**CONTROLLO TASK**
+✅ Task di avviso __{msg_id}__ riavviato con successo.</sentence>
+
+
+    <!-- Get message task message (ok) -->
+    <sentence id="MESSAGE_TASK_GET_OK_CMD">**TASK CONTROL**
+Messaggio impostato per il task di avviso __{msg_id}__:
+
+{msg}</sentence>
+    <!-- Get message task message (no) -->
+    <sentence id="MESSAGE_TASK_GET_NO_CMD">**TASK CONTROL**
+Nessun messaggio impostato pr il task di avviso __{msg_id}__.</sentence>
+
+    <!-- Set message task message (ok) -->
+    <sentence id="MESSAGE_TASK_SET_OK_CMD">**TASK CONTROL**
+✅ Messaggio impostato con successo per il task di avviso __{msg_id}__.</sentence>
+
+    <!-- Delete last message ok message -->
+    <sentence id="MESSAGE_TASK_DELETE_LAST_MSG_OK_CMD">**CONTROLLO TASK**
+✅ Task di avviso __{msg_id}__ cancella ultimo messaggio impostato a: {flag}.</sentence>
+
+    <!-- Price task info message -->
+    <sentence id="MESSAGE_TASK_INFO_CMD">**INFORMAZIONI TASK**
+Numero di task attivi in questa chat: **{tasks_num}**
+Lista dei task:
+{tasks_list}</sentence>
+    <!-- Price task info no task message -->
+    <sentence id="MESSAGE_TASK_INFO_NO_TASK_CMD">**INFORMAZIONI TASK**
+Nessun task attivo in questa chat.</sentence>
+
+    <!-- Bot welcome message -->
+    <sentence id="BOT_WELCOME_MSG">Ciao!
+Grazie per aver scelto il **Telegram Periodic Message Bot**.
+Usa __/help__ per vedere la lista dei comandi supportati.
+Non dimenticarti di **farmi amministratore del gruppo** o non potrò funzionare correttamente.</sentence>
+
+    <!-- Generic error message -->
+    <sentence id="GENERIC_ERR_MSG">**ERRORE**
+❌ Si è verificato un errore durante l'esecuzione del comando.</sentence>
+    <!-- Authorized-only users error message -->
+    <sentence id="AUTH_ONLY_ERR_MSG">**ERRORE**
+❌ Non sei autorizzato a utilizzare il comando.</sentence>
+    <!-- Group-only error message -->
+    <sentence id="GROUP_ONLY_ERR_MSG">**ERRORE**
+❌ Questo comando può essere eseguito solo nel gruppo.</sentence>
+    <!-- Parameter error message -->
+    <sentence id="PARAM_ERR_MSG">**ERRORE**
+❌ Parametri non validi.</sentence>
+    <!-- Task already existent error message -->
+    <sentence id="TASK_EXISTENT_ERR_MSG">**ERRORE**
+❌ Task di avviso __{msg_id}__ già attivo in questa chat. Ferma il task per avviarne un altro con lo stesso ID.</sentence>
+    <!-- Task not existent error message -->
+    <sentence id="TASK_NOT_EXISTENT_ERR_MSG">**ERRORE**
+❌ Task di avviso __{msg_id}__ non attivo in questa chat.</sentence>
+    <!-- Task period error message -->
+    <sentence id="TASK_PERIOD_ERR_MSG">**ERRORE**
+❌ Il periodo deve essere compreso tra 1 e 24.</sentence>
+    <!-- Maximum tasks error message -->
+    <sentence id="MAX_TASK_ERR_MSG">**ERRORE**
+❌ Massimo numero di task raggiunto. Ferma qualche task per avviarne dei nuovi.</sentence>
+    <!-- Single task information message -->
+    <sentence id="SINGLE_TASK_INFO_MSG">- ID: __{msg_id}__, periodo: __{period}h__, stato: __{state}__</sentence>
+    <!-- Task running message -->
+    <sentence id="TASK_RUNNING_MSG">attivo</sentence>
+    <!-- Task paused message -->
+    <sentence id="TASK_PAUSED_MSG">in pausa</sentence>
+</translation>

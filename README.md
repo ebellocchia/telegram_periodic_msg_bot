@@ -1,7 +1,7 @@
 # Telegram Periodic Message Bot
 
 Telegram bot for sending periodic messages in groups based on *pyrogram*.\
-A single bot instance can be used with multiple periodic messages (with different periods) and in multiple groups, since it uses multiple tasks.
+A single bot instance can be used with multiple periodic messages (with different periods) and in multiple groups.
 
 ## Setup
 
@@ -51,7 +51,9 @@ The list of all possible fields that can be set is shown below.
 |app_is_test_mode|True to activate test mode false otherwise|
 |app_lang_file|Language file in XML format (default: English)|
 |**[task]**|Configuration for tasks|
-|tasks_max_num|Maximum number of running tasks (totally, in all groups)|
+|tasks_max_num|Maximum number of running tasks (totally, in all groups). Default: 20.|
+|**[message]**|Configuration for message|
+|message_max_len|Maximum message length in characters. Default: 4000.|
 |**[logging]**|Configuration for logging|
 |log_level|Log level, same of python logging (*DEBUG*, *INFO*, *WARNING*, *ERROR*, *CRITICAL*). Default: *INFO*.|
 |log_console_enabled|True to enable logging to console, false otherwise (default: true)|

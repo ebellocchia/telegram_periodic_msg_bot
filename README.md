@@ -1,5 +1,8 @@
 # Telegram Periodic Message Bot
 
+[![PyPI version](https://badge.fury.io/py/telegram-periodic-msg-bot.svg)](https://badge.fury.io/py/telegram-periodic-msg-bot)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://raw.githubusercontent.com/ebellocchia/bip_utils/master/LICENSE)
+
 Telegram bot for sending periodic messages in groups based on *pyrogram*.\
 A single bot instance can be used with multiple periodic messages (with different periods) and in multiple groups.
 

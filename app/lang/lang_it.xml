@@ -107,6 +107,12 @@ Non dimenticarti di **farmi amministratore del gruppo** o non potrò funzionare 
     <!-- Parameter error message -->
     <sentence id="PARAM_ERR_MSG">**ERRORE**
 ❌ Parametri non validi.</sentence>
+    <!-- Message invalid error message -->
+    <sentence id="MESSAGE_INVALID_ERR_MSG">**ERRORE**
+❌ Messaggio non valido.</sentence>
+    <!-- Message too long error message -->
+    <sentence id="MESSAGE_TOO_LONG_ERR_MSG">**ERRORE**
+❌ Il messaggio è troppo lungo (lunghezza massima consentita: {msg_max_len}).</sentence>
     <!-- Task already existent error message -->
     <sentence id="TASK_EXISTENT_ERR_MSG">**ERRORE**
 ❌ Task di avviso __{msg_id}__ già attivo in questa chat. Ferma il task per avviarne un altro con lo stesso ID.</sentence>

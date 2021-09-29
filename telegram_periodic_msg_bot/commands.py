@@ -24,14 +24,15 @@
 from typing import Any, Callable
 from telegram_periodic_msg_bot.periodic_msg_scheduler import (
     PeriodicMsgJobAlreadyExistentError, PeriodicMsgJobNotExistentError,
-    PeriodicMsgJobInvalidMessageError, PeriodicMsgJobInvalidPeriodError,
-    PeriodicMsgJobMaxNumError
+    PeriodicMsgJobInvalidPeriodError, PeriodicMsgJobMaxNumError
 )
 from telegram_periodic_msg_bot.command_base import CommandBase
 from telegram_periodic_msg_bot.command_data import CommandParameterError
 from telegram_periodic_msg_bot.config import ConfigTypes
 from telegram_periodic_msg_bot.helpers import UserHelper
-from telegram_periodic_msg_bot.periodic_msg_parser import PeriodicMsgParser
+from telegram_periodic_msg_bot.periodic_msg_parser import (
+    PeriodicMsgParserInvalidError, PeriodicMsgParserTooLongError
+)
 
 
 #
@@ -134,7 +135,7 @@ class MessageTaskStartCmd(CommandBase):
                 kwargs["periodic_msg_scheduler"].Start(self.cmd_data.Chat(),
                                                        period_hours,
                                                        msg_id,
-                                                       PeriodicMsgParser.Parse(self.message))
+                                                       self.message)
                 self._SendMessage(
                     self.translator.GetSentence("MESSAGE_TASK_START_OK_CMD",
                                                 period=period_hours,
@@ -149,8 +150,13 @@ class MessageTaskStartCmd(CommandBase):
                     self.translator.GetSentence("TASK_EXISTENT_ERR_MSG",
                                                 msg_id=msg_id)
                 )
-            except PeriodicMsgJobInvalidMessageError:
-                self._SendMessage(self.translator.GetSentence("MESSAGE_ERR_MSG"))
+            except PeriodicMsgParserInvalidError:
+                self._SendMessage(self.translator.GetSentence("MESSAGE_INVALID_ERR_MSG"))
+            except PeriodicMsgParserTooLongError:
+                self._SendMessage(
+                    self.translator.GetSentence("MESSAGE_TOO_LONG_ERR_MSG",
+                                                msg_max_len=self.config.GetValue(ConfigTypes.MESSAGE_MAX_LEN))
+                )
 
 
 #
@@ -298,22 +304,25 @@ class MessageTaskSetCmd(CommandBase):
             self._SendMessage(self.translator.GetSentence("PARAM_ERR_MSG"))
         else:
             try:
-                msg = PeriodicMsgParser.Parse(self.message)
                 kwargs["periodic_msg_scheduler"].SetMessage(self.cmd_data.Chat(),
                                                             msg_id,
-                                                            msg)
+                                                            self.message)
                 self._SendMessage(
                     self.translator.GetSentence("MESSAGE_TASK_SET_OK_CMD",
-                                                msg_id=msg_id,
-                                                msg=msg)
+                                                msg_id=msg_id)
                 )
             except PeriodicMsgJobNotExistentError:
                 self._SendMessage(
                     self.translator.GetSentence("TASK_NOT_EXISTENT_ERR_MSG",
                                                 msg_id=msg_id)
                 )
-            except PeriodicMsgJobInvalidMessageError:
-                self._SendMessage(self.translator.GetSentence("MESSAGE_ERR_MSG"))
+            except PeriodicMsgParserInvalidError:
+                self._SendMessage(self.translator.GetSentence("MESSAGE_INVALID_ERR_MSG"))
+            except PeriodicMsgParserTooLongError:
+                self._SendMessage(
+                    self.translator.GetSentence("MESSAGE_TOO_LONG_ERR_MSG",
+                                                msg_max_len=self.config.GetValue(ConfigTypes.MESSAGE_MAX_LEN))
+                )
 
 
 #

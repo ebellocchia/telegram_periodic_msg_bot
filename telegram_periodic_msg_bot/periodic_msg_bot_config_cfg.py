@@ -86,6 +86,17 @@ PeriodicMsgBotConfigCfg: ConfigCfgType = {
             "name": "tasks_max_num",
             "conv_fct": Utils.StrToInt,
             "def_val": 20,
+            "valid_if": lambda cfg, val: val > 0,
+        },
+    ],
+    # Message
+    "message": [
+        {
+            "type": ConfigTypes.MESSAGE_MAX_LEN,
+            "name": "message_max_len",
+            "conv_fct": Utils.StrToInt,
+            "def_val": 4000,
+            "valid_if": lambda cfg, val: val > 0,
         },
     ],
     # Logging

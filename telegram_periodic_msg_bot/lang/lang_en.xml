@@ -105,9 +105,12 @@ Do not forget to **make me administrator of the group** or I won't work properly
     <!-- Parameter error message -->
     <sentence id="PARAM_ERR_MSG">**ERROR**
 ❌ Invalid parameters.</sentence>
-    <!-- Message error message -->
-    <sentence id="MESSAGE_ERR_MSG">**ERROR**
+    <!-- Message invalid error message -->
+    <sentence id="MESSAGE_INVALID_ERR_MSG">**ERROR**
 ❌ Invalid message.</sentence>
+    <!-- Message too long error message -->
+    <sentence id="MESSAGE_TOO_LONG_ERR_MSG">**ERROR**
+❌ Message is too long (maximum accepted length: {msg_max_len}).</sentence>
     <!-- Task already existent error message -->
     <sentence id="TASK_EXISTENT_ERR_MSG">**ERROR**
 ❌ Message task __{msg_id}__ is already active in this chat. Stop the task to start a new one with the same ID again.</sentence>

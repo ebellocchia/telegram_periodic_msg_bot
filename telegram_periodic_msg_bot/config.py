@@ -38,6 +38,8 @@ class ConfigTypes(Enum):
     APP_LANG_FILE = auto(),
     # Task
     TASKS_MAX_NUM = auto(),
+    # Message
+    MESSAGE_MAX_LEN = auto(),
     # Logging
     LOG_LEVEL = auto(),
     LOG_CONSOLE_ENABLED = auto(),

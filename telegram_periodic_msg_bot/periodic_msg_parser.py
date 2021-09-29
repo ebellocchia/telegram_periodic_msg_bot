@@ -22,19 +22,44 @@
 # Imports
 #
 import pyrogram
+from telegram_periodic_msg_bot.config import ConfigTypes, Config
 
 
 #
 # Classes
 #
 
-# Periodic message parser
+# Invalid message error
+class PeriodicMsgParserInvalidError(Exception):
+    pass
+
+
+# Too long message error
+class PeriodicMsgParserTooLongError(Exception):
+    pass
+
+
+# Periodic message parser class
 class PeriodicMsgParser:
+    # Constructor
+    def __init__(self,
+                 config: Config) -> None:
+        self.config = config
+
     # Parse message
-    @staticmethod
-    def Parse(message: pyrogram.types.Message) -> str:
+    def Parse(self,
+              message: pyrogram.types.Message) -> str:
         try:
             # The message shall start on a new line
-            return message.text[message.text.index("\n"):].strip()
+            msg = message.text[message.text.index("\n"):].strip()
+
+            # Check message
+            if msg == "":
+                raise PeriodicMsgParserInvalidError()
+            if len(msg) > self.config.GetValue(ConfigTypes.MESSAGE_MAX_LEN):
+                raise PeriodicMsgParserTooLongError()
+
+            return msg
+
         except ValueError:
-            return ""
+            raise PeriodicMsgParserInvalidError()

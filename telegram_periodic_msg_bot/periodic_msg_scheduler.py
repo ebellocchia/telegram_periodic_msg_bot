@@ -27,6 +27,7 @@ from telegram_periodic_msg_bot.config import ConfigTypes, Config
 from telegram_periodic_msg_bot.helpers import ChatHelper
 from telegram_periodic_msg_bot.logger import Logger
 from telegram_periodic_msg_bot.periodic_msg_job import PeriodicMsgJobData, PeriodicMsgJob
+from telegram_periodic_msg_bot.periodic_msg_parser import PeriodicMsgParser
 from telegram_periodic_msg_bot.translation_loader import TranslationLoader
 from telegram_periodic_msg_bot.wrapped_list import WrappedList
 
@@ -47,11 +48,6 @@ class PeriodicMsgJobNotExistentError(Exception):
 
 # Job invalid period error
 class PeriodicMsgJobInvalidPeriodError(Exception):
-    pass
-
-
-# Job invalid message error
-class PeriodicMsgJobInvalidMessageError(Exception):
     pass
 
 
@@ -133,7 +129,7 @@ class PeriodicMsgScheduler:
               chat: pyrogram.types.Chat,
               period_hours: int,
               msg_id: str,
-              msg: str) -> None:
+              message: pyrogram.types.Message) -> None:
         job_id = self.__GetJobId(chat, msg_id)
 
         # Check if existent
@@ -150,13 +146,6 @@ class PeriodicMsgScheduler:
             )
             raise PeriodicMsgJobInvalidPeriodError()
 
-        # Check message
-        if msg == "":
-            self.logger.GetLogger().error(
-                f"Invalid message for job {job_id} in chat {ChatHelper.GetTitleOrId(chat)}, cannot set it"
-            )
-            raise PeriodicMsgJobInvalidMessageError()
-
         # Check total jobs number
         tot_job_cnt = self.__GetTotalJobCount()
         if tot_job_cnt >= self.config.GetValue(ConfigTypes.TASKS_MAX_NUM):
@@ -164,7 +153,7 @@ class PeriodicMsgScheduler:
             raise PeriodicMsgJobMaxNumError()
 
         # Create job
-        self.__CreateJob(job_id, chat, period_hours, msg_id, msg)
+        self.__CreateJob(job_id, chat, period_hours, msg_id, message)
         # Add job
         self.__AddJob(job_id, chat, period_hours, msg_id)
 
@@ -187,7 +176,7 @@ class PeriodicMsgScheduler:
     def SetMessage(self,
                    chat: pyrogram.types.Chat,
                    msg_id: str,
-                   msg: str) -> None:
+                   message: pyrogram.types.Message) -> None:
         job_id = self.__GetJobId(chat, msg_id)
 
         # Check if existent
@@ -197,12 +186,8 @@ class PeriodicMsgScheduler:
             )
             raise PeriodicMsgJobNotExistentError()
 
-        # Check message
-        if msg == "":
-            self.logger.GetLogger().error(
-                f"Invalid message for job {job_id} in chat {ChatHelper.GetTitleOrId(chat)}"
-            )
-            raise PeriodicMsgJobInvalidMessageError()
+        # Parse message
+        msg = PeriodicMsgParser(self.config).Parse(message)
 
         self.jobs[chat.id][job_id].SetMessage(msg)
         self.logger.GetLogger().info(
@@ -318,7 +303,10 @@ class PeriodicMsgScheduler:
                     chat: pyrogram.types.Chat,
                     period: int,
                     msg_id: str,
-                    msg: str) -> None:
+                    message: pyrogram.types.Message) -> None:
+        # Parse message
+        msg = PeriodicMsgParser(self.config).Parse(message)
+
         if chat.id not in self.jobs:
             self.jobs[chat.id] = {}
 

@@ -32,23 +32,23 @@ from enum import Enum, auto, unique
 # Configuration types
 @unique
 class ConfigTypes(Enum):
-    SESSION_NAME = auto(),
+    SESSION_NAME = auto()
     # App
-    APP_TEST_MODE = auto(),
-    APP_LANG_FILE = auto(),
+    APP_TEST_MODE = auto()
+    APP_LANG_FILE = auto()
     # Task
-    TASKS_MAX_NUM = auto(),
+    TASKS_MAX_NUM = auto()
     # Message
-    MESSAGE_MAX_LEN = auto(),
+    MESSAGE_MAX_LEN = auto()
     # Logging
-    LOG_LEVEL = auto(),
-    LOG_CONSOLE_ENABLED = auto(),
-    LOG_FILE_ENABLED = auto(),
-    LOG_FILE_NAME = auto(),
-    LOG_FILE_USE_ROTATING = auto(),
-    LOG_FILE_APPEND = auto(),
-    LOG_FILE_MAX_BYTES = auto(),
-    LOG_FILE_BACKUP_CNT = auto(),
+    LOG_LEVEL = auto()
+    LOG_CONSOLE_ENABLED = auto()
+    LOG_FILE_ENABLED = auto()
+    LOG_FILE_NAME = auto()
+    LOG_FILE_USE_ROTATING = auto()
+    LOG_FILE_APPEND = auto()
+    LOG_FILE_MAX_BYTES = auto()
+    LOG_FILE_BACKUP_CNT = auto()
 
 
 #

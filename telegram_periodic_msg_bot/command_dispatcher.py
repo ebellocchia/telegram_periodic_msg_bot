@@ -38,20 +38,20 @@ from telegram_periodic_msg_bot.translation_loader import TranslationLoader
 # Command types
 @unique
 class CommandTypes(Enum):
-    START_CMD = auto(),
-    HELP_CMD = auto(),
-    ALIVE_CMD = auto(),
-    SET_TEST_MODE_CMD = auto(),
-    IS_TEST_MODE_CMD = auto(),
-    MESSAGE_TASK_START_CMD = auto(),
-    MESSAGE_TASK_STOP_CMD = auto(),
-    MESSAGE_TASK_STOP_ALL_CMD = auto(),
-    MESSAGE_TASK_PAUSE_CMD = auto(),
-    MESSAGE_TASK_RESUME_CMD = auto(),
-    MESSAGE_TASK_GET_CMD = auto(),
-    MESSAGE_TASK_SET_CMD = auto(),
-    MESSAGE_TASK_DELETE_LAST_MSG_CMD = auto(),
-    MESSAGE_TASK_INFO_CMD = auto(),
+    START_CMD = auto()
+    HELP_CMD = auto()
+    ALIVE_CMD = auto()
+    SET_TEST_MODE_CMD = auto()
+    IS_TEST_MODE_CMD = auto()
+    MESSAGE_TASK_START_CMD = auto()
+    MESSAGE_TASK_STOP_CMD = auto()
+    MESSAGE_TASK_STOP_ALL_CMD = auto()
+    MESSAGE_TASK_PAUSE_CMD = auto()
+    MESSAGE_TASK_RESUME_CMD = auto()
+    MESSAGE_TASK_GET_CMD = auto()
+    MESSAGE_TASK_SET_CMD = auto()
+    MESSAGE_TASK_DELETE_LAST_MSG_CMD = auto()
+    MESSAGE_TASK_INFO_CMD = auto()
 
 
 #

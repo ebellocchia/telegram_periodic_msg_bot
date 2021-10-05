@@ -64,16 +64,16 @@ Parametri:
 
 
     <!-- Get message task message (ok) -->
-    <sentence id="MESSAGE_TASK_GET_OK_CMD">**TASK CONTROL**
+    <sentence id="MESSAGE_TASK_GET_OK_CMD">**CONTROLLO TASK**
 Messaggio impostato per il task di avviso __{msg_id}__:
 
 {msg}</sentence>
     <!-- Get message task message (no) -->
-    <sentence id="MESSAGE_TASK_GET_NO_CMD">**TASK CONTROL**
+    <sentence id="MESSAGE_TASK_GET_NO_CMD">**CONTROLLO TASK**
 Nessun messaggio impostato pr il task di avviso __{msg_id}__.</sentence>
 
     <!-- Set message task message (ok) -->
-    <sentence id="MESSAGE_TASK_SET_OK_CMD">**TASK CONTROL**
+    <sentence id="MESSAGE_TASK_SET_OK_CMD">**CONTROLLO TASK**
 ✅ Messaggio impostato con successo per il task di avviso __{msg_id}__.</sentence>
 
     <!-- Delete last message ok message -->

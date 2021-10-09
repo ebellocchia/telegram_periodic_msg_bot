@@ -22,7 +22,7 @@
 # Imports
 #
 import pyrogram
-from typing import Optional
+from typing import List, Optional
 from telegram_periodic_msg_bot.config import Config
 from telegram_periodic_msg_bot.logger import Logger
 from telegram_periodic_msg_bot.message_deleter import MessageDeleter
@@ -38,7 +38,7 @@ class PeriodicMsgSender:
 
     logger: Logger
     delete_last_sent_msg: bool
-    last_sent_msg: Optional[pyrogram.types.Message]
+    last_sent_msgs: Optional[List[pyrogram.types.Message]]
     message_deleter: MessageDeleter
     message_sender: MessageSender
 
@@ -49,7 +49,7 @@ class PeriodicMsgSender:
                  logger: Logger) -> None:
         self.logger = logger
         self.delete_last_sent_msg = True
-        self.last_sent_msg = None
+        self.last_sent_msgs = None
         self.message_deleter = MessageDeleter(client, logger)
         self.message_sender = MessageSender(client, config, logger)
 
@@ -65,11 +65,11 @@ class PeriodicMsgSender:
         if self.delete_last_sent_msg:
             self.__DeleteLastSentMessage()
 
-        self.last_sent_msg = self.message_sender.SendMessage(chat, msg)
+        self.last_sent_msgs = self.message_sender.SendMessage(chat, msg)
 
     # Delete last sent message
     def __DeleteLastSentMessage(self) -> None:
-        if self.last_sent_msg is not None:
-            self.message_deleter.DeleteMessages(self.last_sent_msg)
+        if self.last_sent_msgs is not None:
+            self.message_deleter.DeleteMessages(self.last_sent_msgs)
 
-        self.last_sent_msg = None
+        self.last_sent_msgs = None

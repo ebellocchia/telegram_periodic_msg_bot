@@ -24,8 +24,8 @@
 import pyrogram
 import time
 from typing import List, Union
-from telegram_crypto_price_bot.config import Config
-from telegram_crypto_price_bot.logger import Logger
+from telegram_periodic_msg_bot.config import Config
+from telegram_periodic_msg_bot.logger import Logger
 
 
 #

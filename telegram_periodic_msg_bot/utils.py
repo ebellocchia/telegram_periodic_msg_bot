@@ -27,22 +27,6 @@ from typing import Any, Callable
 
 
 #
-# Decorators
-#
-
-# Decorator for synchronized functions or methods
-def Synchronized(lock: Lock()):
-    def _decorator(wrapped: Callable[..., Any]):
-        @functools.wraps(wrapped)
-        def _wrapper(*args: Any,
-                     **kwargs: Any):
-            with lock:
-                return wrapped(*args, **kwargs)
-        return _wrapper
-    return _decorator
-
-
-#
 # Classes
 #
 

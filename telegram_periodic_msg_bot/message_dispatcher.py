@@ -35,6 +35,11 @@ from telegram_periodic_msg_bot.translation_loader import TranslationLoader
 
 # Message dispatcher class
 class MessageDispatcher:
+
+    config: Config
+    logger: Logger
+    translator: TranslationLoader
+
     # Constructor
     def __init__(self,
                  config: Config,

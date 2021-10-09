@@ -23,6 +23,7 @@
 #
 import pyrogram
 from apscheduler.schedulers.background import BackgroundScheduler
+from typing import Dict
 from telegram_periodic_msg_bot.config import ConfigTypes, Config
 from telegram_periodic_msg_bot.helpers import ChatHelper
 from telegram_periodic_msg_bot.logger import Logger
@@ -65,6 +66,9 @@ class PeriodicMsgSchedulerConst:
 
 # Periodic message jobs list class
 class PeriodicMsgJobsList(WrappedList):
+
+    translator: TranslationLoader
+
     # Constructor
     def __init__(self,
                  translator: TranslationLoader) -> None:
@@ -91,6 +95,14 @@ class PeriodicMsgJobsList(WrappedList):
 
 # Periodic message scheduler class
 class PeriodicMsgScheduler:
+
+    client: pyrogram.Client
+    config: Config
+    logger: Logger
+    translator: TranslationLoader
+    jobs: Dict[int, Dict[str, PeriodicMsgJob]]
+    scheduler: BackgroundScheduler
+
     # Constructor
     def __init__(self,
                  client: pyrogram.Client,

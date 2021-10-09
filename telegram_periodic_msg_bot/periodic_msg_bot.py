@@ -33,6 +33,9 @@ from telegram_periodic_msg_bot.periodic_msg_bot_handlers_cfg import PeriodicMsgB
 
 # Periodic message bot class
 class PeriodicMsgBot(BotBase):
+
+    periodic_msg_scheduler: PeriodicMsgScheduler
+
     # Constructor
     def __init__(self,
                  config_file: str) -> None:

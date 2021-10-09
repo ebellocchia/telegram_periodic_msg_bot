@@ -35,6 +35,12 @@ from telegram_periodic_msg_bot.periodic_msg_sender import PeriodicMsgSender
 
 # Periodic message job data class
 class PeriodicMsgJobData:
+
+    chat: pyrogram.types.Chat
+    period_hours: int
+    msg_id: str
+    running: bool
+
     # Constructor
     def __init__(self,
                  chat: pyrogram.types.Chat,
@@ -69,6 +75,14 @@ class PeriodicMsgJobData:
 
 # Periodic message job class
 class PeriodicMsgJob:
+
+    data: PeriodicMsgJobData
+    logger: Logger
+    message: str
+    message_lock: Lock
+    message_sender: PeriodicMsgSender
+
+    # Constructor
     def __init__(self,
                  client: pyrogram.Client,
                  config: Config,

@@ -41,6 +41,9 @@ class PeriodicMsgParserTooLongError(Exception):
 
 # Periodic message parser class
 class PeriodicMsgParser:
+
+    config: Config
+
     # Constructor
     def __init__(self,
                  config: Config) -> None:

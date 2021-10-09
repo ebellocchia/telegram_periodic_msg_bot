@@ -33,6 +33,10 @@ from telegram_crypto_price_bot.logger import Logger
 
 # Message deleter class
 class MessageDeleter:
+
+    client: pyrogram.Client
+    logger: Logger
+
     # Constructor
     def __init__(self,
                  client: pyrogram.Client,

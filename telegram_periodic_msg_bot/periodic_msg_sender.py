@@ -22,6 +22,7 @@
 # Imports
 #
 import pyrogram
+from typing import Optional
 from telegram_periodic_msg_bot.config import Config
 from telegram_periodic_msg_bot.logger import Logger
 from telegram_periodic_msg_bot.message_deleter import MessageDeleter
@@ -34,6 +35,14 @@ from telegram_periodic_msg_bot.message_sender import MessageSender
 
 # Periodic message sender class
 class PeriodicMsgSender:
+
+    logger: Logger
+    delete_last_sent_msg: bool
+    last_sent_msg: Optional[pyrogram.types.Message]
+    message_deleter: MessageDeleter
+    message_sender: MessageSender
+
+    # Constructor
     def __init__(self,
                  client: pyrogram.Client,
                  config: Config,

@@ -25,7 +25,7 @@ import pyrogram
 from pyrogram import Client
 from typing import Any, Dict, List
 from telegram_periodic_msg_bot.command_dispatcher import CommandDispatcher, CommandTypes
-from telegram_periodic_msg_bot.config import ConfigTypes
+from telegram_periodic_msg_bot.config import ConfigTypes, Config
 from telegram_periodic_msg_bot.config_loader import ConfigCfgType, ConfigLoader
 from telegram_periodic_msg_bot.logger import Logger
 from telegram_periodic_msg_bot.message_dispatcher import MessageDispatcher
@@ -47,6 +47,14 @@ HandlersCfgType = Dict[Any, List[Dict[str, Any]]]
 
 # Bot base class
 class BotBase:
+
+    config: Config
+    logger: Logger
+    translator: TranslationLoader
+    client: pyrogram.Client
+    cmd_dispatcher: CommandDispatcher
+    msg_dispatcher: MessageDispatcher
+
     # Constructor
     def __init__(self,
                  config_file: str,

@@ -21,8 +21,8 @@
 #
 # Imports
 #
-import pyrogram
 from threading import Lock
+import pyrogram
 from telegram_periodic_msg_bot.config import Config
 from telegram_periodic_msg_bot.helpers import ChatHelper
 from telegram_periodic_msg_bot.logger import Logger

@@ -64,5 +64,5 @@ class PeriodicMsgParser:
 
             return msg
 
-        except ValueError:
-            raise PeriodicMsgParserInvalidError()
+        except ValueError as ex:
+            raise PeriodicMsgParserInvalidError() from ex

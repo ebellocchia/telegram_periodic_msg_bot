@@ -21,9 +21,9 @@
 #
 # Imports
 #
+from typing import Dict
 import pyrogram
 from apscheduler.schedulers.background import BackgroundScheduler
-from typing import Dict
 from telegram_periodic_msg_bot.config import ConfigTypes, Config
 from telegram_periodic_msg_bot.helpers import ChatHelper
 from telegram_periodic_msg_bot.logger import Logger

@@ -21,10 +21,10 @@
 #
 # Imports
 #
-import pyrogram
 from abc import ABC, abstractmethod
-from pyrogram.errors import RPCError
 from typing import Any
+import pyrogram
+from pyrogram.errors import RPCError
 from telegram_periodic_msg_bot.chat_members import ChatMembersGetter
 from telegram_periodic_msg_bot.command_data import CommandData
 from telegram_periodic_msg_bot.config import Config
@@ -101,9 +101,9 @@ class CommandBase(ABC):
     def _IsUserAuthorized(self) -> bool:
         if ChatHelper.IsPrivateChat(self.cmd_data.Chat(), self.cmd_data.User()):
             return True
-        else:
-            admin_members = ChatMembersGetter(self.client, self.config).GetAdmins(self.cmd_data.Chat())
-            return any([self.cmd_data.User().id == member.user.id for member in admin_members])
+
+        admin_members = ChatMembersGetter(self.client, self.config).GetAdmins(self.cmd_data.Chat())
+        return any((self.cmd_data.User().id == member.user.id for member in admin_members))
 
     # Get if chat is private
     def _IsPrivateChat(self) -> bool:

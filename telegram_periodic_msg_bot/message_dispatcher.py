@@ -21,8 +21,8 @@
 #
 # Imports
 #
-import pyrogram
 from typing import Any
+import pyrogram
 from telegram_periodic_msg_bot.config import Config
 from telegram_periodic_msg_bot.logger import Logger
 from telegram_periodic_msg_bot.message_sender import MessageSender

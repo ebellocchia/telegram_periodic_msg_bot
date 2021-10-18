@@ -21,9 +21,9 @@
 #
 # Imports
 #
-import pyrogram
 from typing import Callable, Optional
-from telegram_periodic_msg_bot.config import ConfigTypes, Config
+import pyrogram
+from telegram_periodic_msg_bot.config import Config
 from telegram_periodic_msg_bot.helpers import UserHelper
 from telegram_periodic_msg_bot.wrapped_list import WrappedList
 
@@ -105,4 +105,4 @@ class ChatMembersGetter:
     def GetAdmins(self,
                   chat: pyrogram.types.Chat) -> ChatMembersList:
         return self.FilterMembers(chat,
-                                  lambda member: member.status == "administrator" or member.status == "creator")
+                                  lambda member: member.status in ["administrator", "creator"])

@@ -110,8 +110,8 @@ Send a periodical message every 8 hours in the current chat:
 
     /message_task_start 1 test_msg
     Hi,
-    This is a periodic message.
-    Bye!
+    This is a <i>periodic message</i>.
+    <b>Bye!</b>
 
 Pause/Resume/Stop the previous task:
 
@@ -127,8 +127,8 @@ Set a new message set for the previous task:
 
     /message_task_set test_msg
     Hello,
-    This is a different periodic message.
-    Bye bye!
+    This is a <i>different periodic message</i>.
+    <b>Bye bye!</b>
 
 Set task so that it doesn't delete the last sent message:
 

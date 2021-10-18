@@ -13,8 +13,7 @@ def load_version():
 
     if matches and len(matches) > 0:
         return matches[0]
-    else:
-        raise RuntimeError("Cannot find version string in %s" % VERSION_FILE)
+    raise RuntimeError("Cannot find version string in %s" % VERSION_FILE)
 
 version = load_version()
 
@@ -31,13 +30,17 @@ setuptools.setup(
     url="https://github.com/ebellocchia/telegram_periodic_msg_bot",
     download_url="https://github.com/ebellocchia/telegram_periodic_msg_bot/archive/v%s.tar.gz" % version,
     license="MIT",
-    install_requires = ["pyrogram", "tgcrypto", "apscheduler"],
+    install_requires = ["pyrogram", "tgcrypto", "apscheduler", "defusedxml"],
     packages=setuptools.find_packages(exclude=[]),
     package_data={"telegram_periodic_msg_bot": ["lang/lang_en.xml"]},
     keywords="telegram, bot, telegram bot, periodic messages",
     platforms = ["any"],
     classifiers=[
-        "Programming Language :: Python :: 3",
+        "Programming Language :: Python :: 3.7",
+        "Programming Language :: Python :: 3.8",
+        "Programming Language :: Python :: 3.9",
+        "Programming Language :: Python :: 3.10",
+        "Development Status :: 5 - Production/Stable",
         "License :: OSI Approved :: MIT License",
         "Operating System :: OS Independent",
         "Intended Audience :: Developers",

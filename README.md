@@ -1,6 +1,8 @@
 # Telegram Periodic Message Bot
 
 [![PyPI version](https://badge.fury.io/py/telegram-periodic-msg-bot.svg)](https://badge.fury.io/py/telegram-periodic-msg-bot)
+[![Codacy Badge](https://app.codacy.com/project/badge/Grade/d1cc7c1692de4939a23e626981923e83)](https://www.codacy.com/gh/ebellocchia/telegram_periodic_msg_bot/dashboard?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=ebellocchia/telegram_periodic_msg_bot&amp;utm_campaign=Badge_Grade)
+[![CodeFactor](https://www.codefactor.io/repository/github/ebellocchia/telegram_periodic_msg_bot/badge)](https://www.codefactor.io/repository/github/ebellocchia/telegram_periodic_msg_bot)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://raw.githubusercontent.com/ebellocchia/bip_utils/master/LICENSE)
 
 Telegram bot for sending periodic messages in groups based on *pyrogram*.\

@@ -74,31 +74,31 @@ The list of all possible fields that can be set is shown below.
 List of supported commands:
 - **/help**: show this message
 - **/alive**: show if bot is active
-- **/set_test_mode true/false**: enable/disable test mode
-- **/is_test_mode**: show if test mode is enabled
-- **/message_task_start *PERIOD_HOURS MSG_ID MSG***: start a message task in the current chat. If the task *MSG_ID* already exists in the current chat, an error message will be shown. To start it again, it shall be stopped with the *message_task_stop* command.
+- **/msgbot_set_test_mode true/false**: enable/disable test mode
+- **/msgbot_is_test_mode**: show if test mode is enabled
+- **/msgbot_task_start *PERIOD_HOURS MSG_ID MSG***: start a message task in the current chat. If the task *MSG_ID* already exists in the current chat, an error message will be shown. To start it again, it shall be stopped with the *msgbot_task_stop* command.
     - *PERIOD_HOURS*: Task period in hours, it shall be between 1 and 24
     - *MSG_ID*: Message ID
     - *MSG*: Message to be sent periodically, it shall be on a new line
-- **/message_task_stop *MSG_ID***: stop the specified message task in the current chat. If the task *MSG_ID* does not exist in the current chat, an error message will be shown.
+- **/msgbot_task_stop *MSG_ID***: stop the specified message task in the current chat. If the task *MSG_ID* does not exist in the current chat, an error message will be shown.
     - *MSG_ID*: CoinGecko *ID*
-- **/message_task_stop_all**: stop all message tasks in the current chat
-- **/message_task_pause *MSG_ID***: pause the specified message task in the current chat. If the task *MSG_ID* does not exist in the current chat, an error message will be shown.
+- **/msgbot_task_stop_all**: stop all message tasks in the current chat
+- **/msgbot_task_pause *MSG_ID***: pause the specified message task in the current chat. If the task *MSG_ID* does not exist in the current chat, an error message will be shown.
     - *MSG_ID*: Message ID
-- **/message_task_resume *MSG_ID***: resume the specified message task in the current chat. If the task *MSG_ID* does not exist in the current chat, an error message will be shown.
+- **/msgbot_task_resume *MSG_ID***: resume the specified message task in the current chat. If the task *MSG_ID* does not exist in the current chat, an error message will be shown.
     - *MSG_ID*: Message ID
-- **/message_task_get *MSG_ID***: show the message set for the specified message task in the current chat.
+- **/msgbot_task_get *MSG_ID***: show the message set for the specified message task in the current chat.
     - *MSG_ID*: Message ID
-- **/message_task_set *MSG_ID MSG***: set the message of the specified message task in the current chat
+- **/msgbot_task_set *MSG_ID MSG***: set the message of the specified message task in the current chat
     - *MSG_ID*: Message ID
     - *MSG*: Message to be sent periodically, it shall be on a new line
-- **/message_task_delete_last_msg *MSG_ID true/false***: enable/disable the deletion of last messages for the specified message task in the current chat. If the task *MSG_ID* does not exist in the current chat, an error message will be shown.
+- **/msgbot_task_delete_last_msg *MSG_ID true/false***: enable/disable the deletion of last messages for the specified message task in the current chat. If the task *MSG_ID* does not exist in the current chat, an error message will be shown.
     - *MSG_ID*: Message ID
     - *flag*: true or false
-- **/message_task_info**: show the list of active message tasks in the current chat
+- **/msgbot_task_info**: show the list of active message tasks in the current chat
 
 Messages can contain HTML tags if needed (e.g. for bold/italic text), while Markdown tags are not supported.\
-By default, a message task will delete the last sent message when sending a new one. This can be enabled/disabled with the *message_task_delete_last_msg* command.
+By default, a message task will delete the last sent message when sending a new one. This can be enabled/disabled with the *msgbot_task_delete_last_msg* command.
 
 The task period always starts from midnight (be sure to set the correct time on the VPS), for example:
 - A task period of 8 hours will send the message at 00:00, 08:00 and 16:00
@@ -108,31 +108,31 @@ The task period always starts from midnight (be sure to set the correct time on 
 
 Send a periodical message every 8 hours in the current chat:
 
-    /message_task_start 1 test_msg
+    /msgbot_task_start 1 test_msg
     Hi,
     This is a <i>periodic message</i>.
     <b>Bye!</b>
 
 Pause/Resume/Stop the previous task:
 
-    /message_task_pause test_msg
-    /message_task_resume test_msg
-    /message_task_stop test_msg
+    /msgbot_task_pause test_msg
+    /msgbot_task_resume test_msg
+    /msgbot_task_stop test_msg
 
 Show the message set for the previous task:
 
-    /message_task_get test_msg
+    /msgbot_task_get test_msg
 
 Set a new message set for the previous task:
 
-    /message_task_set test_msg
+    /msgbot_task_set test_msg
     Hello,
     This is a <i>different periodic message</i>.
     <b>Bye bye!</b>
 
 Set task so that it doesn't delete the last sent message:
 
-    /message_task_delete_last_msg test_msg false
+    /msgbot_task_delete_last_msg test_msg false
 
 ## Run the Bot
 

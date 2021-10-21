@@ -9,17 +9,17 @@ Qui trovi la lista dei comandi supportati.
 /start : mostra questo messaggio
 /help : mostra questo messaggio
 /alive : mostra se il bot è attivo
-/set_test_mode __true/false__ : attiva/disattiva la modalità di test
-/is_test_mode : mostra se la modalità di test è attiva
-/message_task_start __PERIOD_HOURS MSG_ID MSG__ : avvia un task di avviso nella chat corrente (il messaggio deve essere su una linea a capo)
-/message_task_stop __MSG_ID__ : ferma il task specificato nella chat corrente
-/message_task_stop_all : ferma tutti i task nella chat corrente
-/message_task_pause __MSG_ID__ : mette in pausa il task specificato nella chat corrente
-/message_task_resume __MSG_ID__ : riavvia il task specificato nella chat corrente
-/message_task_get __MSG_ID__ : mostra il messaggio impostato per il task specificato nella chat corrente
-/message_task_set __MSG_ID MSG__ : imposta il messaggio del task specificato nella chat corrente (il messaggio deve essere su una linea a capo)
-/message_task_delete_last_msg __MSG_ID true/false__ : attiva/disattiva la rimozione degli ultimi messaggi inviati per il task specificato nella chat corrente
-/message_task_info : mostra la lista di tutti i task attivi nella chat corrente</sentence>
+/msgbot_set_test_mode __true/false__ : attiva/disattiva la modalità di test
+/msgbot_is_test_mode : mostra se la modalità di test è attiva
+/msgbot_task_start __PERIOD_HOURS MSG_ID MSG__ : avvia un task di avviso nella chat corrente (il messaggio deve essere su una linea a capo)
+/msgbot_task_stop __MSG_ID__ : ferma il task specificato nella chat corrente
+/msgbot_task_stop_all : ferma tutti i task nella chat corrente
+/msgbot_task_pause __MSG_ID__ : mette in pausa il task specificato nella chat corrente
+/msgbot_task_resume __MSG_ID__ : riavvia il task specificato nella chat corrente
+/msgbot_task_get __MSG_ID__ : mostra il messaggio impostato per il task specificato nella chat corrente
+/msgbot_task_set __MSG_ID MSG__ : imposta il messaggio del task specificato nella chat corrente (il messaggio deve essere su una linea a capo)
+/msgbot_task_delete_last_msg __MSG_ID true/false__ : attiva/disattiva la rimozione degli ultimi messaggi inviati per il task specificato nella chat corrente
+/msgbot_task_info : mostra la lista di tutti i task attivi nella chat corrente</sentence>
     <!-- Alive command message -->
     <sentence id="ALIVE_CMD">**STATO**
 ✅ Il bot è attivo.</sentence>

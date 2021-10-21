@@ -8,17 +8,17 @@ Here is the list of supported commands.
 
 /help : show this message
 /alive : show if bot is active
-/set_test_mode __true/false__ : enable/disable test mode
-/is_test_mode : show if test mode is enabled
-/message_task_start __PERIOD_HOURS MSG_ID MSG__ : start a message task in the current chat (the message shall be in a new line)
-/message_task_stop __MSG_ID__ : stop the specified message task in the current chat
-/message_task_stop_all : stop all message tasks in the current chat
-/message_task_pause __MSG_ID__ : pause the specified message task in the current chat
-/message_task_resume __MSG_ID__ : resume the specified message task in the current chat
-/message_task_get __MSG_ID__ : show the message set for the specified message task in the current chat
-/message_task_set __MSG_ID MSG__ : set the message of the specified message task in the current chat (the message shall be in a new line)
-/message_task_delete_last_msg __MSG_ID true/false__ : enable/disable the deletion of last messages for the specified message task in the current chat
-/message_task_info : show the list of active message tasks in the current chat</sentence>
+/msgbot_set_test_mode __true/false__ : enable/disable test mode
+/msgbot_is_test_mode : show if test mode is enabled
+/msgbot_task_start __PERIOD_HOURS MSG_ID MSG__ : start a message task in the current chat (the message shall be in a new line)
+/msgbot_task_stop __MSG_ID__ : stop the specified message task in the current chat
+/msgbot_task_stop_all : stop all message tasks in the current chat
+/msgbot_task_pause __MSG_ID__ : pause the specified message task in the current chat
+/msgbot_task_resume __MSG_ID__ : resume the specified message task in the current chat
+/msgbot_task_get __MSG_ID__ : show the message set for the specified message task in the current chat
+/msgbot_task_set __MSG_ID MSG__ : set the message of the specified message task in the current chat (the message shall be in a new line)
+/msgbot_task_delete_last_msg __MSG_ID true/false__ : enable/disable the deletion of last messages for the specified message task in the current chat
+/msgbot_task_info : show the list of active message tasks in the current chat</sentence>
     <!-- Alive command message -->
     <sentence id="ALIVE_CMD">**STATUS**
 ✅ The bot is alive.</sentence>

@@ -106,7 +106,7 @@ PeriodicMsgBotConfigCfg: ConfigCfgType = {
             "name": "log_level",
             "conv_fct": _ConfigTypeConverter.StrToLogLevel,
             "print_fct": _ConfigTypeConverter.LogLevelToStr,
-            "def_val": True,
+            "def_val": logging.INFO,
         },
         {
             "type": ConfigTypes.LOG_CONSOLE_ENABLED,

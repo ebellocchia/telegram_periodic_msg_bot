@@ -323,7 +323,6 @@ class PeriodicMsgScheduler:
             self.jobs[chat.id] = {}
 
         self.jobs[chat.id][job_id] = PeriodicMsgJob(self.client,
-                                                    self.config,
                                                     self.logger,
                                                     PeriodicMsgJobData(chat, period, msg_id))
         self.jobs[chat.id][job_id].SetMessage(msg)

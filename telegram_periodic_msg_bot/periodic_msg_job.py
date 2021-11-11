@@ -23,7 +23,6 @@
 #
 from threading import Lock
 import pyrogram
-from telegram_periodic_msg_bot.config import Config
 from telegram_periodic_msg_bot.helpers import ChatHelper
 from telegram_periodic_msg_bot.logger import Logger
 from telegram_periodic_msg_bot.periodic_msg_sender import PeriodicMsgSender
@@ -85,14 +84,13 @@ class PeriodicMsgJob:
     # Constructor
     def __init__(self,
                  client: pyrogram.Client,
-                 config: Config,
                  logger: Logger,
                  data: PeriodicMsgJobData) -> None:
         self.data = data
         self.logger = logger
         self.message = ""
         self.message_lock = Lock()
-        self.message_sender = PeriodicMsgSender(client, config, logger)
+        self.message_sender = PeriodicMsgSender(client, logger)
 
     # Get data
     def Data(self) -> PeriodicMsgJobData:

@@ -397,7 +397,7 @@ class PeriodicMsgScheduler:
             loop_cnt += 1
 
         t = start_val
-        for i in range(loop_cnt):
+        for _ in range(loop_cnt):
             cron_str += f"{t},"
             t = (t + period) % max_val
 

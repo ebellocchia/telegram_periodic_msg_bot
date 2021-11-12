@@ -102,14 +102,14 @@ Messages can contain HTML tags if needed (e.g. for bold/italic text), while Mark
 By default, a message task will delete the last sent message when sending a new one. This can be enabled/disabled with the *msgbot_task_delete_last_msg* command.
 
 The task period starts from the specified starting hour (be sure to set the correct time on the VPS), for example:
-- A task period of 8 hours starting from midnight will send the message at: 00:00, 08:00 and 16:00
-- A task period of 6 hours starting from 8:00 will send the message at: 08:00, 14:00, 20:00 and 02:00
+- A task period of 8 hours starting from 00:00 will send the message at: 00:00, 08:00 and 16:00
+- A task period of 6 hours starting from 08:00 will send the message at: 08:00, 14:00, 20:00 and 02:00
 
 **Examples**
 
-Send a periodical message every 8 hours in the current chat:
+Send a periodical message every 8 hours starting from 00:00 in the current chat:
 
-    /msgbot_task_start 1 test_msg
+    /msgbot_task_start test_msg 8
     Hi,
     This is a <i>periodic message</i>.
     <b>Bye!</b>
@@ -134,6 +134,11 @@ Set a new message set for the previous task:
 Set task so that it doesn't delete the last sent message:
 
     /msgbot_task_delete_last_msg test_msg false
+
+Send a periodical message every 6 hours starting from 10:00 in the current chat:
+
+    /msgbot_task_start test_msg 6 10
+    Periodic message with start hour
 
 ## Run the Bot
 

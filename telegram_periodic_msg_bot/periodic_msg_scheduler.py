@@ -351,7 +351,7 @@ class PeriodicMsgScheduler:
         per_sym = "minute(s)" if is_test_mode else "hour(s)"
         self.logger.GetLogger().info(
             f"Started job \"{job_id}\" in chat {ChatHelper.GetTitleOrId(chat)} ({period} {per_sym}, "
-            f"{msg_id}), number of active jobs: {self.__GetTotalJobCount()}, {cron_str}"
+            f"{msg_id}), number of active jobs: {self.__GetTotalJobCount()}, cron: {cron_str}"
         )
 
     # Get job ID

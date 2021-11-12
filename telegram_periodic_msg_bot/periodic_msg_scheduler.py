@@ -357,7 +357,7 @@ class PeriodicMsgScheduler:
     @staticmethod
     def __GetJobId(chat: pyrogram.types.Chat,
                    msg_id: str) -> str:
-        return f"{ChatHelper.GetTitleOrId(chat)}-{msg_id}"
+        return f"{chat.id}-{msg_id}"
 
     # Get total job count
     def __GetTotalJobCount(self) -> int:

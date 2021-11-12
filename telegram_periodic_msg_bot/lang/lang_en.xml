@@ -10,7 +10,7 @@ Here is the list of supported commands.
 /alive : show if bot is active
 /msgbot_set_test_mode __true/false__ : enable/disable test mode
 /msgbot_is_test_mode : show if test mode is enabled
-/msgbot_task_start __PERIOD_HOURS MSG_ID MSG__ : start a message task in the current chat (the message shall be in a new line)
+/msgbot_task_start __MSG_ID PERIOD_HOURS [START_HOUR] MSG__ : start a message task in the current chat (the message shall be in a new line)
 /msgbot_task_stop __MSG_ID__ : stop the specified message task in the current chat
 /msgbot_task_stop_all : stop all message tasks in the current chat
 /msgbot_task_pause __MSG_ID__ : pause the specified message task in the current chat
@@ -18,7 +18,9 @@ Here is the list of supported commands.
 /msgbot_task_get __MSG_ID__ : show the message set for the specified message task in the current chat
 /msgbot_task_set __MSG_ID MSG__ : set the message of the specified message task in the current chat (the message shall be in a new line)
 /msgbot_task_delete_last_msg __MSG_ID true/false__ : enable/disable the deletion of last messages for the specified message task in the current chat
-/msgbot_task_info : show the list of active message tasks in the current chat</sentence>
+/msgbot_task_info : show the list of active message tasks in the current chat
+
+Parameters in square brakets are optional.</sentence>
     <!-- Alive command message -->
     <sentence id="ALIVE_CMD">**STATUS**
 ✅ The bot is alive.</sentence>
@@ -43,6 +45,7 @@ Test mode is currently disabled.</sentence>
 
 Parameters:
 - Period: __{period}h__
+- Start: __{start:02d}:00__
 - Message ID: __{msg_id}__</sentence>
 
     <!-- Stop message task ok message -->
@@ -120,11 +123,14 @@ Do not forget to **make me administrator of the group** or I won't work properly
     <!-- Task period error message -->
     <sentence id="TASK_PERIOD_ERR_MSG">**ERROR**
 ❌ Period shall be between 1 and 24.</sentence>
+    <!-- Task start error message -->
+    <sentence id="TASK_START_ERR_MSG">**ERROR**
+❌ Start hour shall be between 0 and 23.</sentence>
     <!-- Maximum tasks error message -->
     <sentence id="MAX_TASK_ERR_MSG">**ERROR**
 ❌ Maximum number of tasks reached. Stop some tasks to start new ones.</sentence>
     <!-- Single task information message -->
-    <sentence id="SINGLE_TASK_INFO_MSG">- ID: __{msg_id}__, period: __{period}h__, state: __{state}__</sentence>
+    <sentence id="SINGLE_TASK_INFO_MSG">- ID: __{msg_id}__, period: __{period}h__, start: __{start:02d}:00__, state: __{state}__</sentence>
     <!-- Task running message -->
     <sentence id="TASK_RUNNING_MSG">runnnig</sentence>
     <!-- Task paused message -->

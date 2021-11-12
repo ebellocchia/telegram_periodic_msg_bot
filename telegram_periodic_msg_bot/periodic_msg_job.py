@@ -37,6 +37,7 @@ class PeriodicMsgJobData:
 
     chat: pyrogram.types.Chat
     period_hours: int
+    start_hour: int
     msg_id: str
     running: bool
 
@@ -44,9 +45,11 @@ class PeriodicMsgJobData:
     def __init__(self,
                  chat: pyrogram.types.Chat,
                  period_hours: int,
+                 start_hour: int,
                  msg_id: str) -> None:
         self.chat = chat
         self.period_hours = period_hours
+        self.start_hour = start_hour
         self.msg_id = msg_id
         self.running = True
 
@@ -57,6 +60,10 @@ class PeriodicMsgJobData:
     # Get period hours
     def PeriodHours(self) -> int:
         return self.period_hours
+
+    # Get start hour
+    def StartHour(self) -> int:
+        return self.start_hour
 
     # Get message ID
     def MessageId(self) -> str:

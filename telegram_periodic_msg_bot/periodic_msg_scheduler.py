@@ -52,6 +52,11 @@ class PeriodicMsgJobInvalidPeriodError(Exception):
     pass
 
 
+# Job invalid start error
+class PeriodicMsgJobInvalidStartError(Exception):
+    pass
+
+
 # Job maximum number error
 class PeriodicMsgJobMaxNumError(Exception):
     pass
@@ -59,6 +64,9 @@ class PeriodicMsgJobMaxNumError(Exception):
 
 # Constants for periodic message scheduler
 class PeriodicMsgSchedulerConst:
+    # Minimum/Maximum start hour
+    MIN_START_HOUR: int = 0
+    MAX_START_HOUR: int = 23
     # Minimum/Maximum periods
     MIN_PERIOD_HOURS: int = 1
     MAX_PERIOD_HOURS: int = 24
@@ -81,6 +89,7 @@ class PeriodicMsgJobsList(WrappedList):
             [self.translator.GetSentence("SINGLE_TASK_INFO_MSG",
                                          msg_id=job_data.MessageId(),
                                          period=job_data.PeriodHours(),
+                                         start=job_data.StartHour(),
                                          state=(self.translator.GetSentence("TASK_RUNNING_MSG")
                                                 if job_data.IsRunning()
                                                 else self.translator.GetSentence("TASK_PAUSED_MSG"))
@@ -140,6 +149,7 @@ class PeriodicMsgScheduler:
     def Start(self,
               chat: pyrogram.types.Chat,
               period_hours: int,
+              start_hour: int,
               msg_id: str,
               message: pyrogram.types.Message) -> None:
         job_id = self.__GetJobId(chat, msg_id)
@@ -158,6 +168,13 @@ class PeriodicMsgScheduler:
             )
             raise PeriodicMsgJobInvalidPeriodError()
 
+        # Check start hour
+        if start_hour < PeriodicMsgSchedulerConst.MIN_START_HOUR or start_hour > PeriodicMsgSchedulerConst.MAX_START_HOUR:
+            self.logger.GetLogger().error(
+                f"Invalid start hour {start_hour} for job \"{job_id}\", cannot start it"
+            )
+            raise PeriodicMsgJobInvalidStartError()
+
         # Check total jobs number
         tot_job_cnt = self.__GetTotalJobCount()
         if tot_job_cnt >= self.config.GetValue(ConfigTypes.TASKS_MAX_NUM):
@@ -165,9 +182,9 @@ class PeriodicMsgScheduler:
             raise PeriodicMsgJobMaxNumError()
 
         # Create job
-        self.__CreateJob(job_id, chat, period_hours, msg_id, message)
+        self.__CreateJob(job_id, chat, period_hours, start_hour, msg_id, message)
         # Add job
-        self.__AddJob(job_id, chat, period_hours, msg_id)
+        self.__AddJob(job_id, chat, period_hours, start_hour, msg_id)
 
     # Get message
     def GetMessage(self,
@@ -314,6 +331,7 @@ class PeriodicMsgScheduler:
                     job_id: str,
                     chat: pyrogram.types.Chat,
                     period: int,
+                    start: int,
                     msg_id: str,
                     message: pyrogram.types.Message) -> None:
         # Parse message
@@ -324,7 +342,7 @@ class PeriodicMsgScheduler:
 
         self.jobs[chat.id][job_id] = PeriodicMsgJob(self.client,
                                                     self.logger,
-                                                    PeriodicMsgJobData(chat, period, msg_id))
+                                                    PeriodicMsgJobData(chat, period, start, msg_id))
         self.jobs[chat.id][job_id].SetMessage(msg)
 
     # Add job
@@ -332,9 +350,10 @@ class PeriodicMsgScheduler:
                  job_id: str,
                  chat: pyrogram.types.Chat,
                  period: int,
+                 start: int,
                  msg_id: str) -> None:
         is_test_mode = self.config.GetValue(ConfigTypes.APP_TEST_MODE)
-        cron_str = self.__BuildCronString(period, is_test_mode)
+        cron_str = self.__BuildCronString(period, start, is_test_mode)
         if is_test_mode:
             self.scheduler.add_job(self.jobs[chat.id][job_id].DoJob,
                                    "cron",
@@ -367,11 +386,19 @@ class PeriodicMsgScheduler:
     # Build cron string
     @staticmethod
     def __BuildCronString(period: int,
+                          start_val: int,
                           is_test_mode: bool) -> str:
         max_val = 24 if not is_test_mode else 60
 
         cron_str = ""
-        for i in range(0, max_val, period):
-            cron_str += f"{i},"
+
+        loop_cnt = max_val // period
+        if max_val % period != 0:
+            loop_cnt += 1
+
+        t = start_val
+        for i in range(loop_cnt):
+            cron_str += f"{t},"
+            t = (t + period) % max_val
 
         return cron_str[:-1]

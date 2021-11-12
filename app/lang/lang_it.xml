@@ -11,7 +11,7 @@ Qui trovi la lista dei comandi supportati.
 /alive : mostra se il bot è attivo
 /msgbot_set_test_mode __true/false__ : attiva/disattiva la modalità di test
 /msgbot_is_test_mode : mostra se la modalità di test è attiva
-/msgbot_task_start __PERIOD_HOURS MSG_ID MSG__ : avvia un task di avviso nella chat corrente (il messaggio deve essere su una linea a capo)
+/msgbot_task_start __MSG_ID PERIOD_HOURS [START_HOUR] MSG__ : avvia un task di avviso nella chat corrente (il messaggio deve essere su una linea a capo)
 /msgbot_task_stop __MSG_ID__ : ferma il task specificato nella chat corrente
 /msgbot_task_stop_all : ferma tutti i task nella chat corrente
 /msgbot_task_pause __MSG_ID__ : mette in pausa il task specificato nella chat corrente
@@ -19,7 +19,9 @@ Qui trovi la lista dei comandi supportati.
 /msgbot_task_get __MSG_ID__ : mostra il messaggio impostato per il task specificato nella chat corrente
 /msgbot_task_set __MSG_ID MSG__ : imposta il messaggio del task specificato nella chat corrente (il messaggio deve essere su una linea a capo)
 /msgbot_task_delete_last_msg __MSG_ID true/false__ : attiva/disattiva la rimozione degli ultimi messaggi inviati per il task specificato nella chat corrente
-/msgbot_task_info : mostra la lista di tutti i task attivi nella chat corrente</sentence>
+/msgbot_task_info : mostra la lista di tutti i task attivi nella chat corrente
+
+I parametri tra parentesi quadre sono opzionali.</sentence>
     <!-- Alive command message -->
     <sentence id="ALIVE_CMD">**STATO**
 ✅ Il bot è attivo.</sentence>
@@ -27,7 +29,7 @@ Qui trovi la lista dei comandi supportati.
     <!-- Set test mode command enabled message -->
     <sentence id="SET_TEST_MODE_EN_CMD">**MODALITÀ TEST**
 ✅ Modalità di test attivata.</sentence>
-    <!-- Set test mode command disabled message -->
+    <!-- Set test mode command disabled message -->SINGLE_TASK_INFO_MSG
     <sentence id="SET_TEST_MODE_DIS_CMD">**MODALITÀ TEST**
 ✅ Modalità di test disattivata.</sentence>
 
@@ -44,6 +46,7 @@ La modalità di test è attualmente disattivata.</sentence>
 
 Parametri:
 - Periodo: __{period}h__
+- Inizio: __{start:02d}:00__
 - ID messaggio: __{msg_id}__</sentence>
 
     <!-- Stop price task ok message -->
@@ -122,11 +125,14 @@ Non dimenticarti di **farmi amministratore del gruppo** o non potrò funzionare 
     <!-- Task period error message -->
     <sentence id="TASK_PERIOD_ERR_MSG">**ERRORE**
 ❌ Il periodo deve essere compreso tra 1 e 24.</sentence>
+    <!-- Task start error message -->
+    <sentence id="TASK_START_ERR_MSG">**ERRORE**
+❌ L'ora di inizio deve essere compresa tra 0 e 23.</sentence>
     <!-- Maximum tasks error message -->
     <sentence id="MAX_TASK_ERR_MSG">**ERRORE**
 ❌ Massimo numero di task raggiunto. Ferma qualche task per avviarne dei nuovi.</sentence>
     <!-- Single task information message -->
-    <sentence id="SINGLE_TASK_INFO_MSG">- ID: __{msg_id}__, periodo: __{period}h__, stato: __{state}__</sentence>
+    <sentence id="SINGLE_TASK_INFO_MSG">- ID: __{msg_id}__, periodo: __{period}h__, inizio: __{start:02d}:00__, stato: __{state}__</sentence>
     <!-- Task running message -->
     <sentence id="TASK_RUNNING_MSG">attivo</sentence>
     <!-- Task paused message -->

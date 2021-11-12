@@ -24,7 +24,8 @@
 from typing import Any, Callable
 from telegram_periodic_msg_bot.periodic_msg_scheduler import (
     PeriodicMsgJobAlreadyExistentError, PeriodicMsgJobNotExistentError,
-    PeriodicMsgJobInvalidPeriodError, PeriodicMsgJobMaxNumError
+    PeriodicMsgJobInvalidPeriodError, PeriodicMsgJobInvalidStartError,
+    PeriodicMsgJobMaxNumError
 )
 from telegram_periodic_msg_bot.command_base import CommandBase
 from telegram_periodic_msg_bot.command_data import CommandParameterError
@@ -126,23 +127,28 @@ class MessageTaskStartCmd(CommandBase):
                         **kwargs: Any) -> None:
         # Get parameters
         try:
-            period_hours = self.cmd_data.Params().GetAsInt(0)
-            msg_id = self.cmd_data.Params().GetAsString(1)
+            msg_id = self.cmd_data.Params().GetAsString(0)
+            period_hours = self.cmd_data.Params().GetAsInt(1)
+            start_hour = self.cmd_data.Params().GetAsInt(2, 0)
         except CommandParameterError:
             self._SendMessage(self.translator.GetSentence("PARAM_ERR_MSG"))
         else:
             try:
                 kwargs["periodic_msg_scheduler"].Start(self.cmd_data.Chat(),
                                                        period_hours,
+                                                       start_hour,
                                                        msg_id,
                                                        self.message)
                 self._SendMessage(
                     self.translator.GetSentence("MESSAGE_TASK_START_OK_CMD",
                                                 period=period_hours,
+                                                start=start_hour,
                                                 msg_id=msg_id)
                 )
             except PeriodicMsgJobInvalidPeriodError:
                 self._SendMessage(self.translator.GetSentence("TASK_PERIOD_ERR_MSG"))
+            except PeriodicMsgJobInvalidStartError:
+                self._SendMessage(self.translator.GetSentence("TASK_START_ERR_MSG"))
             except PeriodicMsgJobMaxNumError:
                 self._SendMessage(self.translator.GetSentence("MAX_TASK_ERR_MSG"))
             except PeriodicMsgJobAlreadyExistentError:

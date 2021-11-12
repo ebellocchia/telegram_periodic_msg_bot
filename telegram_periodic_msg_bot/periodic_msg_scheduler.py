@@ -334,23 +334,24 @@ class PeriodicMsgScheduler:
                  period: int,
                  msg_id: str) -> None:
         is_test_mode = self.config.GetValue(ConfigTypes.APP_TEST_MODE)
+        cron_str = self.__BuildCronString(period, is_test_mode)
         if is_test_mode:
             self.scheduler.add_job(self.jobs[chat.id][job_id].DoJob,
                                    "cron",
                                    args=(chat,),
-                                   minute=self.__BuildCronString(period, is_test_mode),
+                                   minute=cron_str,
                                    id=job_id)
         else:
             self.scheduler.add_job(self.jobs[chat.id][job_id].DoJob,
                                    "cron",
                                    args=(chat,),
-                                   hour=self.__BuildCronString(period, is_test_mode),
+                                   hour=cron_str,
                                    id=job_id)
         # Log
         per_sym = "minute(s)" if is_test_mode else "hour(s)"
         self.logger.GetLogger().info(
             f"Started job \"{job_id}\" in chat {ChatHelper.GetTitleOrId(chat)} ({period} {per_sym}, "
-            f"{msg_id}), number of active jobs: {self.__GetTotalJobCount()}"
+            f"{msg_id}), number of active jobs: {self.__GetTotalJobCount()}, {cron_str}"
         )
 
     # Get job ID

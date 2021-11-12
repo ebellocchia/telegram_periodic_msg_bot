@@ -76,9 +76,10 @@ List of supported commands:
 - **/alive**: show if bot is active
 - **/msgbot_set_test_mode true/false**: enable/disable test mode
 - **/msgbot_is_test_mode**: show if test mode is enabled
-- **/msgbot_task_start *PERIOD_HOURS MSG_ID MSG***: start a message task in the current chat. If the task *MSG_ID* already exists in the current chat, an error message will be shown. To start it again, it shall be stopped with the *msgbot_task_stop* command.
-    - *PERIOD_HOURS*: Task period in hours, it shall be between 1 and 24
+- **/msgbot_task_start *MSG_ID PERIOD_HOURS [START_HOUR] MSG***: start a message task in the current chat. If the task *MSG_ID* already exists in the current chat, an error message will be shown. To start it again, it shall be stopped with the *msgbot_task_stop* command.
     - *MSG_ID*: Message ID
+    - *PERIOD_HOURS*: Task period in hours, it shall be between 1 and 24
+    - *START_HOUR* (optional): Task start hour, it shall be between 0 and 23. Default value: 0.
     - *MSG*: Message to be sent periodically, it shall be on a new line
 - **/msgbot_task_stop *MSG_ID***: stop the specified message task in the current chat. If the task *MSG_ID* does not exist in the current chat, an error message will be shown.
     - *MSG_ID*: CoinGecko *ID*
@@ -100,9 +101,9 @@ List of supported commands:
 Messages can contain HTML tags if needed (e.g. for bold/italic text), while Markdown tags are not supported.\
 By default, a message task will delete the last sent message when sending a new one. This can be enabled/disabled with the *msgbot_task_delete_last_msg* command.
 
-The task period always starts from midnight (be sure to set the correct time on the VPS), for example:
-- A task period of 8 hours will send the message at 00:00, 08:00 and 16:00
-- A task period of 6 hours will send the message at 00:00, 06:00, 12:00 and 18:00
+The task period starts from the specified starting hour (be sure to set the correct time on the VPS), for example:
+- A task period of 8 hours starting from midnight will send the message at: 00:00, 08:00 and 16:00
+- A task period of 6 hours starting from 8:00 will send the message at: 08:00, 14:00, 20:00 and 02:00
 
 **Examples**
 

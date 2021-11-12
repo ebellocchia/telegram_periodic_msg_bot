@@ -147,14 +147,14 @@ class PeriodicMsgScheduler:
         # Check if existent
         if self.IsActiveInChat(chat, msg_id):
             self.logger.GetLogger().error(
-                f"Job {job_id} already active in chat {ChatHelper.GetTitleOrId(chat)}, cannot start it"
+                f"Job \"{job_id}\" already active in chat {ChatHelper.GetTitleOrId(chat)}, cannot start it"
             )
             raise PeriodicMsgJobAlreadyExistentError()
 
         # Check period
         if period_hours < PeriodicMsgSchedulerConst.MIN_PERIOD_HOURS or period_hours > PeriodicMsgSchedulerConst.MAX_PERIOD_HOURS:
             self.logger.GetLogger().error(
-                f"Invalid period {period_hours} for job {job_id}, cannot start it"
+                f"Invalid period {period_hours} for job \"{job_id}\", cannot start it"
             )
             raise PeriodicMsgJobInvalidPeriodError()
 
@@ -178,7 +178,7 @@ class PeriodicMsgScheduler:
         # Check if existent
         if not self.IsActiveInChat(chat, msg_id):
             self.logger.GetLogger().error(
-                f"Job {job_id} not active in chat {ChatHelper.GetTitleOrId(chat)}, cannot get message"
+                f"Job \"{job_id}\" not active in chat {ChatHelper.GetTitleOrId(chat)}, cannot get message"
             )
             raise PeriodicMsgJobNotExistentError()
 
@@ -194,7 +194,7 @@ class PeriodicMsgScheduler:
         # Check if existent
         if not self.IsActiveInChat(chat, msg_id):
             self.logger.GetLogger().error(
-                f"Job {job_id} not active in chat {ChatHelper.GetTitleOrId(chat)}, cannot set message"
+                f"Job \"{job_id}\" not active in chat {ChatHelper.GetTitleOrId(chat)}, cannot set message"
             )
             raise PeriodicMsgJobNotExistentError()
 
@@ -203,7 +203,7 @@ class PeriodicMsgScheduler:
 
         self.jobs[chat.id][job_id].SetMessage(msg)
         self.logger.GetLogger().info(
-            f"Set message to job {job_id} in chat {ChatHelper.GetTitleOrId(chat)}: {msg}"
+            f"Set message to job \"{job_id}\" in chat {ChatHelper.GetTitleOrId(chat)}: {msg}"
         )
 
     # Stop job
@@ -214,14 +214,14 @@ class PeriodicMsgScheduler:
 
         if not self.IsActiveInChat(chat, msg_id):
             self.logger.GetLogger().error(
-                f"Job {job_id} not active in chat {ChatHelper.GetTitleOrId(chat)}, cannot stop it"
+                f"Job \"{job_id}\" not active in chat {ChatHelper.GetTitleOrId(chat)}, cannot stop it"
             )
             raise PeriodicMsgJobNotExistentError()
 
         del self.jobs[chat.id][job_id]
         self.scheduler.remove_job(job_id)
         self.logger.GetLogger().info(
-            f"Stopped job {job_id} in chat {ChatHelper.GetTitleOrId(chat)}, number of active jobs: {self.__GetTotalJobCount()}"
+            f"Stopped job \"{job_id}\" in chat {ChatHelper.GetTitleOrId(chat)}, number of active jobs: {self.__GetTotalJobCount()}"
         )
 
     # Stop all jobs
@@ -238,7 +238,7 @@ class PeriodicMsgScheduler:
         for job_id in self.jobs[chat.id].keys():
             self.scheduler.remove_job(job_id)
             self.logger.GetLogger().info(
-                f"Stopped job {job_id} in chat {ChatHelper.GetTitleOrId(chat)}"
+                f"Stopped job \"{job_id}\" in chat {ChatHelper.GetTitleOrId(chat)}"
             )
         # Delete entry
         del self.jobs[chat.id]
@@ -263,14 +263,14 @@ class PeriodicMsgScheduler:
 
         if not self.IsActiveInChat(chat, msg_id):
             self.logger.GetLogger().error(
-                f"Job {job_id} not active in chat {ChatHelper.GetTitleOrId(chat)}, cannot pause it"
+                f"Job \"{job_id}\" not active in chat {ChatHelper.GetTitleOrId(chat)}, cannot pause it"
             )
             raise PeriodicMsgJobNotExistentError()
 
         self.jobs[chat.id][job_id].SetRunning(False)
         self.scheduler.pause_job(job_id)
         self.logger.GetLogger().info(
-            f"Paused job {job_id} in chat {ChatHelper.GetTitleOrId(chat)}"
+            f"Paused job \"{job_id}\" in chat {ChatHelper.GetTitleOrId(chat)}"
         )
 
     # Resume job
@@ -281,14 +281,14 @@ class PeriodicMsgScheduler:
 
         if not self.IsActiveInChat(chat, msg_id):
             self.logger.GetLogger().error(
-                f"Job {job_id} not active in chat {ChatHelper.GetTitleOrId(chat)}, cannot resume it"
+                f"Job \"{job_id}\" not active in chat {ChatHelper.GetTitleOrId(chat)}, cannot resume it"
             )
             raise PeriodicMsgJobNotExistentError()
 
         self.jobs[chat.id][job_id].SetRunning(True)
         self.scheduler.resume_job(job_id)
         self.logger.GetLogger().info(
-            f"Resumed job {job_id} in chat {ChatHelper.GetTitleOrId(chat)}"
+            f"Resumed job \"{job_id}\" in chat {ChatHelper.GetTitleOrId(chat)}"
         )
 
     # Set delete last sent message flag
@@ -300,13 +300,13 @@ class PeriodicMsgScheduler:
 
         if not self.IsActiveInChat(chat, msg_id):
             self.logger.GetLogger().error(
-                f"Job {job_id} not active in chat {ChatHelper.GetTitleOrId(chat)}"
+                f"Job \"{job_id}\" not active in chat {ChatHelper.GetTitleOrId(chat)}"
             )
             raise PeriodicMsgJobNotExistentError()
 
         self.jobs[chat.id][job_id].DeleteLastSentMessage(flag)
         self.logger.GetLogger().info(
-            f"Set delete last message to {flag} for job {job_id} in chat {ChatHelper.GetTitleOrId(chat)}"
+            f"Set delete last message to {flag} for job \"{job_id}\" in chat {ChatHelper.GetTitleOrId(chat)}"
         )
 
     # Create job
@@ -349,7 +349,7 @@ class PeriodicMsgScheduler:
         # Log
         per_sym = "minute(s)" if is_test_mode else "hour(s)"
         self.logger.GetLogger().info(
-            f"Started job {job_id} in chat {ChatHelper.GetTitleOrId(chat)} ({period} {per_sym}, "
+            f"Started job \"{job_id}\" in chat {ChatHelper.GetTitleOrId(chat)} ({period} {per_sym}, "
             f"{msg_id}), number of active jobs: {self.__GetTotalJobCount()}"
         )
 

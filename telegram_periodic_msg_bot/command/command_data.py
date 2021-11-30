@@ -23,8 +23,8 @@
 #
 from typing import Any, Callable, Optional, Union
 import pyrogram
-from telegram_periodic_msg_bot.utils import Utils
-from telegram_periodic_msg_bot.wrapped_list import WrappedList
+from telegram_periodic_msg_bot.utils.utils import Utils
+from telegram_periodic_msg_bot.utils.wrapped_list import WrappedList
 
 
 #

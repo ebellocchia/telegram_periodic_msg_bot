@@ -25,7 +25,8 @@ import logging
 import logging.handlers
 import os
 from typing import Union
-from telegram_periodic_msg_bot.config import ConfigTypes, Config
+from telegram_periodic_msg_bot.bot.bot_config import BotConfigTypes
+from telegram_periodic_msg_bot.config.configurable_object import ConfigurableObject
 
 
 #
@@ -44,12 +45,12 @@ class LoggerConst:
 # Logger class
 class Logger:
 
-    config: Config
+    config: ConfigurableObject
     logger: logging.Logger
 
     # Constructor
     def __init__(self,
-                 config: Config) -> None:
+                 config: ConfigurableObject) -> None:
         self.config = config
         self.logger = logging.getLogger(LoggerConst.LOGGER_NAME)
         self.__Init()
@@ -69,15 +70,15 @@ class Logger:
 
     # Configure root logger
     def __ConfigureRootLogger(self) -> None:
-        self.logger.setLevel(self.config.GetValue(ConfigTypes.LOG_LEVEL))
+        self.logger.setLevel(self.config.GetValue(BotConfigTypes.LOG_LEVEL))
 
     # Configure console logger
     def __ConfigureConsoleLogger(self) -> None:
         # Configure console handler if required
-        if self.config.GetValue(ConfigTypes.LOG_CONSOLE_ENABLED):
+        if self.config.GetValue(BotConfigTypes.LOG_CONSOLE_ENABLED):
             # Create handler
             ch = logging.StreamHandler()
-            ch.setLevel(self.config.GetValue(ConfigTypes.LOG_LEVEL))
+            ch.setLevel(self.config.GetValue(BotConfigTypes.LOG_LEVEL))
             ch.setFormatter(logging.Formatter(LoggerConst.LOG_CONSOLE_FORMAT))
             # Add handler
             self.logger.addHandler(ch)
@@ -85,25 +86,25 @@ class Logger:
     # Configure file logger
     def __ConfigureFileLogger(self) -> None:
         # Configure file handler if required
-        if self.config.GetValue(ConfigTypes.LOG_FILE_ENABLED):
+        if self.config.GetValue(BotConfigTypes.LOG_FILE_ENABLED):
             # Get file name
-            log_file_name = self.config.GetValue(ConfigTypes.LOG_FILE_NAME)
+            log_file_name = self.config.GetValue(BotConfigTypes.LOG_FILE_NAME)
             # Create log directories if needed
             self.__MakeLogDir(log_file_name)
 
             # Create file handler
             fh: Union[logging.handlers.RotatingFileHandler, logging.FileHandler]
-            if self.config.GetValue(ConfigTypes.LOG_FILE_USE_ROTATING):
+            if self.config.GetValue(BotConfigTypes.LOG_FILE_USE_ROTATING):
                 fh = logging.handlers.RotatingFileHandler(log_file_name,
-                                                          maxBytes=self.config.GetValue(ConfigTypes.LOG_FILE_MAX_BYTES),
-                                                          backupCount=self.config.GetValue(ConfigTypes.LOG_FILE_BACKUP_CNT),
+                                                          maxBytes=self.config.GetValue(BotConfigTypes.LOG_FILE_MAX_BYTES),
+                                                          backupCount=self.config.GetValue(BotConfigTypes.LOG_FILE_BACKUP_CNT),
                                                           encoding="utf-8")
             else:
                 fh = logging.FileHandler(log_file_name,
-                                         mode="a" if self.config.GetValue(ConfigTypes.LOG_FILE_APPEND) else "w",
+                                         mode="a" if self.config.GetValue(BotConfigTypes.LOG_FILE_APPEND) else "w",
                                          encoding="utf-8")
 
-            fh.setLevel(self.config.GetValue(ConfigTypes.LOG_LEVEL))
+            fh.setLevel(self.config.GetValue(BotConfigTypes.LOG_LEVEL))
             fh.setFormatter(logging.Formatter(LoggerConst.LOG_FILE_FORMAT))
             # Add handler
             self.logger.addHandler(fh)

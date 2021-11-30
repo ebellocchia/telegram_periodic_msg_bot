@@ -24,10 +24,10 @@
 from enum import Enum, auto, unique
 from typing import Any
 import pyrogram
-from telegram_periodic_msg_bot.config import Config
-from telegram_periodic_msg_bot.logger import Logger
-from telegram_periodic_msg_bot.message_sender import MessageSender
-from telegram_periodic_msg_bot.translation_loader import TranslationLoader
+from telegram_periodic_msg_bot.config.configurable_object import ConfigurableObject
+from telegram_periodic_msg_bot.logger.logger import Logger
+from telegram_periodic_msg_bot.message.message_sender import MessageSender
+from telegram_periodic_msg_bot.translator.translation_loader import TranslationLoader
 
 
 #
@@ -49,13 +49,13 @@ class MessageTypes(Enum):
 # Message dispatcher class
 class MessageDispatcher:
 
-    config: Config
+    config: ConfigurableObject
     logger: Logger
     translator: TranslationLoader
 
     # Constructor
     def __init__(self,
-                 config: Config,
+                 config: ConfigurableObject,
                  logger: Logger,
                  translator: TranslationLoader) -> None:
         self.config = config

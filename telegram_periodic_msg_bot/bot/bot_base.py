@@ -24,12 +24,13 @@
 from typing import Any, Dict, List
 import pyrogram
 from pyrogram import Client
-from telegram_periodic_msg_bot.command_dispatcher import CommandTypes, CommandDispatcher
-from telegram_periodic_msg_bot.config import ConfigTypes, Config
-from telegram_periodic_msg_bot.config_loader import ConfigCfgType, ConfigLoader
-from telegram_periodic_msg_bot.logger import Logger
-from telegram_periodic_msg_bot.message_dispatcher import MessageTypes, MessageDispatcher
-from telegram_periodic_msg_bot.translation_loader import TranslationLoader
+from telegram_periodic_msg_bot.bot.bot_config import BotConfigTypes, BotConfig
+from telegram_periodic_msg_bot.config.configurable_object import ConfigurableObject
+from telegram_periodic_msg_bot.command.command_dispatcher import CommandTypes, CommandDispatcher
+from telegram_periodic_msg_bot.config.config_loader import ConfigCfgType, ConfigLoader
+from telegram_periodic_msg_bot.logger.logger import Logger
+from telegram_periodic_msg_bot.message.message_dispatcher import MessageTypes, MessageDispatcher
+from telegram_periodic_msg_bot.translator.translation_loader import TranslationLoader
 
 
 #
@@ -48,7 +49,7 @@ HandlersCfgType = Dict[Any, List[Dict[str, Any]]]
 # Bot base class
 class BotBase:
 
-    config: Config
+    config: ConfigurableObject
     logger: Logger
     translator: TranslationLoader
     client: pyrogram.Client
@@ -61,16 +62,16 @@ class BotBase:
                  config_cfg: ConfigCfgType,
                  handlers_cfg: HandlersCfgType) -> None:
         # Load configuration
-        config_ldr = ConfigLoader(config_cfg)
+        config_ldr = ConfigLoader(BotConfig(), config_cfg)
         config_ldr.Load(config_file)
-        self.config = config_ldr.GetConfig()
+        self.config = config_ldr.GetLoadedObject()
         # Initialize logger
         self.logger = Logger(self.config)
         # Initialize translations
         self.translator = TranslationLoader(self.logger)
-        self.translator.Load(self.config.GetValue(ConfigTypes.APP_LANG_FILE))
+        self.translator.Load(self.config.GetValue(BotConfigTypes.APP_LANG_FILE))
         # Initialize client
-        self.client = Client(self.config.GetValue(ConfigTypes.SESSION_NAME),
+        self.client = Client(self.config.GetValue(BotConfigTypes.SESSION_NAME),
                              config_file=config_file)
         # Initialize helper classes
         self.cmd_dispatcher = CommandDispatcher(self.config, self.logger, self.translator)

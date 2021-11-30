@@ -21,7 +21,7 @@
 #
 # Imports
 #
-from enum import Enum, auto, unique
+from enum import Enum
 from typing import Any, Dict
 
 
@@ -29,41 +29,19 @@ from typing import Any, Dict
 # Enumerations
 #
 
-# Configuration types
-@unique
-class ConfigTypes(Enum):
-    SESSION_NAME = auto()
-    # App
-    APP_TEST_MODE = auto()
-    APP_LANG_FILE = auto()
-    # Task
-    TASKS_MAX_NUM = auto()
-    # Message
-    MESSAGE_MAX_LEN = auto()
-    # Logging
-    LOG_LEVEL = auto()
-    LOG_CONSOLE_ENABLED = auto()
-    LOG_FILE_ENABLED = auto()
-    LOG_FILE_NAME = auto()
-    LOG_FILE_USE_ROTATING = auto()
-    LOG_FILE_APPEND = auto()
-    LOG_FILE_MAX_BYTES = auto()
-    LOG_FILE_BACKUP_CNT = auto()
+# Configurable types
+class ConfigurableTypes(Enum):
+    pass
 
 
 #
 # Classes
 #
 
-# Configuration error class
-class ConfigError(Exception):
-    pass
+# Configurable object class
+class ConfigurableObject:
 
-
-# Configuration class
-class Config:
-
-    config: Dict[ConfigTypes, Any]
+    config: Dict[ConfigurableTypes, Any]
 
     # Constructor
     def __init__(self) -> None:
@@ -71,22 +49,32 @@ class Config:
 
     # Get value
     def GetValue(self,
-                 config_type: ConfigTypes) -> Any:
-        if not isinstance(config_type, ConfigTypes):
-            raise TypeError("Config type is not an enumerative of ConfigTypes")
+                 config_type: ConfigurableTypes) -> Any:
+        if not isinstance(config_type, ConfigurableTypes):
+            raise TypeError("BotConfig type is not an enumerative of ConfigurableTypes")
 
         return self.config[config_type]
 
     # Set value
     def SetValue(self,
-                 config_type: ConfigTypes,
+                 config_type: ConfigurableTypes,
                  value: Any) -> None:
-        if not isinstance(config_type, ConfigTypes):
-            raise TypeError("Config type is not an enumerative of ConfigTypes")
+        if not isinstance(config_type, ConfigurableTypes):
+            raise TypeError("BotConfig type is not an enumerative of ConfigurableTypes")
 
         self.config[config_type] = value
 
     # Get if value is set
     def IsValueSet(self,
-                   config_type: ConfigTypes) -> bool:
+                   config_type: ConfigurableTypes) -> bool:
         return config_type in self.config
+
+    # Convert to string
+    def ToString(self) -> str:
+        return "\n".join(
+            f"{field}: {val}" for field, val in self.config.values()
+        )
+
+    # Convert to string
+    def __str__(self) -> str:
+        return self.ToString()

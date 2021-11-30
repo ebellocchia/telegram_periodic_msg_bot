@@ -22,16 +22,17 @@
 # Imports
 #
 from typing import Any, Callable
-from telegram_periodic_msg_bot.periodic_msg_scheduler import (
+
+from telegram_periodic_msg_bot.command.command_base import CommandBase
+from telegram_periodic_msg_bot.command.command_data import CommandParameterError
+from telegram_periodic_msg_bot.bot.bot_config import BotConfigTypes
+from telegram_periodic_msg_bot.misc.helpers import UserHelper
+from telegram_periodic_msg_bot.periodic_msg.periodic_msg_scheduler import (
     PeriodicMsgJobAlreadyExistentError, PeriodicMsgJobNotExistentError,
     PeriodicMsgJobInvalidPeriodError, PeriodicMsgJobInvalidStartError,
     PeriodicMsgJobMaxNumError
 )
-from telegram_periodic_msg_bot.command_base import CommandBase
-from telegram_periodic_msg_bot.command_data import CommandParameterError
-from telegram_periodic_msg_bot.config import ConfigTypes
-from telegram_periodic_msg_bot.helpers import UserHelper
-from telegram_periodic_msg_bot.periodic_msg_parser import (
+from telegram_periodic_msg_bot.periodic_msg.periodic_msg_parser import (
     PeriodicMsgParserInvalidError, PeriodicMsgParserTooLongError
 )
 
@@ -95,10 +96,10 @@ class SetTestModeCmd(CommandBase):
             self._SendMessage(self.translator.GetSentence("PARAM_ERR_MSG"))
         else:
             # Set test mode
-            self.config.SetValue(ConfigTypes.APP_TEST_MODE, flag)
+            self.config.SetValue(BotConfigTypes.APP_TEST_MODE, flag)
 
             # Send message
-            if self.config.GetValue(ConfigTypes.APP_TEST_MODE):
+            if self.config.GetValue(BotConfigTypes.APP_TEST_MODE):
                 self._SendMessage(self.translator.GetSentence("SET_TEST_MODE_EN_CMD"))
             else:
                 self._SendMessage(self.translator.GetSentence("SET_TEST_MODE_DIS_CMD"))
@@ -111,7 +112,7 @@ class IsTestModeCmd(CommandBase):
     # Execute command
     def _ExecuteCommand(self,
                         **kwargs: Any) -> None:
-        if self.config.GetValue(ConfigTypes.APP_TEST_MODE):
+        if self.config.GetValue(BotConfigTypes.APP_TEST_MODE):
             self._SendMessage(self.translator.GetSentence("IS_TEST_MODE_EN_CMD"))
         else:
             self._SendMessage(self.translator.GetSentence("IS_TEST_MODE_DIS_CMD"))
@@ -161,7 +162,7 @@ class MessageTaskStartCmd(CommandBase):
             except PeriodicMsgParserTooLongError:
                 self._SendMessage(
                     self.translator.GetSentence("MESSAGE_TOO_LONG_ERR_MSG",
-                                                msg_max_len=self.config.GetValue(ConfigTypes.MESSAGE_MAX_LEN))
+                                                msg_max_len=self.config.GetValue(BotConfigTypes.MESSAGE_MAX_LEN))
                 )
 
 
@@ -327,7 +328,7 @@ class MessageTaskSetCmd(CommandBase):
             except PeriodicMsgParserTooLongError:
                 self._SendMessage(
                     self.translator.GetSentence("MESSAGE_TOO_LONG_ERR_MSG",
-                                                msg_max_len=self.config.GetValue(ConfigTypes.MESSAGE_MAX_LEN))
+                                                msg_max_len=self.config.GetValue(BotConfigTypes.MESSAGE_MAX_LEN))
                 )
 
 

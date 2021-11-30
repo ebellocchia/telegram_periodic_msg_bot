@@ -21,41 +21,30 @@
 #
 # Imports
 #
-from typing import List
-import pyrogram
-import pyrogram.errors.exceptions as pyrogram_ex
-from telegram_periodic_msg_bot.logger import Logger
+from typing import Any, Dict
 
 
 #
 # Classes
 #
 
-# Message deleter class
-class MessageDeleter:
+# Key-Value converter class
+class KeyValueConverter:
 
-    client: pyrogram.Client
-    logger: Logger
+    kv_dict: Dict[str, Any]
 
     # Constructor
     def __init__(self,
-                 client: pyrogram.Client,
-                 logger: Logger) -> None:
-        self.client = client
-        self.logger = logger
+                 kv_dict: Dict[str, Any]) -> None:
+        self.kv_dict = kv_dict
 
-    # Delete message
-    def DeleteMessage(self,
-                      message: pyrogram.types.Message) -> bool:
-        try:
-            self.client.delete_messages(message.chat.id, message.message_id)
-            return True
-        except pyrogram_ex.forbidden_403.MessageDeleteForbidden:
-            self.logger.GetLogger().exception(f"Unable to delete message {message.message_id}")
-            return False
+    # Convert key to value
+    def KeyToValue(self,
+                   key: str) -> Any:
+        return self.kv_dict[key]
 
-    # Delete messages
-    def DeleteMessages(self,
-                       messages: List[pyrogram.types.Message]) -> None:
-        for message in messages:
-            self.DeleteMessage(message)
+    # Convert value to key
+    def ValueToKey(self,
+                   value: Any) -> str:
+        idx = list(self.kv_dict.values()).index(value)
+        return list(self.kv_dict.keys())[idx]

@@ -24,16 +24,16 @@
 from enum import Enum, auto, unique
 from typing import Any, Dict, Type
 import pyrogram
-from telegram_periodic_msg_bot.command_base import CommandBase
-from telegram_periodic_msg_bot.commands import (
+from telegram_periodic_msg_bot.config.configurable_object import ConfigurableObject
+from telegram_periodic_msg_bot.command.command_base import CommandBase
+from telegram_periodic_msg_bot.command.commands import (
     HelpCmd, AliveCmd, SetTestModeCmd, IsTestModeCmd,
     MessageTaskStartCmd, MessageTaskStopCmd, MessageTaskStopAllCmd, MessageTaskPauseCmd, MessageTaskResumeCmd,
     MessageTaskGetCmd, MessageTaskSetCmd,
     MessageTaskDeleteLastMsgCmd, MessageTaskInfoCmd
 )
-from telegram_periodic_msg_bot.config import Config
-from telegram_periodic_msg_bot.logger import Logger
-from telegram_periodic_msg_bot.translation_loader import TranslationLoader
+from telegram_periodic_msg_bot.logger.logger import Logger
+from telegram_periodic_msg_bot.translator.translation_loader import TranslationLoader
 
 
 #
@@ -87,13 +87,13 @@ class CommandDispatcherConst:
 # Command dispatcher class
 class CommandDispatcher:
 
-    config: Config
+    config: ConfigurableObject
     logger: Logger
     translator: TranslationLoader
 
     # Constructor
     def __init__(self,
-                 config: Config,
+                 config: ConfigurableObject,
                  logger: Logger,
                  translator: TranslationLoader) -> None:
         self.config = config

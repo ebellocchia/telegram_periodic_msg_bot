@@ -25,13 +25,13 @@ from abc import ABC, abstractmethod
 from typing import Any
 import pyrogram
 from pyrogram.errors import RPCError
-from telegram_periodic_msg_bot.chat_members import ChatMembersGetter
-from telegram_periodic_msg_bot.command_data import CommandData
-from telegram_periodic_msg_bot.config import Config
-from telegram_periodic_msg_bot.logger import Logger
-from telegram_periodic_msg_bot.message_sender import MessageSender
-from telegram_periodic_msg_bot.helpers import ChatHelper, UserHelper
-from telegram_periodic_msg_bot.translation_loader import TranslationLoader
+from telegram_periodic_msg_bot.command.command_data import CommandData
+from telegram_periodic_msg_bot.config.configurable_object import ConfigurableObject
+from telegram_periodic_msg_bot.logger.logger import Logger
+from telegram_periodic_msg_bot.message.message_sender import MessageSender
+from telegram_periodic_msg_bot.misc.chat_members import ChatMembersGetter
+from telegram_periodic_msg_bot.misc.helpers import ChatHelper, UserHelper
+from telegram_periodic_msg_bot.translator.translation_loader import TranslationLoader
 
 
 #
@@ -44,7 +44,7 @@ from telegram_periodic_msg_bot.translation_loader import TranslationLoader
 class CommandBase(ABC):
 
     client: pyrogram.Client
-    config: Config
+    config: ConfigurableObject
     logger: Logger
     translator: TranslationLoader
     message: pyrogram.types.Message
@@ -54,7 +54,7 @@ class CommandBase(ABC):
     # Constructor
     def __init__(self,
                  client: pyrogram.Client,
-                 config: Config,
+                 config: ConfigurableObject,
                  logger: Logger,
                  translator: TranslationLoader) -> None:
         self.client = client

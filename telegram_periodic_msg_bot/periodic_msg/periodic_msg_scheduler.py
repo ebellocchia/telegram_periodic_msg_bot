@@ -24,13 +24,14 @@
 from typing import Dict
 import pyrogram
 from apscheduler.schedulers.background import BackgroundScheduler
-from telegram_periodic_msg_bot.config import ConfigTypes, Config
-from telegram_periodic_msg_bot.helpers import ChatHelper
-from telegram_periodic_msg_bot.logger import Logger
-from telegram_periodic_msg_bot.periodic_msg_job import PeriodicMsgJobData, PeriodicMsgJob
-from telegram_periodic_msg_bot.periodic_msg_parser import PeriodicMsgParser
-from telegram_periodic_msg_bot.translation_loader import TranslationLoader
-from telegram_periodic_msg_bot.wrapped_list import WrappedList
+from telegram_periodic_msg_bot.bot.bot_config import BotConfigTypes
+from telegram_periodic_msg_bot.config.configurable_object import ConfigurableObject
+from telegram_periodic_msg_bot.logger.logger import Logger
+from telegram_periodic_msg_bot.misc.helpers import ChatHelper
+from telegram_periodic_msg_bot.periodic_msg.periodic_msg_job import PeriodicMsgJobData, PeriodicMsgJob
+from telegram_periodic_msg_bot.periodic_msg.periodic_msg_parser import PeriodicMsgParser
+from telegram_periodic_msg_bot.translator.translation_loader import TranslationLoader
+from telegram_periodic_msg_bot.utils.wrapped_list import WrappedList
 
 
 #
@@ -106,7 +107,7 @@ class PeriodicMsgJobsList(WrappedList):
 class PeriodicMsgScheduler:
 
     client: pyrogram.Client
-    config: Config
+    config: ConfigurableObject
     logger: Logger
     translator: TranslationLoader
     jobs: Dict[int, Dict[str, PeriodicMsgJob]]
@@ -115,7 +116,7 @@ class PeriodicMsgScheduler:
     # Constructor
     def __init__(self,
                  client: pyrogram.Client,
-                 config: Config,
+                 config: ConfigurableObject,
                  logger: Logger,
                  translator: TranslationLoader) -> None:
         self.client = client
@@ -177,7 +178,7 @@ class PeriodicMsgScheduler:
 
         # Check total jobs number
         tot_job_cnt = self.__GetTotalJobCount()
-        if tot_job_cnt >= self.config.GetValue(ConfigTypes.TASKS_MAX_NUM):
+        if tot_job_cnt >= self.config.GetValue(BotConfigTypes.TASKS_MAX_NUM):
             self.logger.GetLogger().error("Maximum number of jobs reached, cannot start a new one")
             raise PeriodicMsgJobMaxNumError()
 
@@ -352,7 +353,7 @@ class PeriodicMsgScheduler:
                  period: int,
                  start: int,
                  msg_id: str) -> None:
-        is_test_mode = self.config.GetValue(ConfigTypes.APP_TEST_MODE)
+        is_test_mode = self.config.GetValue(BotConfigTypes.APP_TEST_MODE)
         cron_str = self.__BuildCronString(period, start, is_test_mode)
         if is_test_mode:
             self.scheduler.add_job(self.jobs[chat.id][job_id].DoJob,

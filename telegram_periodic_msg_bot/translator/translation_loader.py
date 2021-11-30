@@ -24,7 +24,7 @@
 import os
 from typing import Any, Dict, Optional
 from defusedxml import ElementTree
-from telegram_periodic_msg_bot.logger import Logger
+from telegram_periodic_msg_bot.logger.logger import Logger
 
 
 #
@@ -34,7 +34,7 @@ from telegram_periodic_msg_bot.logger import Logger
 # Constants for translation loader class
 class TranslationLoaderConst:
     # Default language folder
-    DEF_LANG_FOLDER: str = "lang"
+    DEF_LANG_FOLDER: str = "../lang"
     # Default file name
     DEF_FILE_NAME: str = "lang_en.xml"
     # XML tag for sentences

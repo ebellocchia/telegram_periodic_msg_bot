@@ -23,8 +23,8 @@
 #
 from typing import Callable, Optional
 import pyrogram
-from telegram_periodic_msg_bot.helpers import UserHelper
-from telegram_periodic_msg_bot.wrapped_list import WrappedList
+from telegram_periodic_msg_bot.misc.helpers import UserHelper
+from telegram_periodic_msg_bot.utils.wrapped_list import WrappedList
 
 
 #

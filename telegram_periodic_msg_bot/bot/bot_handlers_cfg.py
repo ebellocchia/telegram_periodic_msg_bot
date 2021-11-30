@@ -23,17 +23,17 @@
 #
 from pyrogram import filters
 from pyrogram.handlers import MessageHandler
-from telegram_periodic_msg_bot.bot_base import HandlersCfgType
-from telegram_periodic_msg_bot.command_dispatcher import CommandTypes
-from telegram_periodic_msg_bot.message_dispatcher import MessageTypes
+from telegram_periodic_msg_bot.bot.bot_base import HandlersCfgType
+from telegram_periodic_msg_bot.command.command_dispatcher import CommandTypes
+from telegram_periodic_msg_bot.message.message_dispatcher import MessageTypes
 
 
 #
 # Classes
 #
 
-# Periodic message bot handlers configuration
-PeriodicMsgBotHandlersCfg: HandlersCfgType = {
+# Bot handlers configuration
+BotHandlersCfg: HandlersCfgType = {
     # Handlers for MessageHandler
     MessageHandler: [
 

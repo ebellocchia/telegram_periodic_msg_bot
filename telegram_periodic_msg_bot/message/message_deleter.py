@@ -21,53 +21,41 @@
 #
 # Imports
 #
-from typing import List, Optional
+from typing import List
 import pyrogram
-from telegram_periodic_msg_bot.logger import Logger
-from telegram_periodic_msg_bot.message_deleter import MessageDeleter
-from telegram_periodic_msg_bot.message_sender import MessageSender
+import pyrogram.errors.exceptions as pyrogram_ex
+from telegram_periodic_msg_bot.logger.logger import Logger
 
 
 #
 # Classes
 #
 
-# Periodic message sender class
-class PeriodicMsgSender:
+# Message deleter class
+class MessageDeleter:
 
+    client: pyrogram.Client
     logger: Logger
-    delete_last_sent_msg: bool
-    last_sent_msgs: Optional[List[pyrogram.types.Message]]
-    message_deleter: MessageDeleter
-    message_sender: MessageSender
 
     # Constructor
     def __init__(self,
                  client: pyrogram.Client,
                  logger: Logger) -> None:
+        self.client = client
         self.logger = logger
-        self.delete_last_sent_msg = True
-        self.last_sent_msgs = None
-        self.message_deleter = MessageDeleter(client, logger)
-        self.message_sender = MessageSender(client, logger)
 
-    # Set delete last sent message
-    def DeleteLastSentMessage(self,
-                              flag: bool) -> None:
-        self.delete_last_sent_msg = flag
+    # Delete message
+    def DeleteMessage(self,
+                      message: pyrogram.types.Message) -> bool:
+        try:
+            self.client.delete_messages(message.chat.id, message.message_id)
+            return True
+        except pyrogram_ex.forbidden_403.MessageDeleteForbidden:
+            self.logger.GetLogger().exception(f"Unable to delete message {message.message_id}")
+            return False
 
-    # Send message
-    def SendMessage(self,
-                    chat: pyrogram.types.Chat,
-                    msg: str) -> None:
-        if self.delete_last_sent_msg:
-            self.__DeleteLastSentMessage()
-
-        self.last_sent_msgs = self.message_sender.SendMessage(chat, msg)
-
-    # Delete last sent message
-    def __DeleteLastSentMessage(self) -> None:
-        if self.last_sent_msgs is not None:
-            self.message_deleter.DeleteMessages(self.last_sent_msgs)
-
-        self.last_sent_msgs = None
+    # Delete messages
+    def DeleteMessages(self,
+                       messages: List[pyrogram.types.Message]) -> None:
+        for message in messages:
+            self.DeleteMessage(message)

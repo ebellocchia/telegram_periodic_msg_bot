@@ -21,29 +21,40 @@
 #
 # Imports
 #
-from telegram_periodic_msg_bot.bot.bot_base import BotBase
-from telegram_periodic_msg_bot.bot.bot_config_cfg import BotConfigCfg
-from telegram_periodic_msg_bot.bot.bot_handlers_cfg import BotHandlersCfg
-from telegram_periodic_msg_bot.periodic_msg.periodic_msg_scheduler import PeriodicMsgScheduler
+from enum import auto, unique
+from telegram_periodic_msg_bot.config.configurable_object import ConfigurableTypes, ConfigurableObject
+
+
+#
+# Enumerations
+#
+
+# Bot configuration types
+@unique
+class BotConfigTypes(ConfigurableTypes):
+    SESSION_NAME = auto()
+    # App
+    APP_TEST_MODE = auto()
+    APP_LANG_FILE = auto()
+    # Task
+    TASKS_MAX_NUM = auto()
+    # Message
+    MESSAGE_MAX_LEN = auto()
+    # Logging
+    LOG_LEVEL = auto()
+    LOG_CONSOLE_ENABLED = auto()
+    LOG_FILE_ENABLED = auto()
+    LOG_FILE_NAME = auto()
+    LOG_FILE_USE_ROTATING = auto()
+    LOG_FILE_APPEND = auto()
+    LOG_FILE_MAX_BYTES = auto()
+    LOG_FILE_BACKUP_CNT = auto()
 
 
 #
 # Classes
 #
 
-# Periodic message bot class
-class PeriodicMsgBot(BotBase):
-
-    periodic_msg_scheduler: PeriodicMsgScheduler
-
-    # Constructor
-    def __init__(self,
-                 config_file: str) -> None:
-        super().__init__(config_file,
-                         BotConfigCfg,
-                         BotHandlersCfg)
-        # Initialize periodic message scheduler
-        self.periodic_msg_scheduler = PeriodicMsgScheduler(self.client,
-                                                           self.config,
-                                                           self.logger,
-                                                           self.translator)
+# Bot configuration class
+class BotConfig(ConfigurableObject):
+    pass

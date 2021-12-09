@@ -27,7 +27,7 @@ import pyrogram
 from telegram_periodic_msg_bot.config.configurable_object import ConfigurableObject
 from telegram_periodic_msg_bot.command.command_base import CommandBase
 from telegram_periodic_msg_bot.command.commands import (
-    HelpCmd, AliveCmd, SetTestModeCmd, IsTestModeCmd,
+    HelpCmd, AliveCmd, SetTestModeCmd, IsTestModeCmd, VersionCmd,
     MessageTaskStartCmd, MessageTaskStopCmd, MessageTaskStopAllCmd, MessageTaskPauseCmd, MessageTaskResumeCmd,
     MessageTaskGetCmd, MessageTaskSetCmd,
     MessageTaskDeleteLastMsgCmd, MessageTaskInfoCmd
@@ -48,6 +48,7 @@ class CommandTypes(Enum):
     ALIVE_CMD = auto()
     SET_TEST_MODE_CMD = auto()
     IS_TEST_MODE_CMD = auto()
+    VERSION_CMD = auto()
     MESSAGE_TASK_START_CMD = auto()
     MESSAGE_TASK_STOP_CMD = auto()
     MESSAGE_TASK_STOP_ALL_CMD = auto()
@@ -72,6 +73,7 @@ class CommandDispatcherConst:
         CommandTypes.ALIVE_CMD: AliveCmd,
         CommandTypes.SET_TEST_MODE_CMD: SetTestModeCmd,
         CommandTypes.IS_TEST_MODE_CMD: IsTestModeCmd,
+        CommandTypes.VERSION_CMD: VersionCmd,
         CommandTypes.MESSAGE_TASK_START_CMD: MessageTaskStartCmd,
         CommandTypes.MESSAGE_TASK_STOP_CMD: MessageTaskStopCmd,
         CommandTypes.MESSAGE_TASK_STOP_ALL_CMD: MessageTaskStopAllCmd,

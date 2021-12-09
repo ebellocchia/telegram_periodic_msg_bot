@@ -35,6 +35,7 @@ from telegram_periodic_msg_bot.periodic_msg.periodic_msg_scheduler import (
 from telegram_periodic_msg_bot.periodic_msg.periodic_msg_parser import (
     PeriodicMsgParserInvalidError, PeriodicMsgParserTooLongError
 )
+from telegram_periodic_msg_bot._version import __version__
 
 
 #
@@ -116,6 +117,19 @@ class IsTestModeCmd(CommandBase):
             self._SendMessage(self.translator.GetSentence("IS_TEST_MODE_EN_CMD"))
         else:
             self._SendMessage(self.translator.GetSentence("IS_TEST_MODE_DIS_CMD"))
+
+
+#
+# Command for showing bot version
+#
+class VersionCmd(CommandBase):
+    # Execute command
+    def _ExecuteCommand(self,
+                        **kwargs: Any) -> None:
+        self._SendMessage(
+            self.translator.GetSentence("VERSION_CMD",
+                                        version=__version__)
+        )
 
 
 #

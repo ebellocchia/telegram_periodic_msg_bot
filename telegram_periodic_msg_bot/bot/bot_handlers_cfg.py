@@ -71,6 +71,12 @@ BotHandlersCfg: HandlersCfgType = {
                                                                            CommandTypes.IS_TEST_MODE_CMD),
             "filters": filters.command(["msgbot_is_test_mode"]),
         },
+        {
+            "callback": lambda self, client, message: self.DispatchCommand(client,
+                                                                           message,
+                                                                           CommandTypes.VERSION_CMD),
+            "filters": filters.command(["msgbot_version"]),
+        },
 
         #
         # Message commands (task)

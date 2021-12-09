@@ -76,6 +76,7 @@ List of supported commands:
 - **/alive**: show if bot is active
 - **/msgbot_set_test_mode true/false**: enable/disable test mode
 - **/msgbot_is_test_mode**: show if test mode is enabled
+- **/msgbot_version**: show bot version
 - **/msgbot_task_start *MSG_ID PERIOD_HOURS [START_HOUR] MSG***: start a message task in the current chat. If the task *MSG_ID* already exists in the current chat, an error message will be shown. To start it again, it shall be stopped with the *msgbot_task_stop* command.
     - *MSG_ID*: Message ID
     - *PERIOD_HOURS*: Task period in hours, it shall be between 1 and 24

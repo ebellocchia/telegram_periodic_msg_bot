@@ -89,6 +89,9 @@ class MessageDispatcher:
                         client,
                         message: pyrogram.types.Message,
                         **kwargs: Any) -> None:
+        if message.chat is None:
+            return
+
         # Send the welcome message
         MessageSender(client, self.logger).SendMessage(
             message.chat,
@@ -101,7 +104,7 @@ class MessageDispatcher:
                        message: pyrogram.types.Message,
                        **kwargs: Any) -> None:
         # If the member is the bot itself, remove the chat from the scheduler
-        if message.left_chat_member.is_self:
+        if message.left_chat_member is not None and message.left_chat_member.is_self:
             kwargs["periodic_msg_scheduler"].ChatLeft(message.chat)
 
     # Function called when a member joined the chat
@@ -109,6 +112,9 @@ class MessageDispatcher:
                          client,
                          message: pyrogram.types.Message,
                          **kwargs: Any) -> None:
+        if message.new_chat_members is None or message.chat is None:
+            return
+
         # If the member is the bot itself, send the welcome message
         for member in message.new_chat_members:
             if member.is_self:

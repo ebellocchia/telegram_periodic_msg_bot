@@ -32,6 +32,9 @@ from telegram_periodic_msg_bot.config.configurable_object import ConfigurableTyp
 # Bot configuration types
 @unique
 class BotConfigTypes(ConfigurableTypes):
+    API_ID = auto()
+    API_HASH = auto()
+    BOT_TOKEN = auto()
     SESSION_NAME = auto()
     # App
     APP_TEST_MODE = auto()

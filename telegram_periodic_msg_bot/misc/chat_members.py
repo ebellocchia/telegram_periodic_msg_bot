@@ -24,6 +24,7 @@
 from typing import Callable, Optional
 import pyrogram
 from telegram_periodic_msg_bot.misc.helpers import UserHelper
+from telegram_periodic_msg_bot.utils.pyrogram_wrapper import PyrogramWrapper
 from telegram_periodic_msg_bot.utils.wrapped_list import WrappedList
 
 
@@ -82,7 +83,7 @@ class ChatMembersGetter:
                       filter_fct: Optional[Callable[[pyrogram.types.ChatMember], bool]] = None,
                       filter_str: str = "all") -> ChatMembersList:
         # Get members
-        filtered_members = self.client.iter_chat_members(chat.id, filter=filter_str)
+        filtered_members = PyrogramWrapper.GetChatMembers(self.client, chat, filter_str)
         # Filter them if necessary
         if filter_fct is not None:
             filtered_members = list(filter(filter_fct, filtered_members))

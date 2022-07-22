@@ -39,7 +39,7 @@ from telegram_periodic_msg_bot.utils.utils import Utils
 
 # Wrapper for pyrogram for handling different versions
 class PyrogramWrapper:
-    # Get if channel
+    # Get message id
     @staticmethod
     def MessageId(message: pyrogram.types.Message) -> int:
         if PyrogramWrapper.__Version() == 2:

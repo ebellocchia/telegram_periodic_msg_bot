@@ -54,6 +54,9 @@ class PeriodicMsgParser:
     # Parse message
     def Parse(self,
               message: pyrogram.types.Message) -> str:
+        if message.text is None:
+            raise PeriodicMsgParserInvalidError()
+
         try:
             # The message shall start on a new line
             msg = message.text[message.text.index("\n"):].strip()

@@ -53,6 +53,8 @@ class ChatHelper:
     @staticmethod
     def IsPrivateChat(chat: pyrogram.types.Chat,
                       user: pyrogram.types.User):
+        if ChatHelper.IsChannel(chat):
+            return False
         return chat.id == user.id
 
 
@@ -78,4 +80,4 @@ class UserHelper:
 
         if user.first_name is not None:
             return f"{user.first_name} {user.last_name}" if user.last_name is not None else f"{user.first_name}"
-        return user.last_name
+        return user.last_name if user.last_name is not None else ""

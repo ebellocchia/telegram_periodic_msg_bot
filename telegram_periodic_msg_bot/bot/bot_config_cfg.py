@@ -22,6 +22,7 @@
 # Imports
 #
 import logging
+
 from telegram_periodic_msg_bot.bot.bot_config import BotConfigTypes
 from telegram_periodic_msg_bot.config.config_loader import ConfigCfgType
 from telegram_periodic_msg_bot.utils.key_value_converter import KeyValueConverter

@@ -23,15 +23,16 @@
 #
 from enum import Enum, auto, unique
 from typing import Any, Dict, Type
+
 import pyrogram
-from telegram_periodic_msg_bot.config.configurable_object import ConfigurableObject
+
 from telegram_periodic_msg_bot.command.command_base import CommandBase
 from telegram_periodic_msg_bot.command.commands import (
-    HelpCmd, AliveCmd, SetTestModeCmd, IsTestModeCmd, VersionCmd,
-    MessageTaskStartCmd, MessageTaskStopCmd, MessageTaskStopAllCmd, MessageTaskPauseCmd, MessageTaskResumeCmd,
-    MessageTaskGetCmd, MessageTaskSetCmd,
-    MessageTaskDeleteLastMsgCmd, MessageTaskInfoCmd
+    AliveCmd, HelpCmd, IsTestModeCmd, MessageTaskDeleteLastMsgCmd, MessageTaskGetCmd, MessageTaskInfoCmd,
+    MessageTaskPauseCmd, MessageTaskResumeCmd, MessageTaskSetCmd, MessageTaskStartCmd, MessageTaskStopAllCmd,
+    MessageTaskStopCmd, SetTestModeCmd, VersionCmd
 )
+from telegram_periodic_msg_bot.config.configurable_object import ConfigurableObject
 from telegram_periodic_msg_bot.logger.logger import Logger
 from telegram_periodic_msg_bot.translator.translation_loader import TranslationLoader
 

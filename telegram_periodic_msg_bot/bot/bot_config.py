@@ -22,7 +22,8 @@
 # Imports
 #
 from enum import auto, unique
-from telegram_periodic_msg_bot.config.configurable_object import ConfigurableTypes, ConfigurableObject
+
+from telegram_periodic_msg_bot.config.configurable_object import ConfigurableObject, ConfigurableTypes
 
 
 #

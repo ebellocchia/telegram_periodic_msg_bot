@@ -23,8 +23,10 @@
 #
 from abc import ABC, abstractmethod
 from typing import Any
+
 import pyrogram
 from pyrogram.errors import RPCError
+
 from telegram_periodic_msg_bot.command.command_data import CommandData
 from telegram_periodic_msg_bot.config.configurable_object import ConfigurableObject
 from telegram_periodic_msg_bot.logger.logger import Logger

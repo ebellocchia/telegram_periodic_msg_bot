@@ -22,13 +22,15 @@
 # Imports
 #
 from typing import Dict
+
 import pyrogram
 from apscheduler.schedulers.background import BackgroundScheduler
+
 from telegram_periodic_msg_bot.bot.bot_config import BotConfigTypes
 from telegram_periodic_msg_bot.config.configurable_object import ConfigurableObject
 from telegram_periodic_msg_bot.logger.logger import Logger
 from telegram_periodic_msg_bot.misc.helpers import ChatHelper
-from telegram_periodic_msg_bot.periodic_msg.periodic_msg_job import PeriodicMsgJobData, PeriodicMsgJob
+from telegram_periodic_msg_bot.periodic_msg.periodic_msg_job import PeriodicMsgJob, PeriodicMsgJobData
 from telegram_periodic_msg_bot.periodic_msg.periodic_msg_parser import PeriodicMsgParser
 from telegram_periodic_msg_bot.translator.translation_loader import TranslationLoader
 from telegram_periodic_msg_bot.utils.wrapped_list import WrappedList

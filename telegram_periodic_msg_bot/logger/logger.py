@@ -25,6 +25,7 @@ import logging
 import logging.handlers
 import os
 from typing import Union
+
 from telegram_periodic_msg_bot.bot.bot_config import BotConfigTypes
 from telegram_periodic_msg_bot.config.configurable_object import ConfigurableObject
 

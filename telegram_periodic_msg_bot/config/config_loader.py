@@ -23,6 +23,7 @@
 #
 import configparser
 from typing import Any, Dict, List
+
 from telegram_periodic_msg_bot.config.configurable_object import ConfigurableObject
 
 

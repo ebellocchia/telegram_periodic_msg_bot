@@ -23,7 +23,9 @@
 #
 import os
 from typing import Any, Dict, Optional
+
 from defusedxml import ElementTree
+
 from telegram_periodic_msg_bot.logger.logger import Logger
 
 

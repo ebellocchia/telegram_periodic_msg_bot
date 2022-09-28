@@ -22,7 +22,9 @@
 # Imports
 #
 from typing import Optional
+
 import pyrogram
+
 from telegram_periodic_msg_bot.utils.pyrogram_wrapper import PyrogramWrapper
 
 

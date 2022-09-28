@@ -22,8 +22,10 @@
 # Imports
 #
 from typing import List
+
 import pyrogram
 import pyrogram.errors.exceptions as pyrogram_ex
+
 from telegram_periodic_msg_bot.logger.logger import Logger
 from telegram_periodic_msg_bot.utils.pyrogram_wrapper import PyrogramWrapper
 

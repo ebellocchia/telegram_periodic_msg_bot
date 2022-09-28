@@ -22,7 +22,9 @@
 # Imports
 #
 from typing import List, Optional
+
 import pyrogram
+
 from telegram_periodic_msg_bot.logger.logger import Logger
 from telegram_periodic_msg_bot.message.message_deleter import MessageDeleter
 from telegram_periodic_msg_bot.message.message_sender import MessageSender

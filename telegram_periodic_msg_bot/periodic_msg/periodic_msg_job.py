@@ -22,7 +22,9 @@
 # Imports
 #
 from threading import Lock
+
 import pyrogram
+
 from telegram_periodic_msg_bot.logger.logger import Logger
 from telegram_periodic_msg_bot.misc.helpers import ChatHelper
 from telegram_periodic_msg_bot.periodic_msg.periodic_msg_sender import PeriodicMsgSender

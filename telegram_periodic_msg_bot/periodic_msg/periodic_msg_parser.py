@@ -24,7 +24,7 @@
 import pyrogram
 
 from telegram_periodic_msg_bot.bot.bot_config import BotConfigTypes
-from telegram_periodic_msg_bot.config.configurable_object import ConfigurableObject
+from telegram_periodic_msg_bot.config.config_object import ConfigObject
 
 
 #
@@ -44,11 +44,11 @@ class PeriodicMsgParserTooLongError(Exception):
 # Periodic message parser class
 class PeriodicMsgParser:
 
-    config: ConfigurableObject
+    config: ConfigObject
 
     # Constructor
     def __init__(self,
-                 config: ConfigurableObject) -> None:
+                 config: ConfigObject) -> None:
         self.config = config
 
     # Parse message

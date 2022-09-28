@@ -32,7 +32,7 @@ from telegram_periodic_msg_bot.command.commands import (
     MessageTaskPauseCmd, MessageTaskResumeCmd, MessageTaskSetCmd, MessageTaskStartCmd, MessageTaskStopAllCmd,
     MessageTaskStopCmd, SetTestModeCmd, VersionCmd
 )
-from telegram_periodic_msg_bot.config.configurable_object import ConfigurableObject
+from telegram_periodic_msg_bot.config.config_object import ConfigObject
 from telegram_periodic_msg_bot.logger.logger import Logger
 from telegram_periodic_msg_bot.translator.translation_loader import TranslationLoader
 
@@ -90,13 +90,13 @@ class CommandDispatcherConst:
 # Command dispatcher class
 class CommandDispatcher:
 
-    config: ConfigurableObject
+    config: ConfigObject
     logger: Logger
     translator: TranslationLoader
 
     # Constructor
     def __init__(self,
-                 config: ConfigurableObject,
+                 config: ConfigObject,
                  logger: Logger,
                  translator: TranslationLoader) -> None:
         self.config = config

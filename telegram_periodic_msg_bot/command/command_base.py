@@ -28,7 +28,7 @@ import pyrogram
 from pyrogram.errors import RPCError
 
 from telegram_periodic_msg_bot.command.command_data import CommandData
-from telegram_periodic_msg_bot.config.configurable_object import ConfigurableObject
+from telegram_periodic_msg_bot.config.config_object import ConfigObject
 from telegram_periodic_msg_bot.logger.logger import Logger
 from telegram_periodic_msg_bot.message.message_sender import MessageSender
 from telegram_periodic_msg_bot.misc.chat_members import ChatMembersGetter
@@ -46,7 +46,7 @@ from telegram_periodic_msg_bot.translator.translation_loader import TranslationL
 class CommandBase(ABC):
 
     client: pyrogram.Client
-    config: ConfigurableObject
+    config: ConfigObject
     logger: Logger
     translator: TranslationLoader
     message: pyrogram.types.Message
@@ -56,7 +56,7 @@ class CommandBase(ABC):
     # Constructor
     def __init__(self,
                  client: pyrogram.Client,
-                 config: ConfigurableObject,
+                 config: ConfigObject,
                  logger: Logger,
                  translator: TranslationLoader) -> None:
         self.client = client

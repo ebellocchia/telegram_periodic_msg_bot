@@ -48,59 +48,66 @@ The list of all possible fields that can be set is shown below.
 |Name|Description|
 |---|---|
 |**[pyrogram]**|Configuration for pyrogram|
-|session_name|Session name of your choice|
-|api_id|API ID from [https://my.telegram.org/apps](https://my.telegram.org/apps)|
-|api_hash|API hash from [https://my.telegram.org/apps](https://my.telegram.org/apps)|
-|bot_token|Bot token from BotFather|
+|`session_name`|Session name of your choice|
+|`api_id`|API ID from [https://my.telegram.org/apps](https://my.telegram.org/apps)|
+|`api_hash`|API hash from [https://my.telegram.org/apps](https://my.telegram.org/apps)|
+|`bot_token`|Bot token from BotFather|
 |**[app]**|Configuration for app|
-|app_is_test_mode|True to activate test mode false otherwise|
-|app_lang_file|Language file in XML format (default: English)|
+|`app_is_test_mode`|True to activate test mode false otherwise|
+|`app_lang_file`|Language file in XML format (default: English)|
 |**[task]**|Configuration for tasks|
-|tasks_max_num|Maximum number of running tasks (totally, in all groups). Default: 20.|
+|`tasks_max_num`|Maximum number of running tasks (totally, in all groups). Default: 20.|
 |**[message]**|Configuration for message|
-|message_max_len|Maximum message length in characters. Default: 4000.|
+|`message_max_len`|Maximum message length in characters. Default: 4000.|
 |**[logging]**|Configuration for logging|
-|log_level|Log level, same of python logging (*DEBUG*, *INFO*, *WARNING*, *ERROR*, *CRITICAL*). Default: *INFO*.|
-|log_console_enabled|True to enable logging to console, false otherwise (default: true)|
-|log_file_enabled|True to enable logging to file, false otherwise (default: false). If false, all the next fields will be skipped.|
-|log_file_name|Log file name|
-|log_file_use_rotating|True for using a rotating log file, false otherwise|
-|log_file_max_bytes|Maximum size in bytes for a log file. When reached, a new log file is created up to *log_file_backup_cnt*.. Valid only if log_file_use_rotating is true.|
-|log_file_backup_cnt|Maximum number of log files. Valid only if log_file_use_rotating is true.|
-|log_file_append|True to append to log file, false to start from a new file each time. Valid only if log_file_use_rotating is false.|
+|`log_level`|Log level, same of python logging (`DEBUG`, `INFO`, `WARNING`, `ERROR`, `CRITICAL`). Default: `INFO`.|
+|`log_console_enabled`|True to enable logging to console, false otherwise (default: `true`)|
+|`log_file_enabled`|True to enable logging to file, false otherwise (default: `false`). If false, all the next fields will be skipped.|
+|`log_file_name`|Log file name|
+|`log_file_use_rotating`|True for using a rotating log file, false otherwise|
+|`log_file_max_bytes`|Maximum size in bytes for a log file. When reached, a new log file is created up to `log_file_backup_cnt`. Valid only if `log_file_use_rotating` is true.|
+|`log_file_backup_cnt`|Maximum number of log files. Valid only if `log_file_use_rotating` is true.|
+|`log_file_append`|True to append to log file, false to start from a new file each time. Valid only if `log_file_use_rotating` is false.|
 
 ## Supported Commands
 
 List of supported commands:
-- **/help**: show this message
-- **/alive**: show if bot is active
-- **/msgbot_set_test_mode true/false**: enable/disable test mode
-- **/msgbot_is_test_mode**: show if test mode is enabled
-- **/msgbot_version**: show bot version
-- **/msgbot_task_start *MSG_ID PERIOD_HOURS [START_HOUR] MSG***: start a message task in the current chat. If the task *MSG_ID* already exists in the current chat, an error message will be shown. To start it again, it shall be stopped with the *msgbot_task_stop* command.
-    - *MSG_ID*: Message ID
-    - *PERIOD_HOURS*: Task period in hours, it shall be between 1 and 24
-    - *START_HOUR* (optional): Task start hour, it shall be between 0 and 23. Default value: 0.
-    - *MSG*: Message to be sent periodically, it shall be on a new line
-- **/msgbot_task_stop *MSG_ID***: stop the specified message task in the current chat. If the task *MSG_ID* does not exist in the current chat, an error message will be shown.
-    - *MSG_ID*: CoinGecko *ID*
-- **/msgbot_task_stop_all**: stop all message tasks in the current chat
-- **/msgbot_task_pause *MSG_ID***: pause the specified message task in the current chat. If the task *MSG_ID* does not exist in the current chat, an error message will be shown.
-    - *MSG_ID*: Message ID
-- **/msgbot_task_resume *MSG_ID***: resume the specified message task in the current chat. If the task *MSG_ID* does not exist in the current chat, an error message will be shown.
-    - *MSG_ID*: Message ID
-- **/msgbot_task_get *MSG_ID***: show the message set for the specified message task in the current chat.
-    - *MSG_ID*: Message ID
-- **/msgbot_task_set *MSG_ID MSG***: set the message of the specified message task in the current chat
-    - *MSG_ID*: Message ID
-    - *MSG*: Message to be sent periodically, it shall be on a new line
-- **/msgbot_task_delete_last_msg *MSG_ID true/false***: enable/disable the deletion of last messages for the specified message task in the current chat. If the task *MSG_ID* does not exist in the current chat, an error message will be shown.
-    - *MSG_ID*: Message ID
-    - *flag*: true or false
-- **/msgbot_task_info**: show the list of active message tasks in the current chat
+- `help`: show this message
+- `alive`: show if bot is active
+- `msgbot_set_test_mode true/false`: enable/disable test mode
+- `msgbot_is_test_mode`: show if test mode is enabled
+- `msgbot_version`: show bot version
+- `msgbot_task_start MSG_ID PERIOD_HOURS [START_HOUR] MSG`: start a message task in the current chat. If the task `MSG_ID` already exists in the current chat, an error message will be shown. To start it again, it shall be stopped with the `msgbot_task_stop` command.\
+Parameters:
+    - `MSG_ID`: Message ID
+    - `PERIOD_HOURS`: Task period in hours, it shall be between 1 and 24
+    - `START_HOUR` (optional): Task start hour, it shall be between 0 and 23. Default value: 0.
+    - `MSG`: Message to be sent periodically, it shall be on a new line
+- `msgbot_task_stop MSG_ID`: stop the specified message task in the current chat. If the task `MSG_ID` does not exist in the current chat, an error message will be shown.\
+Parameters:
+    - `MSG_ID`: CoinGecko *ID*
+- `msgbot_task_stop_all`: stop all message tasks in the current chat
+- `msgbot_task_pause MSG_ID`: pause the specified message task in the current chat. If the task `MSG_ID` does not exist in the current chat, an error message will be shown.\
+Parameters:
+    - `MSG_ID`: Message ID
+- `msgbot_task_resume MSG_ID`: resume the specified message task in the current chat. If the task `MSG_ID` does not exist in the current chat, an error message will be shown.\
+Parameters:
+    - `MSG_ID`: Message ID
+- `msgbot_task_get MSG_ID`: show the message set for the specified message task in the current chat.\
+Parameters:
+    - `MSG_ID`: Message ID
+- `msgbot_task_set MSG_ID MSG`: set the message of the specified message task in the current chat.\
+Parameters:
+    - `MSG_ID`: Message ID
+    - `MSG`: Message to be sent periodically, it shall be on a new line
+- `msgbot_task_delete_last_msg MSG_ID true/false`: enable/disable the deletion of last messages for the specified message task in the current chat. If the task `MSG_ID` does not exist in the current chat, an error message will be shown.\
+Parameters:
+    - `MSG_ID`: Message ID
+    - `flag`: true or false
+- `msgbot_task_info`: show the list of active message tasks in the current chat
 
 Messages can contain HTML tags if needed (e.g. for bold/italic text), while Markdown tags are not supported.\
-By default, a message task will delete the last sent message when sending a new one. This can be enabled/disabled with the *msgbot_task_delete_last_msg* command.
+By default, a message task will delete the last sent message when sending a new one. This can be enabled/disabled with the `msgbot_task_delete_last_msg` command.
 
 The task period starts from the specified starting hour (be sure to set the correct time on the VPS), for example:
 - A task period of 8 hours starting from 00:00 will send the message at: 00:00, 08:00 and 16:00
@@ -153,7 +160,7 @@ During test mode, the bot will work as usual but the task period will be applied
 ## Translation
 
 The messages sent by the bot on Telegram can be translated into different languages (the default language is English) by providing a custom XML file.\
-The XML file path is specified in the configuration file (*app_lang_file* field).\
+The XML file path is specified in the configuration file (`app_lang_file` field).\
 An example XML file in italian is provided in the folder *app/lang*.
 
 # License

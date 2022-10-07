@@ -22,7 +22,9 @@
 # Imports
 #
 import argparse
+
 from telegram_periodic_msg_bot import PeriodicMsgBot, __version__
+
 
 #
 # Variables

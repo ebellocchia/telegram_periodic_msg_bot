@@ -21,53 +21,37 @@
 #
 # Imports
 #
-import pyrogram
+import configparser
 
-from telegram_periodic_msg_bot.bot.bot_config_types import BotConfigTypes
 from telegram_periodic_msg_bot.config.config_object import ConfigObject
+from telegram_periodic_msg_bot.config.config_section_loader import ConfigSectionLoader
+from telegram_periodic_msg_bot.config.config_typing import ConfigSectionsType
 
 
 #
 # Classes
 #
 
-# Invalid message error
-class PeriodicMsgParserInvalidError(Exception):
-    pass
+# Configuration sections loader class
+class ConfigSectionsLoader:
 
-
-# Too long message error
-class PeriodicMsgParserTooLongError(Exception):
-    pass
-
-
-# Periodic message parser class
-class PeriodicMsgParser:
-
-    config: ConfigObject
+    config_section_loader: ConfigSectionLoader
 
     # Constructor
     def __init__(self,
-                 config: ConfigObject) -> None:
-        self.config = config
+                 config_parser: configparser.ConfigParser) -> None:
+        self.config_section_loader = ConfigSectionLoader(config_parser)
 
-    # Parse message
-    def Parse(self,
-              message: pyrogram.types.Message) -> str:
-        if message.text is None:
-            raise PeriodicMsgParserInvalidError()
+    # Load sections
+    def LoadSections(self,
+                     sections: ConfigSectionsType) -> ConfigObject:
+        config_obj = ConfigObject()
 
-        try:
-            # The message shall start on a new line
-            msg = message.text[message.text.index("\n"):].strip()
+        # For each section
+        for section_name, section in sections.items():
+            # Print section
+            print(f"Section [{section_name}]")
+            # Load fields
+            self.config_section_loader.LoadSection(config_obj, section_name, section)
 
-            # Check message
-            if msg == "":
-                raise PeriodicMsgParserInvalidError()
-            if len(msg) > self.config.GetValue(BotConfigTypes.MESSAGE_MAX_LEN):
-                raise PeriodicMsgParserTooLongError()
-
-            return msg
-
-        except ValueError as ex:
-            raise PeriodicMsgParserInvalidError() from ex
+        return config_obj

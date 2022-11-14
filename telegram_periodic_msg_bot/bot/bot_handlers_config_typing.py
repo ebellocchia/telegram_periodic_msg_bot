@@ -21,33 +21,23 @@
 #
 # Imports
 #
-from telegram_periodic_msg_bot.bot.bot_base import BotBase
-from telegram_periodic_msg_bot.bot.bot_config import BotConfig
-from telegram_periodic_msg_bot.bot.bot_handlers_config import BotHandlersConfig
-from telegram_periodic_msg_bot.periodic_msg.periodic_msg_scheduler import PeriodicMsgScheduler
+from typing import Callable, Dict, List, Optional, Type, Union
+
+from pyrogram.filters import Filter
+from pyrogram.handlers.handler import Handler
 
 
 #
-# Classes
+# Types
 #
 
-# Periodic message bot class
-class PeriodicMsgBot(BotBase):
-
-    periodic_msg_scheduler: PeriodicMsgScheduler
-
-    # Constructor
-    def __init__(self,
-                 config_file: str) -> None:
-        super().__init__(
-            config_file,
-            BotConfig,
-            BotHandlersConfig
-        )
-        # Initialize periodic message scheduler
-        self.periodic_msg_scheduler = PeriodicMsgScheduler(
-            self.client,
-            self.config,
-            self.logger,
-            self.translator
-        )
+# Bot handlers configuration type
+BotHandlersConfigType = Dict[
+    Type[Handler],
+    List[
+        Dict[
+            str,
+            Optional[Union[Callable[..., None], Filter]]
+        ]
+    ]
+]

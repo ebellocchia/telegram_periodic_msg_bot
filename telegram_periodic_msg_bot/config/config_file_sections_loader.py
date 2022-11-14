@@ -21,53 +21,28 @@
 #
 # Imports
 #
-import pyrogram
+import configparser
 
-from telegram_periodic_msg_bot.bot.bot_config_types import BotConfigTypes
 from telegram_periodic_msg_bot.config.config_object import ConfigObject
+from telegram_periodic_msg_bot.config.config_sections_loader import ConfigSectionsLoader
+from telegram_periodic_msg_bot.config.config_typing import ConfigSectionsType
 
 
 #
 # Classes
 #
 
-# Invalid message error
-class PeriodicMsgParserInvalidError(Exception):
-    pass
+# Configuration file sections loader class
+class ConfigFileSectionsLoader:
+    # Load
+    @staticmethod
+    def Load(file_name: str,
+             sections: ConfigSectionsType) -> ConfigObject:
+        print(f"\nLoading configuration file {file_name}...\n")
 
+        # Read file
+        config_parser = configparser.ConfigParser()
+        config_parser.read(file_name, encoding="utf-8")
 
-# Too long message error
-class PeriodicMsgParserTooLongError(Exception):
-    pass
-
-
-# Periodic message parser class
-class PeriodicMsgParser:
-
-    config: ConfigObject
-
-    # Constructor
-    def __init__(self,
-                 config: ConfigObject) -> None:
-        self.config = config
-
-    # Parse message
-    def Parse(self,
-              message: pyrogram.types.Message) -> str:
-        if message.text is None:
-            raise PeriodicMsgParserInvalidError()
-
-        try:
-            # The message shall start on a new line
-            msg = message.text[message.text.index("\n"):].strip()
-
-            # Check message
-            if msg == "":
-                raise PeriodicMsgParserInvalidError()
-            if len(msg) > self.config.GetValue(BotConfigTypes.MESSAGE_MAX_LEN):
-                raise PeriodicMsgParserTooLongError()
-
-            return msg
-
-        except ValueError as ex:
-            raise PeriodicMsgParserInvalidError() from ex
+        # Load sections
+        return ConfigSectionsLoader(config_parser).LoadSections(sections)

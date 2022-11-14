@@ -19,35 +19,14 @@
 # THE SOFTWARE.
 
 #
-# Imports
-#
-from telegram_periodic_msg_bot.bot.bot_base import BotBase
-from telegram_periodic_msg_bot.bot.bot_config import BotConfig
-from telegram_periodic_msg_bot.bot.bot_handlers_config import BotHandlersConfig
-from telegram_periodic_msg_bot.periodic_msg.periodic_msg_scheduler import PeriodicMsgScheduler
-
-
-#
 # Classes
 #
 
-# Periodic message bot class
-class PeriodicMsgBot(BotBase):
+# Configuration field not existent error class
+class ConfigFieldNotExistentError(Exception):
+    pass
 
-    periodic_msg_scheduler: PeriodicMsgScheduler
 
-    # Constructor
-    def __init__(self,
-                 config_file: str) -> None:
-        super().__init__(
-            config_file,
-            BotConfig,
-            BotHandlersConfig
-        )
-        # Initialize periodic message scheduler
-        self.periodic_msg_scheduler = PeriodicMsgScheduler(
-            self.client,
-            self.config,
-            self.logger,
-            self.translator
-        )
+# Configuration field value error class
+class ConfigFieldValueError(Exception):
+    pass

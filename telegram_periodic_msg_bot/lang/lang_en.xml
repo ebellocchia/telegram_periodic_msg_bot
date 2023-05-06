@@ -3,7 +3,7 @@
     <!-- Help command message -->
     <sentence id="HELP_CMD">**HELP**
 Hi {name},
-welcome to the Telegram Price Bot.
+welcome to the Telegram Periodic Message Bot.
 
 ℹ️ Here is the list of supported commands.
 

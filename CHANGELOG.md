@@ -1,3 +1,7 @@
+# 0.3.2
+
+- Fix usage in channels
+
 # 0.3.1
 
 - Fix some _mypy_ and _prospector_ warnings

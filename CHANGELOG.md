@@ -1,3 +1,7 @@
+# 0.3.4
+
+- Update Python versions
+
 # 0.3.3
 
 - Fix replying to commands in topics

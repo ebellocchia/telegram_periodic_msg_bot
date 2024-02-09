@@ -1,6 +1,7 @@
 # Telegram Periodic Message Bot
 
 [![PyPI version](https://badge.fury.io/py/telegram-periodic-msg-bot.svg)](https://badge.fury.io/py/telegram-periodic-msg-bot)
+[![Build](https://github.com/ebellocchia/telegram_periodic_msg_bot/actions/workflows/build.yml/badge.svg)](https://github.com/ebellocchia/telegram_periodic_msg_bot/actions/workflows/build.yml)
 [![Codacy Badge](https://app.codacy.com/project/badge/Grade/d1cc7c1692de4939a23e626981923e83)](https://app.codacy.com/gh/ebellocchia/telegram_periodic_msg_bot/dashboard?utm_source=gh&utm_medium=referral&utm_content=&utm_campaign=Badge_grade)
 [![CodeFactor](https://www.codefactor.io/repository/github/ebellocchia/telegram_periodic_msg_bot/badge)](https://www.codefactor.io/repository/github/ebellocchia/telegram_periodic_msg_bot)
 

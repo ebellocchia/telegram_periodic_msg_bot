@@ -1,3 +1,7 @@
+# 0.3.5
+
+- Use `pyrotgfork`, since `pyrogram` was archived
+
 # 0.3.4
 
 - Update Python versions

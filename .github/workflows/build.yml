@@ -26,8 +26,9 @@ jobs:
         with:
           python-version: ${{ matrix.python-version }}
       - name: Install dependencies
+        shell: bash
         run: |
-          mv --force pyproject_legacy.toml pyproject.toml
+          mv -f pyproject_legacy.toml pyproject.toml
           python -m pip install --upgrade pip
           pip install -r requirements.txt
       - name: Install package
@@ -51,8 +52,9 @@ jobs:
       with:
         python-version: ${{ matrix.python-version }}
     - name: Install dependencies
+      shell: bash
       run: |
-        mv --force pyproject_legacy.toml pyproject.toml
+        mv -f pyproject_legacy.toml pyproject.toml
         python -m pip install --upgrade pip
         pip install -r requirements.txt
     - name: Install package

@@ -27,18 +27,43 @@ jobs:
           python-version: ${{ matrix.python-version }}
       - name: Install dependencies
         run: |
+          mv pyproject_legacy.toml pyproject.toml
           python -m pip install --upgrade pip
-          pip install 'setuptools>=61.0' wheel
           pip install -r requirements.txt
       - name: Install package
         run: |
           pip install .
 
-  build_older_than_py310:
+  build_py308:
     strategy:
       fail-fast: false
       matrix:
-        python-version: ["3.8", "3.9", "3.10"]
+        python-version: ["3.8"]
+        os:
+          - ubuntu-latest
+          - macOS-13
+          - windows-latest
+    runs-on: ${{ matrix.os }}
+    steps:
+    - uses: actions/checkout@v4
+    - name: Set up Python ${{ matrix.python-version }}
+      uses: actions/setup-python@v4
+      with:
+        python-version: ${{ matrix.python-version }}
+    - name: Install dependencies
+      run: |
+        mv pyproject_legacy.toml pyproject.toml
+        python -m pip install --upgrade pip
+        pip install -r requirements.txt
+    - name: Install package
+      run: |
+        pip install .
+
+  build_py309_py310:
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ["3.9", "3.10"]
         os:
           - ubuntu-latest
           - macOS-13
@@ -53,7 +78,6 @@ jobs:
     - name: Install dependencies
       run: |
         python -m pip install --upgrade pip
-        pip install 'setuptools>=61.0' wheel
         pip install -r requirements.txt
     - name: Install package
       run: |

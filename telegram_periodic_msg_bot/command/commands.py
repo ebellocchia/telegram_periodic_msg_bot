@@ -28,12 +28,13 @@ from telegram_periodic_msg_bot.bot.bot_config_types import BotConfigTypes
 from telegram_periodic_msg_bot.command.command_base import CommandBase
 from telegram_periodic_msg_bot.command.command_data import CommandParameterError
 from telegram_periodic_msg_bot.misc.helpers import UserHelper
-from telegram_periodic_msg_bot.periodic_msg.periodic_msg_parser import (
-    PeriodicMsgParserInvalidError, PeriodicMsgParserTooLongError
-)
+from telegram_periodic_msg_bot.periodic_msg.periodic_msg_parser import PeriodicMsgParserInvalidError, PeriodicMsgParserTooLongError
 from telegram_periodic_msg_bot.periodic_msg.periodic_msg_scheduler import (
-    PeriodicMsgJobAlreadyExistentError, PeriodicMsgJobInvalidPeriodError, PeriodicMsgJobInvalidStartError,
-    PeriodicMsgJobMaxNumError, PeriodicMsgJobNotExistentError
+    PeriodicMsgJobAlreadyExistentError,
+    PeriodicMsgJobInvalidPeriodError,
+    PeriodicMsgJobInvalidStartError,
+    PeriodicMsgJobMaxNumError,
+    PeriodicMsgJobNotExistentError,
 )
 
 

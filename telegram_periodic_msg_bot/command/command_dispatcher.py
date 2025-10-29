@@ -28,9 +28,20 @@ import pyrogram
 
 from telegram_periodic_msg_bot.command.command_base import CommandBase
 from telegram_periodic_msg_bot.command.commands import (
-    AliveCmd, HelpCmd, IsTestModeCmd, MessageTaskDeleteLastMsgCmd, MessageTaskGetCmd, MessageTaskInfoCmd,
-    MessageTaskPauseCmd, MessageTaskResumeCmd, MessageTaskSetCmd, MessageTaskStartCmd, MessageTaskStopAllCmd,
-    MessageTaskStopCmd, SetTestModeCmd, VersionCmd
+    AliveCmd,
+    HelpCmd,
+    IsTestModeCmd,
+    MessageTaskDeleteLastMsgCmd,
+    MessageTaskGetCmd,
+    MessageTaskInfoCmd,
+    MessageTaskPauseCmd,
+    MessageTaskResumeCmd,
+    MessageTaskSetCmd,
+    MessageTaskStartCmd,
+    MessageTaskStopAllCmd,
+    MessageTaskStopCmd,
+    SetTestModeCmd,
+    VersionCmd,
 )
 from telegram_periodic_msg_bot.config.config_object import ConfigObject
 from telegram_periodic_msg_bot.logger.logger import Logger

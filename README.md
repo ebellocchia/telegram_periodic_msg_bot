@@ -81,34 +81,34 @@ List of supported commands:
 - `msgbot_set_test_mode true/false`: enable/disable test mode
 - `msgbot_is_test_mode`: show if test mode is enabled
 - `msgbot_version`: show bot version
-- `msgbot_task_start MSG_ID PERIOD_HOURS [START_HOUR] MSG`: start a message task in the current chat. If the task `MSG_ID` already exists in the current chat, an error message will be shown. To start it again, it shall be stopped with the `msgbot_task_stop` command.\
+- `msgbot_task_start MSG_ID PERIOD_HOURS [START_HOUR] MSG`: start a message task in the current chat/topic. If the task `MSG_ID` already exists in the current chat, an error message will be shown. To start it again, it shall be stopped with the `msgbot_task_stop` command.\
 Parameters:
     - `MSG_ID`: Message ID
     - `PERIOD_HOURS`: Task period in hours, it shall be between 1 and 24
     - `START_HOUR` (optional): Task start hour, it shall be between 0 and 23. Default value: 0.
     - `MSG`: Message to be sent periodically, it shall be on a new line
-- `msgbot_task_stop MSG_ID`: stop the specified message task in the current chat. If the task `MSG_ID` does not exist in the current chat, an error message will be shown.\
+- `msgbot_task_stop MSG_ID`: stop the specified message task in the current chat/topic. If the task `MSG_ID` does not exist in the current chat, an error message will be shown.\
 Parameters:
     - `MSG_ID`: CoinGecko *ID*
-- `msgbot_task_stop_all`: stop all message tasks in the current chat
-- `msgbot_task_pause MSG_ID`: pause the specified message task in the current chat. If the task `MSG_ID` does not exist in the current chat, an error message will be shown.\
+- `msgbot_task_stop_all`: stop all message tasks in the current chat (jobs in all topics will be stopped)
+- `msgbot_task_pause MSG_ID`: pause the specified message task in the current chat/topic. If the task `MSG_ID` does not exist in the current chat, an error message will be shown.\
 Parameters:
     - `MSG_ID`: Message ID
-- `msgbot_task_resume MSG_ID`: resume the specified message task in the current chat. If the task `MSG_ID` does not exist in the current chat, an error message will be shown.\
+- `msgbot_task_resume MSG_ID`: resume the specified message task in the current chat/topic. If the task `MSG_ID` does not exist in the current chat, an error message will be shown.\
 Parameters:
     - `MSG_ID`: Message ID
-- `msgbot_task_get MSG_ID`: show the message set for the specified message task in the current chat.\
+- `msgbot_task_get MSG_ID`: show the message set for the specified message task in the current chat/topic.\
 Parameters:
     - `MSG_ID`: Message ID
-- `msgbot_task_set MSG_ID MSG`: set the message of the specified message task in the current chat.\
+- `msgbot_task_set MSG_ID MSG`: set the message of the specified message task in the current chat/topic.\
 Parameters:
     - `MSG_ID`: Message ID
     - `MSG`: Message to be sent periodically, it shall be on a new line
-- `msgbot_task_delete_last_msg MSG_ID true/false`: enable/disable the deletion of last messages for the specified message task in the current chat. If the task `MSG_ID` does not exist in the current chat, an error message will be shown.\
+- `msgbot_task_delete_last_msg MSG_ID true/false`: enable/disable the deletion of last messages for the specified message task in the current chat/topic. If the task `MSG_ID` does not exist in the current chat, an error message will be shown.\
 Parameters:
     - `MSG_ID`: Message ID
     - `flag`: true or false
-- `msgbot_task_info`: show the list of active message tasks in the current chat
+- `msgbot_task_info`: show the list of active message tasks in the current chat (jobs in all topics will be shown)
 
 Messages can contain HTML tags if needed (e.g. for bold/italic text), while Markdown tags are not supported.\
 By default, a message task will delete the last sent message when sending a new one. This can be enabled/disabled with the `msgbot_task_delete_last_msg` command.

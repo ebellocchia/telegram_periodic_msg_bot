@@ -95,7 +95,7 @@ class MessageSender:
             sent_msgs.append(await self.client.send_message(receiver.id, msg_part, message_thread_id=topic_id, **kwargs))
             await asyncio.sleep(MessageSenderConst.SEND_MSG_SLEEP_TIME_SEC)
 
-        return sent_msgs    # type: ignore
+        return sent_msgs
 
     def __SplitMessage(self,
                        msg: str) -> List[str]:

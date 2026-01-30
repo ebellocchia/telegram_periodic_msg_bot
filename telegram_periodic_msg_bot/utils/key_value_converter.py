@@ -1,4 +1,4 @@
-# Copyright (c) 2021 Emanuele Bellocchia
+# Copyright (c) 2026 Emanuele Bellocchia
 #
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal
@@ -18,33 +18,53 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 # THE SOFTWARE.
 
-#
-# Imports
-#
 from typing import Any, Dict
 
 
-#
-# Classes
-#
-
-# Key-Value converter class
 class KeyValueConverter:
+    """Bidirectional converter between keys and values in a dictionary."""
 
     kv_dict: Dict[str, Any]
 
-    # Constructor
     def __init__(self,
                  kv_dict: Dict[str, Any]) -> None:
+        """
+        Initialize the key-value converter.
+
+        Args:
+            kv_dict: Dictionary to use for key-value conversions
+        """
         self.kv_dict = kv_dict
 
-    # Convert key to value
     def KeyToValue(self,
                    key: str) -> Any:
+        """
+        Convert a key to its corresponding value.
+
+        Args:
+            key: The key to convert
+
+        Returns:
+            The value associated with the key
+
+        Raises:
+            KeyError: If the key is not found in the dictionary
+        """
         return self.kv_dict[key]
 
-    # Convert value to key
     def ValueToKey(self,
                    value: Any) -> str:
+        """
+        Convert a value to its corresponding key.
+
+        Args:
+            value: The value to convert
+
+        Returns:
+            The key associated with the value
+
+        Raises:
+            ValueError: If the value is not found in the dictionary
+        """
         idx = list(self.kv_dict.values()).index(value)
         return list(self.kv_dict.keys())[idx]

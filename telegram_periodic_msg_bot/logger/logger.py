@@ -1,4 +1,4 @@
-# Copyright (c) 2021 Emanuele Bellocchia
+# Copyright (c) 2026 Emanuele Bellocchia
 #
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal
@@ -18,9 +18,6 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 # THE SOFTWARE.
 
-#
-# Imports
-#
 import logging
 import logging.handlers
 import os
@@ -30,70 +27,66 @@ from telegram_periodic_msg_bot.bot.bot_config_types import BotConfigTypes
 from telegram_periodic_msg_bot.config.config_object import ConfigObject
 
 
-#
-# Classes
-#
-
-# Constants for logger class
 class LoggerConst:
-    # Logger name
+    """Constants for logger configuration."""
+
     LOGGER_NAME: str = ""
-    # Log formats
     LOG_CONSOLE_FORMAT: str = "%(asctime)-15s %(levelname)s - %(message)s"
     LOG_FILE_FORMAT: str = "%(asctime)-15s %(levelname)s - [%(name)s.%(funcName)s:%(lineno)d] %(message)s"
 
 
-# Logger class
 class Logger:
+    """Logger class for configuring and managing application logging."""
 
     config: ConfigObject
     logger: logging.Logger
 
-    # Constructor
     def __init__(self,
                  config: ConfigObject) -> None:
+        """
+        Initialize the logger with the provided configuration.
+
+        Args:
+            config: Configuration object containing logger settings
+        """
         self.config = config
         self.logger = logging.getLogger(LoggerConst.LOGGER_NAME)
         self.__Init()
 
-    # Get logger
     def GetLogger(self) -> logging.Logger:
+        """
+        Get the configured logger instance.
+
+        Returns:
+            The configured logging.Logger instance
+        """
         return self.logger
 
-    # Initialize
     def __Init(self) -> None:
-        # Configure loggers
+        """Initialize all logger handlers based on configuration."""
         self.__ConfigureRootLogger()
         self.__ConfigureConsoleLogger()
         self.__ConfigureFileLogger()
-        # Log
         self.logger.info("Logger initialized")
 
-    # Configure root logger
     def __ConfigureRootLogger(self) -> None:
+        """Configure the root logger with the specified log level."""
         self.logger.setLevel(self.config.GetValue(BotConfigTypes.LOG_LEVEL))
 
-    # Configure console logger
     def __ConfigureConsoleLogger(self) -> None:
-        # Configure console handler if required
+        """Configure and add console logging handler if enabled in configuration."""
         if self.config.GetValue(BotConfigTypes.LOG_CONSOLE_ENABLED):
-            # Create handler
             ch = logging.StreamHandler()
             ch.setLevel(self.config.GetValue(BotConfigTypes.LOG_LEVEL))
             ch.setFormatter(logging.Formatter(LoggerConst.LOG_CONSOLE_FORMAT))
-            # Add handler
             self.logger.addHandler(ch)
 
-    # Configure file logger
     def __ConfigureFileLogger(self) -> None:
-        # Configure file handler if required
+        """Configure and add file logging handler if enabled in configuration."""
         if self.config.GetValue(BotConfigTypes.LOG_FILE_ENABLED):
-            # Get file name
             log_file_name = self.config.GetValue(BotConfigTypes.LOG_FILE_NAME)
-            # Create log directories if needed
             self.__MakeLogDir(log_file_name)
 
-            # Create file handler
             fh: Union[logging.handlers.RotatingFileHandler, logging.FileHandler]
             if self.config.GetValue(BotConfigTypes.LOG_FILE_USE_ROTATING):
                 fh = logging.handlers.RotatingFileHandler(log_file_name,
@@ -107,13 +100,17 @@ class Logger:
 
             fh.setLevel(self.config.GetValue(BotConfigTypes.LOG_LEVEL))
             fh.setFormatter(logging.Formatter(LoggerConst.LOG_FILE_FORMAT))
-            # Add handler
             self.logger.addHandler(fh)
 
-    # Make log directories
     @staticmethod
     def __MakeLogDir(file_name: str) -> None:
+        """
+        Create the directory for the log file if it doesn't exist.
+
+        Args:
+            file_name: Path to the log file
+        """
         try:
             os.makedirs(os.path.dirname(file_name))
         except FileExistsError:
-            pass
+            """Directory already exists."""

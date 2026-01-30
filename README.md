@@ -26,16 +26,16 @@ To install it:
 
     pip install telegram_periodic_msg_bot
 
-To run the bot, edit the configuration file by specifying the API ID/hash and bot token. Then, move to the *app* folder and run the *bot.py* script:
+To run the bot, edit the configuration file by specifying the API ID/hash and bot token. Then, move to the *app* folder and run the *bot_start.py* script:
 
     cd app
-    python bot.py
+    python bot_start.py
 
 When run with no parameter, *conf/config.ini* will be the default configuration file (in this way it can be used for different groups).\
 To specify a different configuration file:
 
-    python bot.py -c another_conf.ini
-    python bot.py --config another_conf.ini
+    python bot_start.py -c another_conf.ini
+    python bot_start.py --config another_conf.ini
 
 Of course, the *app* folder can be moved elsewhere if needed.
 

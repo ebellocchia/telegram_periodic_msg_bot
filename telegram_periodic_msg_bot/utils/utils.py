@@ -1,4 +1,4 @@
-# Copyright (c) 2021 Emanuele Bellocchia
+# Copyright (c) 2026 Emanuele Bellocchia
 #
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal
@@ -18,15 +18,24 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 # THE SOFTWARE.
 
-#
-# Classes
-#
 
-# Wrapper for utility functions
 class Utils:
-    # Convert string to bool
+    """Utility functions for common string conversions."""
+
     @staticmethod
     def StrToBool(s: str) -> bool:
+        """
+        Convert a string to a boolean value.
+
+        Args:
+            s: String to convert (accepts: true/on/yes/y or false/off/no/n, case-insensitive)
+
+        Returns:
+            True or False based on the string value
+
+        Raises:
+            ValueError: If the string is not a recognized boolean value
+        """
         s = s.lower()
         if s in ["true", "on", "yes", "y"]:
             res = True
@@ -36,12 +45,34 @@ class Utils:
             raise ValueError("Invalid string")
         return res
 
-    # Convert string to integer
     @staticmethod
     def StrToInt(s: str) -> int:
+        """
+        Convert a string to an integer.
+
+        Args:
+            s: String to convert
+
+        Returns:
+            Integer value
+
+        Raises:
+            ValueError: If the string cannot be converted to an integer
+        """
         return int(s)
 
-    # Convert string to float
     @staticmethod
     def StrToFloat(s: str) -> float:
+        """
+        Convert a string to a float.
+
+        Args:
+            s: String to convert
+
+        Returns:
+            Float value
+
+        Raises:
+            ValueError: If the string cannot be converted to a float
+        """
         return float(s)

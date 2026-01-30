@@ -1,4 +1,4 @@
-# Copyright (c) 2021 Emanuele Bellocchia
+# Copyright (c) 2026-2026 Emanuele Bellocchia
 #
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal
@@ -18,9 +18,6 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 # THE SOFTWARE.
 
-#
-# Imports
-#
 from abc import ABC, abstractmethod
 from typing import Any
 
@@ -37,14 +34,12 @@ from telegram_periodic_msg_bot.misc.helpers import ChatHelper, UserHelper
 from telegram_periodic_msg_bot.translator.translation_loader import TranslationLoader
 
 
-#
-# Classes
-#
-
-#
-# Generic command base class
-#
 class CommandBase(ABC):
+    """Base class for all bot commands.
+
+    This abstract class provides common functionality for command execution,
+    authorization, and message sending.
+    """
 
     client: pyrogram.Client
     config: ConfigObject
@@ -54,107 +49,135 @@ class CommandBase(ABC):
     cmd_data: CommandData
     message_sender: MessageSender
 
-    # Constructor
     def __init__(self,
                  client: pyrogram.Client,
                  config: ConfigObject,
                  logger: Logger,
                  translator: TranslationLoader) -> None:
+        """Initialize the command.
+
+        Args:
+            client: Pyrogram client instance
+            config: Configuration object
+            logger: Logger instance
+            translator: Translation loader instance
+        """
         self.client = client
         self.config = config
         self.logger = logger
         self.translator = translator
-        # Helper classes
         self.message_sender = MessageSender(client, logger)
 
-    # Execute command
     def Execute(self,
                 message: pyrogram.types.Message,
                 **kwargs: Any) -> None:
+        """Execute the command with authorization checks.
+
+        Args:
+            message: Message containing the command
+            **kwargs: Additional arguments to pass to the command implementation
+        """
         self.message = message
         self.cmd_data = CommandData(message)
 
-        # Log command
         self.__LogCommand()
 
-        # Check if user is anonymous
+
         if self._IsUserAnonymous() and not self._IsChannel():
             self.logger.GetLogger().warning("An anonymous user tried to execute the command, exiting")
             return
 
-        # Check if user is authorized
         if not self._IsUserAuthorized():
             if self._IsPrivateChat():
                 self._SendMessage(self.translator.GetSentence("AUTH_ONLY_ERR_MSG"))
 
             self.logger.GetLogger().warning(
-                f"User {UserHelper.GetNameOrId(self.cmd_data.User())} tried to execute the command but it's not authorized"
+                f"User {UserHelper.GetNameOrId(self.cmd_data.User())} tried to execute the command but it's not authorized",
             )
             return
 
-        # Try to execute command
         try:
             self._ExecuteCommand(**kwargs)
         except RPCError:
             self._SendMessage(self.translator.GetSentence("GENERIC_ERR_MSG"))
             self.logger.GetLogger().exception(
-                f"An error occurred while executing command {self.cmd_data.Name()}"
+                f"An error occurred while executing command {self.cmd_data.Name()}",
             )
 
-    # Send message
     def _SendMessage(self,
                      msg: str) -> None:
+        """Send a message to the chat.
+
+        Args:
+            msg: Message text to send
+        """
         try:
             self.message_sender.SendMessage(
                 self.cmd_data.Chat(),
                 msg,
-                reply_to_message_id=self.message.reply_to_message_id
+                reply_to_message_id=self.message.reply_to_message_id,
             )
-        # Send message privately if topic is closed
         except BadRequest:
             self.message_sender.SendMessage(self.cmd_data.User(), msg)
 
-    # Get if channel
     def _IsChannel(self) -> bool:
+        """Check if the chat is a channel.
+
+        Returns:
+            True if the chat is a channel, False otherwise
+        """
         return ChatHelper.IsChannel(self.cmd_data.Chat())
 
-    # Get if user is anonymous
     def _IsUserAnonymous(self) -> bool:
+        """Check if the user is anonymous.
+
+        Returns:
+            True if the user is anonymous, False otherwise
+        """
         return self.cmd_data.User() is None
 
-    # Get if user is authorized
     def _IsUserAuthorized(self) -> bool:
-        # In channels only admins can write, so we consider the user authorized since there is no way to know the specific user
-        # This is a limitation for channels only
+        """Check if the user is authorized to execute the command.
+
+        Returns:
+            True if the user is authorized, False otherwise
+        """
         if self._IsChannel():
             return True
 
-        # Anonymous user
         cmd_user = self.cmd_data.User()
         if cmd_user is None:
             return False
-        # Private chat is always authorized
         if ChatHelper.IsPrivateChat(self.cmd_data.Chat(), cmd_user):
             return True
-        # Check if admin
         admin_members = ChatMembersGetter(self.client).GetAdmins(self.cmd_data.Chat())
         return any(cmd_user.id == member.user.id for member in admin_members if member.user is not None)
 
-    # Get if chat is private
     def _IsPrivateChat(self) -> bool:
+        """Check if the chat is a private chat.
+
+        Returns:
+            True if the chat is private, False otherwise
+        """
         cmd_user = self.cmd_data.User()
         if cmd_user is None:
             return False
         return ChatHelper.IsPrivateChat(self.cmd_data.Chat(), cmd_user)
 
-    # Log command
     def __LogCommand(self) -> None:
+        """Log command execution details."""
         self.logger.GetLogger().info(f"Command: {self.cmd_data.Name()}")
         self.logger.GetLogger().info(f"Executed by user: {UserHelper.GetNameOrId(self.cmd_data.User())}")
         self.logger.GetLogger().debug(f"Received message: {self.message}")
 
-    # Execute command - Abstract method
     @abstractmethod
     def _ExecuteCommand(self,
                         **kwargs: Any) -> None:
-        pass
+        """Execute the command implementation.
+
+        Args:
+            **kwargs: Additional arguments for the command
+
+        Note:
+            This method must be implemented by subclasses.
+        """

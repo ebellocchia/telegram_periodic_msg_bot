@@ -1,4 +1,4 @@
-# Copyright (c) 2021 Emanuele Bellocchia
+# Copyright (c) 2026 Emanuele Bellocchia
 #
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal
@@ -18,9 +18,6 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 # THE SOFTWARE.
 
-#
-# Imports
-#
 from typing import Dict
 
 import pyrogram
@@ -36,58 +33,58 @@ from telegram_periodic_msg_bot.translator.translation_loader import TranslationL
 from telegram_periodic_msg_bot.utils.wrapped_list import WrappedList
 
 
-#
-# Classes
-#
-
-# Job already existent error
 class PeriodicMsgJobAlreadyExistentError(Exception):
-    pass
+    """Exception raised when attempting to create a job that already exists."""
 
 
-# Job not existent error
 class PeriodicMsgJobNotExistentError(Exception):
-    pass
+    """Exception raised when attempting to operate on a non-existent job."""
 
 
-# Job invalid period error
 class PeriodicMsgJobInvalidPeriodError(Exception):
-    pass
+    """Exception raised when the job period is outside valid range."""
 
 
-# Job invalid start error
 class PeriodicMsgJobInvalidStartError(Exception):
-    pass
+    """Exception raised when the job start hour is outside valid range."""
 
 
-# Job maximum number error
 class PeriodicMsgJobMaxNumError(Exception):
-    pass
+    """Exception raised when the maximum number of jobs is reached."""
 
 
-# Constants for periodic message scheduler
 class PeriodicMsgSchedulerConst:
-    # Minimum/Maximum start hour
+    """Constants for periodic message scheduler configuration."""
+
     MIN_START_HOUR: int = 0
     MAX_START_HOUR: int = 23
-    # Minimum/Maximum periods
     MIN_PERIOD_HOURS: int = 1
     MAX_PERIOD_HOURS: int = 24
 
 
-# Periodic message jobs list class
 class PeriodicMsgJobsList(WrappedList):
+    """List of periodic message jobs with formatted string output."""
 
     translator: TranslationLoader
 
-    # Constructor
     def __init__(self,
                  translator: TranslationLoader) -> None:
+        """
+        Initialize the jobs list.
+
+        Args:
+            translator: Translation loader for localized messages
+        """
         super().__init__()
         self.translator = translator
 
-    # Convert to string
     def ToString(self) -> str:
+        """
+        Convert the jobs list to a formatted string.
+
+        Returns:
+            A newline-separated list of job information
+        """
         return "\n".join(
             [self.translator.GetSentence("SINGLE_TASK_INFO_MSG",
                                          msg_id=job_data.MessageId(),
@@ -100,13 +97,18 @@ class PeriodicMsgJobsList(WrappedList):
              for job_data in self.list_elements]
         )
 
-    # Convert to string
     def __str__(self) -> str:
+        """
+        Convert the jobs list to a string.
+
+        Returns:
+            A newline-separated list of job information
+        """
         return self.ToString()
 
 
-# Periodic message scheduler class
 class PeriodicMsgScheduler:
+    """Scheduler for managing periodic message jobs across multiple chats."""
 
     client: pyrogram.Client
     config: ConfigObject
@@ -115,12 +117,20 @@ class PeriodicMsgScheduler:
     jobs: Dict[int, Dict[str, PeriodicMsgJob]]
     scheduler: BackgroundScheduler
 
-    # Constructor
     def __init__(self,
                  client: pyrogram.Client,
                  config: ConfigObject,
                  logger: Logger,
                  translator: TranslationLoader) -> None:
+        """
+        Initialize the periodic message scheduler.
+
+        Args:
+            client: Pyrogram client instance
+            config: Configuration object
+            logger: Logger instance for logging operations
+            translator: Translation loader for localized messages
+        """
         self.client = client
         self.config = config
         self.logger = logger
@@ -129,9 +139,17 @@ class PeriodicMsgScheduler:
         self.scheduler = BackgroundScheduler()
         self.scheduler.start()
 
-    # Get the list of active jobs in chat
     def GetJobsInChat(self,
                       chat: pyrogram.types.Chat) -> PeriodicMsgJobsList:
+        """
+        Get the list of active jobs in a chat.
+
+        Args:
+            chat: The chat to get jobs for
+
+        Returns:
+            List of active jobs in the chat
+        """
         jobs_list = PeriodicMsgJobsList(self.translator)
         jobs_list.AddMultiple(
             [job.Data() for (_, job) in self.jobs[chat.id].items()] if chat.id in self.jobs else []
@@ -139,63 +157,92 @@ class PeriodicMsgScheduler:
 
         return jobs_list
 
-    # Get if job is active in chat
     def IsActiveInChat(self,
                        chat: pyrogram.types.Chat,
                        msg_id: str) -> bool:
+        """
+        Check if a job is active in a chat.
+
+        Args:
+            chat: The chat to check
+            msg_id: The message ID of the job
+
+        Returns:
+            True if the job is active, False otherwise
+        """
         job_id = self.__GetJobId(chat, msg_id)
         return (chat.id in self.jobs and
                 job_id in self.jobs[chat.id] and
                 self.scheduler.get_job(job_id) is not None)
 
-    # Start job
     def Start(self,
               chat: pyrogram.types.Chat,
               period_hours: int,
               start_hour: int,
               msg_id: str,
               message: pyrogram.types.Message) -> None:
+        """
+        Start a new periodic message job.
+
+        Args:
+            chat: The chat to start the job in
+            period_hours: Period in hours between messages
+            start_hour: Starting hour for the job
+            msg_id: Unique identifier for the message
+            message: The message to send periodically
+
+        Raises:
+            PeriodicMsgJobAlreadyExistentError: If job already exists
+            PeriodicMsgJobInvalidPeriodError: If period is invalid
+            PeriodicMsgJobInvalidStartError: If start hour is invalid
+            PeriodicMsgJobMaxNumError: If maximum number of jobs reached
+        """
         job_id = self.__GetJobId(chat, msg_id)
 
-        # Check if existent
         if self.IsActiveInChat(chat, msg_id):
             self.logger.GetLogger().error(
                 f"Job \"{job_id}\" already active in chat {ChatHelper.GetTitleOrId(chat)}, cannot start it"
             )
             raise PeriodicMsgJobAlreadyExistentError()
 
-        # Check period
         if period_hours < PeriodicMsgSchedulerConst.MIN_PERIOD_HOURS or period_hours > PeriodicMsgSchedulerConst.MAX_PERIOD_HOURS:
             self.logger.GetLogger().error(
                 f"Invalid period {period_hours} for job \"{job_id}\", cannot start it"
             )
             raise PeriodicMsgJobInvalidPeriodError()
 
-        # Check start hour
         if start_hour < PeriodicMsgSchedulerConst.MIN_START_HOUR or start_hour > PeriodicMsgSchedulerConst.MAX_START_HOUR:
             self.logger.GetLogger().error(
                 f"Invalid start hour {start_hour} for job \"{job_id}\", cannot start it"
             )
             raise PeriodicMsgJobInvalidStartError()
 
-        # Check total jobs number
         tot_job_cnt = self.__GetTotalJobCount()
         if tot_job_cnt >= self.config.GetValue(BotConfigTypes.TASKS_MAX_NUM):
             self.logger.GetLogger().error("Maximum number of jobs reached, cannot start a new one")
             raise PeriodicMsgJobMaxNumError()
 
-        # Create job
         self.__CreateJob(job_id, chat, period_hours, start_hour, msg_id, message)
-        # Add job
         self.__AddJob(job_id, chat, period_hours, start_hour, msg_id)
 
-    # Get message
     def GetMessage(self,
                    chat: pyrogram.types.Chat,
                    msg_id: str) -> str:
+        """
+        Get the message for a job.
+
+        Args:
+            chat: The chat containing the job
+            msg_id: The message ID of the job
+
+        Returns:
+            The job's message text
+
+        Raises:
+            PeriodicMsgJobNotExistentError: If job does not exist
+        """
         job_id = self.__GetJobId(chat, msg_id)
 
-        # Check if existent
         if not self.IsActiveInChat(chat, msg_id):
             self.logger.GetLogger().error(
                 f"Job \"{job_id}\" not active in chat {ChatHelper.GetTitleOrId(chat)}, cannot get message"
@@ -204,21 +251,29 @@ class PeriodicMsgScheduler:
 
         return self.jobs[chat.id][job_id].GetMessage()
 
-    # Set message
     def SetMessage(self,
                    chat: pyrogram.types.Chat,
                    msg_id: str,
                    message: pyrogram.types.Message) -> None:
+        """
+        Set the message for a job.
+
+        Args:
+            chat: The chat containing the job
+            msg_id: The message ID of the job
+            message: The new message to set
+
+        Raises:
+            PeriodicMsgJobNotExistentError: If job does not exist
+        """
         job_id = self.__GetJobId(chat, msg_id)
 
-        # Check if existent
         if not self.IsActiveInChat(chat, msg_id):
             self.logger.GetLogger().error(
                 f"Job \"{job_id}\" not active in chat {ChatHelper.GetTitleOrId(chat)}, cannot set message"
             )
             raise PeriodicMsgJobNotExistentError()
 
-        # Parse message
         msg = PeriodicMsgParser(self.config).Parse(message)
 
         self.jobs[chat.id][job_id].SetMessage(msg)
@@ -226,10 +281,19 @@ class PeriodicMsgScheduler:
             f"Set message to job \"{job_id}\" in chat {ChatHelper.GetTitleOrId(chat)}: {msg}"
         )
 
-    # Stop job
     def Stop(self,
              chat: pyrogram.types.Chat,
              msg_id: str) -> None:
+        """
+        Stop a periodic message job.
+
+        Args:
+            chat: The chat containing the job
+            msg_id: The message ID of the job
+
+        Raises:
+            PeriodicMsgJobNotExistentError: If job does not exist
+        """
         job_id = self.__GetJobId(chat, msg_id)
 
         if not self.IsActiveInChat(chat, msg_id):
@@ -245,41 +309,56 @@ class PeriodicMsgScheduler:
             f"number of active jobs: {self.__GetTotalJobCount()}"
         )
 
-    # Stop all jobs
     def StopAll(self,
                 chat: pyrogram.types.Chat) -> None:
-        # Check if there are jobs to stop
+        """
+        Stop all jobs in a chat.
+
+        Args:
+            chat: The chat to stop all jobs in
+        """
         if chat.id not in self.jobs:
             self.logger.GetLogger().info(
                 f"No job to stop in chat {ChatHelper.GetTitleOrId(chat)}, exiting..."
             )
             return
 
-        # Stop all jobs
         for job_id in self.jobs[chat.id].keys():
             self.scheduler.remove_job(job_id)
             self.logger.GetLogger().info(
                 f"Stopped job \"{job_id}\" in chat {ChatHelper.GetTitleOrId(chat)}"
             )
-        # Delete entry
         del self.jobs[chat.id]
-        # Log
         self.logger.GetLogger().info(
             f"Removed all jobs in chat {ChatHelper.GetTitleOrId(chat)}, number of active jobs: {self.__GetTotalJobCount()}"
         )
 
-    # Called when chat is left by the bot
     def ChatLeft(self,
                  chat: pyrogram.types.Chat) -> None:
+        """
+        Handle bot leaving a chat by stopping all jobs.
+
+        Args:
+            chat: The chat that was left
+        """
         self.logger.GetLogger().info(
             f"Left chat {ChatHelper.GetTitleOrId(chat)}, stopping all jobs..."
         )
         self.StopAll(chat)
 
-    # Pause job
     def Pause(self,
               chat: pyrogram.types.Chat,
               msg_id: str) -> None:
+        """
+        Pause a periodic message job.
+
+        Args:
+            chat: The chat containing the job
+            msg_id: The message ID of the job
+
+        Raises:
+            PeriodicMsgJobNotExistentError: If job does not exist
+        """
         job_id = self.__GetJobId(chat, msg_id)
 
         if not self.IsActiveInChat(chat, msg_id):
@@ -294,10 +373,19 @@ class PeriodicMsgScheduler:
             f"Paused job \"{job_id}\" in chat {ChatHelper.GetTitleOrId(chat)}"
         )
 
-    # Resume job
     def Resume(self,
                chat: pyrogram.types.Chat,
                msg_id: str) -> None:
+        """
+        Resume a paused periodic message job.
+
+        Args:
+            chat: The chat containing the job
+            msg_id: The message ID of the job
+
+        Raises:
+            PeriodicMsgJobNotExistentError: If job does not exist
+        """
         job_id = self.__GetJobId(chat, msg_id)
 
         if not self.IsActiveInChat(chat, msg_id):
@@ -312,11 +400,21 @@ class PeriodicMsgScheduler:
             f"Resumed job \"{job_id}\" in chat {ChatHelper.GetTitleOrId(chat)}"
         )
 
-    # Set delete last sent message flag
     def DeleteLastSentMessage(self,
                               chat: pyrogram.types.Chat,
                               msg_id: str,
                               flag: bool) -> None:
+        """
+        Configure whether to delete the last sent message for a job.
+
+        Args:
+            chat: The chat containing the job
+            msg_id: The message ID of the job
+            flag: True to delete last message, False to keep it
+
+        Raises:
+            PeriodicMsgJobNotExistentError: If job does not exist
+        """
         job_id = self.__GetJobId(chat, msg_id)
 
         if not self.IsActiveInChat(chat, msg_id):
@@ -330,7 +428,6 @@ class PeriodicMsgScheduler:
             f"Set delete last message to {flag} for job \"{job_id}\" in chat {ChatHelper.GetTitleOrId(chat)}"
         )
 
-    # Create job
     def __CreateJob(self,
                     job_id: str,
                     chat: pyrogram.types.Chat,
@@ -338,7 +435,17 @@ class PeriodicMsgScheduler:
                     start: int,
                     msg_id: str,
                     message: pyrogram.types.Message) -> None:
-        # Parse message
+        """
+        Create a new job instance and store it.
+
+        Args:
+            job_id: Unique job identifier
+            chat: The chat for the job
+            period: Period in hours
+            start: Starting hour
+            msg_id: Message identifier
+            message: The message to send
+        """
         msg = PeriodicMsgParser(self.config).Parse(message)
 
         if chat.id not in self.jobs:
@@ -349,13 +456,22 @@ class PeriodicMsgScheduler:
                                                     PeriodicMsgJobData(chat, period, start, msg_id))
         self.jobs[chat.id][job_id].SetMessage(msg)
 
-    # Add job
     def __AddJob(self,
                  job_id: str,
                  chat: pyrogram.types.Chat,
                  period: int,
                  start: int,
                  msg_id: str) -> None:
+        """
+        Add a job to the scheduler with cron configuration.
+
+        Args:
+            job_id: Unique job identifier
+            chat: The chat for the job
+            period: Period in hours
+            start: Starting hour
+            msg_id: Message identifier
+        """
         is_test_mode = self.config.GetValue(BotConfigTypes.APP_TEST_MODE)
         cron_str = self.__BuildCronString(period, start, is_test_mode)
         if is_test_mode:
@@ -370,28 +486,51 @@ class PeriodicMsgScheduler:
                                    args=(chat,),
                                    hour=cron_str,
                                    id=job_id)
-        # Log
         per_sym = "minute(s)" if is_test_mode else "hour(s)"
         self.logger.GetLogger().info(
             f"Started job \"{job_id}\" in chat {ChatHelper.GetTitleOrId(chat)} ({period} {per_sym}, "
             f"{msg_id}), number of active jobs: {self.__GetTotalJobCount()}, cron: {cron_str}"
         )
 
-    # Get job ID
     @staticmethod
     def __GetJobId(chat: pyrogram.types.Chat,
                    msg_id: str) -> str:
+        """
+        Generate a unique job ID from chat and message IDs.
+
+        Args:
+            chat: The chat
+            msg_id: The message ID
+
+        Returns:
+            The generated job ID
+        """
         return f"{chat.id}-{msg_id}"
 
-    # Get total job count
     def __GetTotalJobCount(self) -> int:
+        """
+        Get the total number of active jobs across all chats.
+
+        Returns:
+            Total number of active jobs
+        """
         return sum([len(jobs) for (_, jobs) in self.jobs.items()])
 
-    # Build cron string
     @staticmethod
     def __BuildCronString(period: int,
                           start_val: int,
                           is_test_mode: bool) -> str:
+        """
+        Build a cron string for the job schedule.
+
+        Args:
+            period: Period between executions
+            start_val: Starting value
+            is_test_mode: True for minute-based testing, False for hour-based
+
+        Returns:
+            Comma-separated cron schedule string
+        """
         max_val = 24 if not is_test_mode else 60
 
         cron_str = ""

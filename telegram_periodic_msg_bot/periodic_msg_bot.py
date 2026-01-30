@@ -1,4 +1,4 @@
-# Copyright (c) 2021 Emanuele Bellocchia
+# Copyright (c) 2026 Emanuele Bellocchia
 #
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal
@@ -18,33 +18,30 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 # THE SOFTWARE.
 
-#
-# Imports
-#
 from telegram_periodic_msg_bot.bot.bot_base import BotBase
 from telegram_periodic_msg_bot.bot.bot_config import BotConfig
 from telegram_periodic_msg_bot.bot.bot_handlers_config import BotHandlersConfig
 from telegram_periodic_msg_bot.periodic_msg.periodic_msg_scheduler import PeriodicMsgScheduler
 
 
-#
-# Classes
-#
-
-# Periodic message bot class
 class PeriodicMsgBot(BotBase):
+    """Main bot class for managing periodic message scheduling in Telegram chats."""
 
     periodic_msg_scheduler: PeriodicMsgScheduler
 
-    # Constructor
     def __init__(self,
                  config_file: str) -> None:
+        """
+        Initialize the periodic message bot.
+
+        Args:
+            config_file: Path to the configuration file
+        """
         super().__init__(
             config_file,
             BotConfig,
             BotHandlersConfig
         )
-        # Initialize periodic message scheduler
         self.periodic_msg_scheduler = PeriodicMsgScheduler(
             self.client,
             self.config,

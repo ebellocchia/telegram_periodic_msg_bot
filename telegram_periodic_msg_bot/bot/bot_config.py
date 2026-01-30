@@ -1,4 +1,4 @@
-# Copyright (c) 2021 Emanuele Bellocchia
+# Copyright (c) 2026-2026 Emanuele Bellocchia
 #
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal
@@ -18,9 +18,6 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 # THE SOFTWARE.
 
-#
-# Imports
-#
 import logging
 
 from telegram_periodic_msg_bot.bot.bot_config_types import BotConfigTypes
@@ -29,11 +26,6 @@ from telegram_periodic_msg_bot.utils.key_value_converter import KeyValueConverte
 from telegram_periodic_msg_bot.utils.utils import Utils
 
 
-#
-# Variables
-#
-
-# Logging level converter
 LoggingLevelConverter = KeyValueConverter({
     "DEBUG": logging.DEBUG,
     "INFO": logging.INFO,
@@ -43,7 +35,6 @@ LoggingLevelConverter = KeyValueConverter({
 })
 
 
-# Bot configuration
 BotConfig: ConfigSectionsType = {
     # Pyrogram
     "pyrogram": [

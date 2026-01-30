@@ -1,4 +1,4 @@
-# Copyright (c) 2021 Emanuele Bellocchia
+# Copyright (c) 2026 Emanuele Bellocchia
 #
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal
@@ -18,9 +18,6 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 # THE SOFTWARE.
 
-#
-# Imports
-#
 from typing import Callable, Optional
 
 import pyrogram
@@ -30,84 +27,150 @@ from telegram_periodic_msg_bot.utils.pyrogram_wrapper import PyrogramWrapper
 from telegram_periodic_msg_bot.utils.wrapped_list import WrappedList
 
 
-#
-# Classes
-#
-
-# Chat members list class
 class ChatMembersList(WrappedList):
-    # Get by user ID
+    """List of chat members with lookup and display functionality."""
+
     def GetByUserId(self,
                     user_id: int) -> Optional[pyrogram.types.ChatMember]:
+        """
+        Get a chat member by user ID.
+
+        Args:
+            user_id: The user ID to search for
+
+        Returns:
+            The chat member if found, None otherwise
+        """
         res = list(filter(lambda member: user_id == member.user.id, self.list_elements))
         return None if len(res) == 0 else res[0]
 
-    # Get by username
     def GetByUsername(self,
                       username: str) -> Optional[pyrogram.types.ChatMember]:
+        """
+        Get a chat member by username.
+
+        Args:
+            username: The username to search for
+
+        Returns:
+            The chat member if found, None otherwise
+        """
         res = list(filter(lambda member: username == member.user.username, self.list_elements))
         return None if len(res) == 0 else res[0]
 
-    # Get if ID is present
     def IsUserIdPresent(self,
                         user_id: int) -> bool:
+        """
+        Check if a user ID is present in the member list.
+
+        Args:
+            user_id: The user ID to check
+
+        Returns:
+            True if the user ID is present, False otherwise
+        """
         return self.GetByUserId(user_id) is not None
 
-    # Get if username is present
     def IsUsernamePresent(self,
                           username: str) -> bool:
+        """
+        Check if a username is present in the member list.
+
+        Args:
+            username: The username to check
+
+        Returns:
+            True if the username is present, False otherwise
+        """
         return self.GetByUsername(username) is not None
 
-    # Convert to string
     def ToString(self) -> str:
+        """
+        Convert the member list to a formatted string.
+
+        Returns:
+            A newline-separated list of member names or IDs
+        """
         return "\n".join(
             [f"- {UserHelper.GetNameOrId(member.user)}" for member in self.list_elements]
         )
 
-    # Convert to string
     def __str__(self) -> str:
+        """
+        Convert the member list to a string.
+
+        Returns:
+            A newline-separated list of member names or IDs
+        """
         return self.ToString()
 
 
-# Chat members getter class
 class ChatMembersGetter:
+    """Class for retrieving and filtering chat members."""
 
     client: pyrogram.Client
 
-    # Constructor
     def __init__(self,
                  client: pyrogram.Client) -> None:
+        """
+        Initialize the chat members getter.
+
+        Args:
+            client: Pyrogram client instance
+        """
         self.client = client
 
-    # Get the list of chat members by applying the specified filter
     def FilterMembers(self,
                       chat: pyrogram.types.Chat,
                       filter_fct: Optional[Callable[[pyrogram.types.ChatMember], bool]] = None,
                       filter_str: str = "all") -> ChatMembersList:
-        # Get members
+        """
+        Get a filtered and sorted list of chat members.
+
+        Args:
+            chat: The chat to get members from
+            filter_fct: Optional function to filter members
+            filter_str: Pyrogram filter string (e.g., "all", "administrators")
+
+        Returns:
+            Sorted list of filtered chat members
+        """
         filtered_members = list(PyrogramWrapper.GetChatMembers(self.client, chat, filter_str))
-        # Filter them if necessary
         if filter_fct is not None:
             filtered_members = list(filter(filter_fct, filtered_members))   # type: ignore
-        # Order filtered members
         filtered_members.sort(      # type: ignore
             key=lambda member: member.user.username.lower() if member.user.username is not None else str(member.user.id)
         )
 
-        # Build chat members
         chat_members = ChatMembersList()
         chat_members.AddMultiple(filtered_members)      # type: ignore
 
         return chat_members
 
-    # Get all
     def GetAll(self,
                chat: pyrogram.types.Chat) -> ChatMembersList:
+        """
+        Get all members of a chat.
+
+        Args:
+            chat: The chat to get members from
+
+        Returns:
+            List of all chat members
+        """
         return self.FilterMembers(chat)
 
-    # Get admins
     def GetAdmins(self,
                   chat: pyrogram.types.Chat) -> ChatMembersList:
+        """
+        Get all administrators of a chat.
+
+        Args:
+            chat: The chat to get administrators from
+
+        Returns:
+            List of chat administrators
+        """
         return self.FilterMembers(chat,
                                   lambda member: True,
                                   "administrators")

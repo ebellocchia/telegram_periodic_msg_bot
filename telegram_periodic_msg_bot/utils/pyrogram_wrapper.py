@@ -1,4 +1,4 @@
-# Copyright (c) 2021 Emanuele Bellocchia
+# Copyright (c) 2026 Emanuele Bellocchia
 #
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal
@@ -18,11 +18,6 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 # THE SOFTWARE.
 
-# Old wrapper, not needed anymore with pyrotgfork
-
-#
-# Imports
-#
 from typing import Iterator
 
 import pyrogram
@@ -35,40 +30,71 @@ if int(pyrogram.__version__[0]) == 2:
 else:
     from enum import Enum
 
-    # Fake enum
     class ChatMembersFilter(Enum):  # type: ignore
-        pass
+        """Placeholder enum for pyrogram version 1 compatibility."""
 
 
-#
-# Classes
-#
-
-# Wrapper for pyrogram for handling different versions
 class PyrogramWrapper:
-    # Get message id
+    """Wrapper class for handling different versions of pyrogram library."""
+
     @staticmethod
     def MessageId(message: pyrogram.types.Message) -> int:
+        """
+        Get the message ID in a version-independent way.
+
+        Args:
+            message: The message to get the ID from
+
+        Returns:
+            The message ID
+
+        Raises:
+            RuntimeError: If pyrogram version is not supported
+        """
         if PyrogramWrapper.__Version() == 2:
             return message.id
         if PyrogramWrapper.__Version() == 1:
             return message.message_id
         raise RuntimeError("Unsupported pyrogram version")
 
-    # Get if channel
     @staticmethod
     def IsChannel(chat: pyrogram.types.Chat) -> bool:
+        """
+        Check if a chat is a channel in a version-independent way.
+
+        Args:
+            chat: The chat to check
+
+        Returns:
+            True if the chat is a channel, False otherwise
+
+        Raises:
+            RuntimeError: If pyrogram version is not supported
+        """
         if PyrogramWrapper.__Version() == 2:
             return chat.type == ChatType.CHANNEL
         if PyrogramWrapper.__Version() == 1:
             return chat["type"] == "channel"
         raise RuntimeError("Unsupported pyrogram version")
 
-    # Get if channel
     @staticmethod
     def GetChatMembers(client: pyrogram.Client,
                        chat: pyrogram.types.Chat,
                        filter_str: str) -> Iterator[pyrogram.types.ChatMember]:
+        """
+        Get chat members with a filter in a version-independent way.
+
+        Args:
+            client: Pyrogram client instance
+            chat: The chat to get members from
+            filter_str: Filter string (e.g., "all", "administrators", "banned")
+
+        Returns:
+            Iterator over chat members
+
+        Raises:
+            RuntimeError: If pyrogram version is not supported
+        """
         if PyrogramWrapper.__Version() == 2:
             return client.get_chat_members(chat.id, filter=PyrogramWrapper.__StrToChatMembersFilter(filter_str))
         if PyrogramWrapper.__Version() == 1:
@@ -77,6 +103,18 @@ class PyrogramWrapper:
 
     @staticmethod
     def __StrToChatMembersFilter(filter_str: str) -> ChatMembersFilter:
+        """
+        Convert a filter string to ChatMembersFilter enum.
+
+        Args:
+            filter_str: Filter string to convert
+
+        Returns:
+            ChatMembersFilter enum value
+
+        Raises:
+            KeyError: If filter string is not recognized
+        """
         str_to_enum = {
             "all": ChatMembersFilter.SEARCH,
             "banned": ChatMembersFilter.BANNED,
@@ -87,7 +125,12 @@ class PyrogramWrapper:
 
         return str_to_enum[filter_str]
 
-    # Get version
     @staticmethod
     def __Version() -> int:
+        """
+        Get the major version number of pyrogram.
+
+        Returns:
+            The major version number
+        """
         return Utils.StrToInt(pyrogram.__version__[0])

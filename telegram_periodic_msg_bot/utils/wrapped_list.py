@@ -1,4 +1,4 @@
-# Copyright (c) 2021 Emanuele Bellocchia
+# Copyright (c) 2026 Emanuele Bellocchia
 #
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal
@@ -18,67 +18,111 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 # THE SOFTWARE.
 
-#
-# Imports
-#
 import typing
 from abc import ABC
 from typing import Iterator, List
 
 
-#
-# Classes
-#
-
-# Wrapped list class
 class WrappedList(ABC):
+    """Abstract base class providing a wrapper around a list with common operations."""
 
     list_elements: List[typing.Any]
 
-    # Constructor
     def __init__(self) -> None:
+        """Initialize an empty wrapped list."""
         self.list_elements = []
 
-    # Add single element
     def AddSingle(self,
                   element: typing.Any) -> None:
+        """
+        Add a single element to the list.
+
+        Args:
+            element: The element to add
+        """
         self.list_elements.append(element)
 
-    # Add multiple elements
     def AddMultiple(self,
                     elements: List[typing.Any]) -> None:
+        """
+        Add multiple elements to the list.
+
+        Args:
+            elements: List of elements to add
+        """
         self.list_elements.extend(elements)
 
-    # Remove single element
     def RemoveSingle(self,
                      element: typing.Any) -> None:
+        """
+        Remove a single element from the list.
+
+        Args:
+            element: The element to remove
+
+        Raises:
+            ValueError: If the element is not in the list
+        """
         self.list_elements.remove(element)
 
-    # Get if element is present
     def IsElem(self,
                element: typing.Any) -> bool:
+        """
+        Check if an element is present in the list.
+
+        Args:
+            element: The element to check for
+
+        Returns:
+            True if the element is in the list, False otherwise
+        """
         return element in self.list_elements
 
-    # Clear element
     def Clear(self) -> None:
+        """Clear all elements from the list."""
         self.list_elements.clear()
 
-    # Get elements count
     def Count(self) -> int:
+        """
+        Get the number of elements in the list.
+
+        Returns:
+            The number of elements
+        """
         return len(self.list_elements)
 
-    # Get if any
     def Any(self) -> bool:
+        """
+        Check if the list contains any elements.
+
+        Returns:
+            True if the list has at least one element, False otherwise
+        """
         return self.Count() > 0
 
-    # Get if empty
     def Empty(self) -> bool:
+        """
+        Check if the list is empty.
+
+        Returns:
+            True if the list is empty, False otherwise
+        """
         return self.Count() == 0
 
-    # Get list
     def GetList(self) -> List[typing.Any]:
+        """
+        Get the underlying list.
+
+        Returns:
+            The list of elements
+        """
         return self.list_elements
 
-    # Get iterator
     def __iter__(self) -> Iterator[typing.Any]:
+        """
+        Get an iterator over the list elements.
+
+        Returns:
+            Iterator over the elements
+        """
         yield from self.list_elements

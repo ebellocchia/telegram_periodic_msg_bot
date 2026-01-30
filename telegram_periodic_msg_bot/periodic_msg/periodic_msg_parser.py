@@ -1,4 +1,4 @@
-# Copyright (c) 2021 Emanuele Bellocchia
+# Copyright (c) 2026 Emanuele Bellocchia
 #
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal
@@ -18,50 +18,56 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 # THE SOFTWARE.
 
-#
-# Imports
-#
 import pyrogram
 
 from telegram_periodic_msg_bot.bot.bot_config_types import BotConfigTypes
 from telegram_periodic_msg_bot.config.config_object import ConfigObject
 
 
-#
-# Classes
-#
-
-# Invalid message error
 class PeriodicMsgParserInvalidError(Exception):
-    pass
+    """Exception raised when a message is invalid or malformed."""
 
 
-# Too long message error
 class PeriodicMsgParserTooLongError(Exception):
-    pass
+    """Exception raised when a message exceeds the maximum allowed length."""
 
 
-# Periodic message parser class
 class PeriodicMsgParser:
+    """Parser for extracting and validating periodic messages."""
 
     config: ConfigObject
 
-    # Constructor
     def __init__(self,
                  config: ConfigObject) -> None:
+        """
+        Initialize the message parser.
+
+        Args:
+            config: Configuration object containing message constraints
+        """
         self.config = config
 
-    # Parse message
     def Parse(self,
               message: pyrogram.types.Message) -> str:
+        """
+        Parse and validate a periodic message.
+
+        Args:
+            message: The message to parse
+
+        Returns:
+            The extracted and validated message text
+
+        Raises:
+            PeriodicMsgParserInvalidError: If the message is invalid or empty
+            PeriodicMsgParserTooLongError: If the message exceeds maximum length
+        """
         if message.text is None:
             raise PeriodicMsgParserInvalidError()
 
         try:
-            # The message shall start on a new line
             msg = message.text[message.text.index("\n"):].strip()
 
-            # Check message
             if msg == "":
                 raise PeriodicMsgParserInvalidError()
             if len(msg) > self.config.GetValue(BotConfigTypes.MESSAGE_MAX_LEN):

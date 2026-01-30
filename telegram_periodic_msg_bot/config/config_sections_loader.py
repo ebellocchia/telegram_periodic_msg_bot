@@ -1,4 +1,4 @@
-# Copyright (c) 2021 Emanuele Bellocchia
+# Copyright (c) 2026 Emanuele Bellocchia
 #
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal
@@ -18,9 +18,6 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 # THE SOFTWARE.
 
-#
-# Imports
-#
 import configparser
 
 from telegram_periodic_msg_bot.config.config_object import ConfigObject
@@ -28,30 +25,36 @@ from telegram_periodic_msg_bot.config.config_section_loader import ConfigSection
 from telegram_periodic_msg_bot.config.config_typing import ConfigSectionsType
 
 
-#
-# Classes
-#
-
-# Configuration sections loader class
 class ConfigSectionsLoader:
+    """Loader class for processing multiple configuration sections."""
 
     config_section_loader: ConfigSectionLoader
 
-    # Constructor
     def __init__(self,
                  config_parser: configparser.ConfigParser) -> None:
+        """
+        Initialize the sections loader with a configuration parser.
+
+        Args:
+            config_parser: ConfigParser instance containing the parsed configuration
+        """
         self.config_section_loader = ConfigSectionLoader(config_parser)
 
-    # Load sections
     def LoadSections(self,
                      sections: ConfigSectionsType) -> ConfigObject:
+        """
+        Load all specified configuration sections into a new configuration object.
+
+        Args:
+            sections: Specification of all sections to load
+
+        Returns:
+            ConfigObject containing all loaded configuration values
+        """
         config_obj = ConfigObject()
 
-        # For each section
         for section_name, section in sections.items():
-            # Print section
             print(f"Section [{section_name}]")
-            # Load fields
             self.config_section_loader.LoadSection(config_obj, section_name, section)
 
         return config_obj

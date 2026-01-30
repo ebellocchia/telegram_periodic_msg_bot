@@ -1,4 +1,4 @@
-# Copyright (c) 2021 Emanuele Bellocchia
+# Copyright (c) 2026-2026 Emanuele Bellocchia
 #
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal
@@ -18,9 +18,6 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 # THE SOFTWARE.
 
-#
-# Imports
-#
 from enum import Enum, auto, unique
 from typing import Any, Dict, Type
 
@@ -48,13 +45,9 @@ from telegram_periodic_msg_bot.logger.logger import Logger
 from telegram_periodic_msg_bot.translator.translation_loader import TranslationLoader
 
 
-#
-# Enumerations
-#
-
-# Command types
 @unique
 class CommandTypes(Enum):
+    """Enumeration of command types."""
     START_CMD = auto()
     HELP_CMD = auto()
     ALIVE_CMD = auto()
@@ -72,13 +65,9 @@ class CommandTypes(Enum):
     MESSAGE_TASK_INFO_CMD = auto()
 
 
-#
-# Classes
-#
-
-# Comstant for command dispatcher class
 class CommandDispatcherConst:
-    # Command to class map
+    """Constants for the command dispatcher."""
+
     CMD_TYPE_TO_CLASS: Dict[CommandTypes, Type[CommandBase]] = {
         CommandTypes.START_CMD: HelpCmd,
         CommandTypes.HELP_CMD: HelpCmd,
@@ -98,38 +87,54 @@ class CommandDispatcherConst:
     }
 
 
-# Command dispatcher class
 class CommandDispatcher:
+    """Dispatcher for routing commands to their respective handlers."""
 
     config: ConfigObject
     logger: Logger
     translator: TranslationLoader
 
-    # Constructor
     def __init__(self,
                  config: ConfigObject,
                  logger: Logger,
                  translator: TranslationLoader) -> None:
+        """Initialize the command dispatcher.
+
+        Args:
+            config: Configuration object
+            logger: Logger instance
+            translator: Translation loader instance
+        """
         self.config = config
         self.logger = logger
         self.translator = translator
 
-    # Dispatch command
     def Dispatch(self,
                  client: pyrogram.Client,
                  message: pyrogram.types.Message,
                  cmd_type: CommandTypes,
                  **kwargs: Any) -> None:
+        """Dispatch a command to its handler.
+
+        Args:
+            client: Pyrogram client instance
+            message: Message containing the command
+            cmd_type: Type of command to dispatch
+            **kwargs: Additional arguments to pass to the command handler
+
+        Raises:
+            TypeError: If cmd_type is not a CommandTypes enumeration
+        """
         if not isinstance(cmd_type, CommandTypes):
             raise TypeError("Command type is not an enumerative of CommandTypes")
 
-        # Log
         self.logger.GetLogger().info(f"Dispatching command type: {cmd_type}")
 
-        # Create and execute command if existent
         if cmd_type in CommandDispatcherConst.CMD_TYPE_TO_CLASS:
-            cmd_class = CommandDispatcherConst.CMD_TYPE_TO_CLASS[cmd_type](client,
-                                                                           self.config,
-                                                                           self.logger,
-                                                                           self.translator)
+            cmd_class = CommandDispatcherConst.CMD_TYPE_TO_CLASS[cmd_type](
+                client,
+                self.config,
+                self.logger,
+                self.translator,
+            )
             cmd_class.Execute(message, **kwargs)

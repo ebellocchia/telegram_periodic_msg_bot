@@ -1,4 +1,4 @@
-# Copyright (c) 2021 Emanuele Bellocchia
+# Copyright (c) 2026 Emanuele Bellocchia
 #
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal
@@ -18,9 +18,6 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 # THE SOFTWARE.
 
-#
-# Imports
-#
 from threading import Lock
 
 import pyrogram
@@ -30,12 +27,8 @@ from telegram_periodic_msg_bot.misc.helpers import ChatHelper
 from telegram_periodic_msg_bot.periodic_msg.periodic_msg_sender import PeriodicMsgSender
 
 
-#
-# Classes
-#
-
-# Periodic message job data class
 class PeriodicMsgJobData:
+    """Data container for a periodic message job."""
 
     chat: pyrogram.types.Chat
     period_hours: int
@@ -43,46 +36,84 @@ class PeriodicMsgJobData:
     msg_id: str
     running: bool
 
-    # Constructor
     def __init__(self,
                  chat: pyrogram.types.Chat,
                  period_hours: int,
                  start_hour: int,
                  msg_id: str) -> None:
+        """
+        Initialize the job data.
+
+        Args:
+            chat: The chat where the job runs
+            period_hours: Period in hours between message sends
+            start_hour: Starting hour for the job
+            msg_id: Unique identifier for the message
+        """
         self.chat = chat
         self.period_hours = period_hours
         self.start_hour = start_hour
         self.msg_id = msg_id
         self.running = True
 
-    # Get chat
     def Chat(self) -> pyrogram.types.Chat:
+        """
+        Get the chat associated with this job.
+
+        Returns:
+            The chat object
+        """
         return self.chat
 
-    # Get period hours
     def PeriodHours(self) -> int:
+        """
+        Get the period in hours.
+
+        Returns:
+            The period in hours
+        """
         return self.period_hours
 
-    # Get start hour
     def StartHour(self) -> int:
+        """
+        Get the starting hour.
+
+        Returns:
+            The starting hour
+        """
         return self.start_hour
 
-    # Get message ID
     def MessageId(self) -> str:
+        """
+        Get the message ID.
+
+        Returns:
+            The message ID
+        """
         return self.msg_id
 
-    # Set if running
     def SetRunning(self,
                    flag: bool) -> None:
+        """
+        Set the running state of the job.
+
+        Args:
+            flag: True to set job as running, False otherwise
+        """
         self.running = flag
 
-    # Get if running
     def IsRunning(self) -> bool:
+        """
+        Check if the job is running.
+
+        Returns:
+            True if the job is running, False otherwise
+        """
         return self.running
 
 
-# Periodic message job class
 class PeriodicMsgJob:
+    """Periodic message job that sends messages at scheduled intervals."""
 
     data: PeriodicMsgJobData
     logger: Logger
@@ -90,45 +121,81 @@ class PeriodicMsgJob:
     message_lock: Lock
     message_sender: PeriodicMsgSender
 
-    # Constructor
     def __init__(self,
                  client: pyrogram.Client,
                  logger: Logger,
                  data: PeriodicMsgJobData) -> None:
+        """
+        Initialize the periodic message job.
+
+        Args:
+            client: Pyrogram client instance
+            logger: Logger instance for logging operations
+            data: Job data containing configuration
+        """
         self.data = data
         self.logger = logger
         self.message = ""
         self.message_lock = Lock()
         self.message_sender = PeriodicMsgSender(client, logger)
 
-    # Get data
     def Data(self) -> PeriodicMsgJobData:
+        """
+        Get the job data.
+
+        Returns:
+            The job data object
+        """
         return self.data
 
-    # Set if running
     def SetRunning(self,
                    flag: bool) -> None:
+        """
+        Set the running state of the job.
+
+        Args:
+            flag: True to set job as running, False otherwise
+        """
         self.data.SetRunning(flag)
 
-    # Set delete last sent message
     def DeleteLastSentMessage(self,
                               flag: bool) -> None:
+        """
+        Configure whether to delete the last sent message.
+
+        Args:
+            flag: True to delete last message before sending new one, False otherwise
+        """
         self.message_sender.DeleteLastSentMessage(flag)
 
-    # Get message
     def GetMessage(self) -> str:
+        """
+        Get the message to be sent.
+
+        Returns:
+            The message text
+        """
         return self.message
 
-    # Set message
     def SetMessage(self,
                    message: str) -> None:
-        # Prevent accidental modifications while job is executing
+        """
+        Set the message to be sent periodically.
+
+        Args:
+            message: The message text to send
+        """
         with self.message_lock:
             self.message = message
 
-    # Do job
     def DoJob(self,
               chat: pyrogram.types.Chat) -> None:
+        """
+        Execute the job by sending the periodic message.
+
+        Args:
+            chat: The chat to send the message to
+        """
         self.logger.GetLogger().info(f"Periodic message job started in chat '{ChatHelper.GetTitleOrId(chat)}'")
 
         with self.message_lock:

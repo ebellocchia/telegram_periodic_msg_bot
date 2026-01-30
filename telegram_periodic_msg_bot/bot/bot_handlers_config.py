@@ -1,4 +1,4 @@
-# Copyright (c) 2021 Emanuele Bellocchia
+# Copyright (c) 2026-2026 Emanuele Bellocchia
 #
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal
@@ -18,9 +18,6 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 # THE SOFTWARE.
 
-#
-# Imports
-#
 from pyrogram import filters
 from pyrogram.handlers import MessageHandler
 
@@ -29,19 +26,8 @@ from telegram_periodic_msg_bot.command.command_dispatcher import CommandTypes
 from telegram_periodic_msg_bot.message.message_dispatcher import MessageTypes
 
 
-#
-# Classes
-#
-
-# Bot handlers configuration
 BotHandlersConfig: BotHandlersConfigType = {
-    # Handlers for MessageHandler
     MessageHandler: [
-
-        #
-        # Generic commands
-        #
-
         {
             "callback": lambda self, client, message: self.DispatchCommand(client,
                                                                            message,
@@ -78,11 +64,6 @@ BotHandlersConfig: BotHandlersConfigType = {
                                                                            CommandTypes.VERSION_CMD),
             "filters": filters.command(["msgbot_version"]),
         },
-
-        #
-        # Message commands (task)
-        #
-
         {
             "callback": (lambda self, client, message: self.DispatchCommand(client,
                                                                             message,
@@ -146,11 +127,6 @@ BotHandlersConfig: BotHandlersConfigType = {
                                                                             periodic_msg_scheduler=self.periodic_msg_scheduler)),
             "filters": filters.command(["msgbot_task_info"]),
         },
-
-        #
-        # Update status messages
-        #
-
         {
             "callback": (lambda self, client, message: self.HandleMessage(client,
                                                                           message,

@@ -1,3 +1,9 @@
+# 0.4.0
+
+- Migrate to full async/await client
+- Topics support: if bot is started in a topic, it'll send messages in that specific topic (not in General like before).\
+  All task commands operates in the topic where they are executed.
+
 # 0.3.5
 
 - Use `pyrotgfork`, since `pyrogram` was archived

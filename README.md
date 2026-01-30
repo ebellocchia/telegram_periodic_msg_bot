@@ -157,6 +157,15 @@ Send a periodical message every 6 hours starting from 10:00 in the current chat:
 Since the bot deletes the last sent messages, it'd be better if it's an administrator of the group (otherwise the last messages cannot be deleted).\
 In order to send messages periodically, the bot shall run 24h/24h. So, it's suggested to run it on a VPS (there is no performance requirements, so a cheap VPS will suffice).
 
+### Docker
+
+Docker files are also provided, to run the bot in a Docker container.
+In this case, the configuration file can be set by setting the `CONFIG_FILE` variable, for example:
+
+    CONFIG_FILE=conf/config.ini docker compose up -d --build
+
+**NOTE:** Depending on your timezone, you may want to adjust the `TZ=Europe/Rome` variable in `docker-compose.yml`.
+
 ## Test Mode
 
 During test mode, the bot will work as usual but the task period will be applied in minutes instead of hours. This allows to quickly check if it is working.

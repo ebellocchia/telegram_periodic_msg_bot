@@ -31,6 +31,7 @@ class PeriodicMsgJobData:
     """Data container for a periodic message job."""
 
     chat: pyrogram.types.Chat
+    topic_id: int
     period_hours: int
     start_hour: int
     msg_id: str
@@ -38,6 +39,7 @@ class PeriodicMsgJobData:
 
     def __init__(self,
                  chat: pyrogram.types.Chat,
+                 topic_id: int,
                  period_hours: int,
                  start_hour: int,
                  msg_id: str) -> None:
@@ -46,11 +48,13 @@ class PeriodicMsgJobData:
 
         Args:
             chat: The chat where the job runs
+            topic_id: The topic where the job runs
             period_hours: Period in hours between message sends
             start_hour: Starting hour for the job
             msg_id: Unique identifier for the message
         """
         self.chat = chat
+        self.topic_id = topic_id
         self.period_hours = period_hours
         self.start_hour = start_hour
         self.msg_id = msg_id
@@ -64,6 +68,14 @@ class PeriodicMsgJobData:
             The chat object
         """
         return self.chat
+
+    def TopicId(self) -> int:
+        """Get the topic associated with this job.
+
+        Returns:
+            The Telegram topic ID
+        """
+        return self.topic_id
 
     def PeriodHours(self) -> int:
         """
@@ -189,18 +201,22 @@ class PeriodicMsgJob:
             self.message = message
 
     def DoJob(self,
-              chat: pyrogram.types.Chat) -> None:
+              chat: pyrogram.types.Chat,
+              topic_id: int) -> None:
         """
         Execute the job by sending the periodic message.
 
         Args:
             chat: The chat to send the message to
+            topic_id: The topic to send the message to
         """
-        self.logger.GetLogger().info(f"Periodic message job started in chat '{ChatHelper.GetTitleOrId(chat)}'")
+        self.logger.GetLogger().info(
+            f"Periodic message job started in chat '{ChatHelper.GetTitleOrId(chat)}' ({topic_id})"
+        )
 
         with self.message_lock:
             if self.message == "":
                 self.logger.GetLogger().info("No message set, exiting...")
                 return
 
-            self.message_sender.SendMessage(chat, self.message)
+            self.message_sender.SendMessage(chat, topic_id, self.message)

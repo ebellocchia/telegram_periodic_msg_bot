@@ -139,6 +139,7 @@ class MessageTaskStartCmd(CommandBase):
             try:
                 kwargs["periodic_msg_scheduler"].Start(
                     self.cmd_data.Chat(),
+                    self.message.message_thread_id,
                     period_hours,
                     start_hour,
                     msg_id,
@@ -189,7 +190,7 @@ class MessageTaskStopCmd(CommandBase):
             self._SendMessage(self.translator.GetSentence("PARAM_ERR_MSG"))
         else:
             try:
-                kwargs["periodic_msg_scheduler"].Stop(self.cmd_data.Chat(), msg_id)
+                kwargs["periodic_msg_scheduler"].Stop(self.cmd_data.Chat(), self.message.message_thread_id, msg_id)
                 self._SendMessage(
                     self.translator.GetSentence(
                         "MESSAGE_TASK_STOP_OK_CMD",
@@ -231,7 +232,7 @@ class MessageTaskPauseCmd(CommandBase):
             self._SendMessage(self.translator.GetSentence("PARAM_ERR_MSG"))
         else:
             try:
-                kwargs["periodic_msg_scheduler"].Pause(self.cmd_data.Chat(), msg_id)
+                kwargs["periodic_msg_scheduler"].Pause(self.cmd_data.Chat(), self.message.message_thread_id, msg_id)
                 self._SendMessage(
                     self.translator.GetSentence(
                         "MESSAGE_TASK_PAUSE_OK_CMD",
@@ -260,7 +261,7 @@ class MessageTaskResumeCmd(CommandBase):
             self._SendMessage(self.translator.GetSentence("PARAM_ERR_MSG"))
         else:
             try:
-                kwargs["periodic_msg_scheduler"].Resume(self.cmd_data.Chat(), msg_id)
+                kwargs["periodic_msg_scheduler"].Resume(self.cmd_data.Chat(), self.message.message_thread_id, msg_id)
                 self._SendMessage(
                     self.translator.GetSentence(
                         "MESSAGE_TASK_RESUME_OK_CMD",
@@ -289,7 +290,9 @@ class MessageTaskGetCmd(CommandBase):
             self._SendMessage(self.translator.GetSentence("PARAM_ERR_MSG"))
         else:
             try:
-                msg = kwargs["periodic_msg_scheduler"].GetMessage(self.cmd_data.Chat(), msg_id)
+                msg = kwargs["periodic_msg_scheduler"].GetMessage(self.cmd_data.Chat(),
+                                                                  self.message.message_thread_id,
+                                                                  msg_id)
 
                 if msg != "":
                     self._SendMessage(
@@ -330,6 +333,7 @@ class MessageTaskSetCmd(CommandBase):
             try:
                 kwargs["periodic_msg_scheduler"].SetMessage(
                     self.cmd_data.Chat(),
+                    self.message.message_thread_id,
                     msg_id,
                     self.message,
                 )
@@ -373,6 +377,7 @@ class MessageTaskDeleteLastMsgCmd(CommandBase):
             try:
                 kwargs["periodic_msg_scheduler"].DeleteLastSentMessage(
                     self.cmd_data.Chat(),
+                    self.message.message_thread_id,
                     msg_id,
                     flag,
                 )

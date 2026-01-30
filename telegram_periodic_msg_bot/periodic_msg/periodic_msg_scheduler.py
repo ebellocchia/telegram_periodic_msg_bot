@@ -88,6 +88,7 @@ class PeriodicMsgJobsList(WrappedList):
         return "\n".join(
             [self.translator.GetSentence("SINGLE_TASK_INFO_MSG",
                                          msg_id=job_data.MessageId(),
+                                         topic_id=job_data.TopicId(),
                                          period=job_data.PeriodHours(),
                                          start=job_data.StartHour(),
                                          state=(self.translator.GetSentence("TASK_RUNNING_MSG")
@@ -114,7 +115,7 @@ class PeriodicMsgScheduler:
     config: ConfigObject
     logger: Logger
     translator: TranslationLoader
-    jobs: Dict[int, Dict[str, PeriodicMsgJob]]
+    jobs: Dict[str, PeriodicMsgJob]
     scheduler: BackgroundScheduler
 
     def __init__(self,
@@ -150,33 +151,34 @@ class PeriodicMsgScheduler:
         Returns:
             List of active jobs in the chat
         """
+        chat_id_str = str(chat.id)
+
         jobs_list = PeriodicMsgJobsList(self.translator)
-        jobs_list.AddMultiple(
-            [job.Data() for (_, job) in self.jobs[chat.id].items()] if chat.id in self.jobs else []
-        )
+        jobs_list.AddMultiple([job.Data() for (job_id, job) in self.jobs.items() if job_id.startswith(chat_id_str)])
 
         return jobs_list
 
     def IsActiveInChat(self,
                        chat: pyrogram.types.Chat,
+                       topic_id: int,
                        msg_id: str) -> bool:
         """
         Check if a job is active in a chat.
 
         Args:
             chat: The chat to check
+            topic_id: The topic to check
             msg_id: The message ID of the job
 
         Returns:
             True if the job is active, False otherwise
         """
-        job_id = self.__GetJobId(chat, msg_id)
-        return (chat.id in self.jobs and
-                job_id in self.jobs[chat.id] and
-                self.scheduler.get_job(job_id) is not None)
+        job_id = self.__GetJobId(chat, topic_id, msg_id)
+        return job_id in self.jobs and self.scheduler.get_job(job_id) is not None
 
     def Start(self,
               chat: pyrogram.types.Chat,
+              topic_id: int,
               period_hours: int,
               start_hour: int,
               msg_id: str,
@@ -186,6 +188,7 @@ class PeriodicMsgScheduler:
 
         Args:
             chat: The chat to start the job in
+            topic_id: The topic to start the job in
             period_hours: Period in hours between messages
             start_hour: Starting hour for the job
             msg_id: Unique identifier for the message
@@ -197,23 +200,23 @@ class PeriodicMsgScheduler:
             PeriodicMsgJobInvalidStartError: If start hour is invalid
             PeriodicMsgJobMaxNumError: If maximum number of jobs reached
         """
-        job_id = self.__GetJobId(chat, msg_id)
+        job_id = self.__GetJobId(chat, topic_id, msg_id)
 
-        if self.IsActiveInChat(chat, msg_id):
+        if self.IsActiveInChat(chat, topic_id, msg_id):
             self.logger.GetLogger().error(
-                f"Job \"{job_id}\" already active in chat {ChatHelper.GetTitleOrId(chat)}, cannot start it"
+                f"Job '{job_id}' already active in chat {ChatHelper.GetTitleOrId(chat)} ({topic_id}), cannot start it"
             )
             raise PeriodicMsgJobAlreadyExistentError()
 
         if period_hours < PeriodicMsgSchedulerConst.MIN_PERIOD_HOURS or period_hours > PeriodicMsgSchedulerConst.MAX_PERIOD_HOURS:
             self.logger.GetLogger().error(
-                f"Invalid period {period_hours} for job \"{job_id}\", cannot start it"
+                f"Invalid period {period_hours} for job '{job_id}', cannot start it"
             )
             raise PeriodicMsgJobInvalidPeriodError()
 
         if start_hour < PeriodicMsgSchedulerConst.MIN_START_HOUR or start_hour > PeriodicMsgSchedulerConst.MAX_START_HOUR:
             self.logger.GetLogger().error(
-                f"Invalid start hour {start_hour} for job \"{job_id}\", cannot start it"
+                f"Invalid start hour {start_hour} for job '{job_id}', cannot start it"
             )
             raise PeriodicMsgJobInvalidStartError()
 
@@ -222,17 +225,19 @@ class PeriodicMsgScheduler:
             self.logger.GetLogger().error("Maximum number of jobs reached, cannot start a new one")
             raise PeriodicMsgJobMaxNumError()
 
-        self.__CreateJob(job_id, chat, period_hours, start_hour, msg_id, message)
-        self.__AddJob(job_id, chat, period_hours, start_hour, msg_id)
+        self.__CreateJob(job_id, chat, topic_id, period_hours, start_hour, msg_id, message)
+        self.__AddJob(job_id, chat, topic_id, period_hours, start_hour, msg_id)
 
     def GetMessage(self,
                    chat: pyrogram.types.Chat,
+                   topic_id: int,
                    msg_id: str) -> str:
         """
         Get the message for a job.
 
         Args:
             chat: The chat containing the job
+            topic_id: The topic containing the job
             msg_id: The message ID of the job
 
         Returns:
@@ -241,18 +246,19 @@ class PeriodicMsgScheduler:
         Raises:
             PeriodicMsgJobNotExistentError: If job does not exist
         """
-        job_id = self.__GetJobId(chat, msg_id)
+        job_id = self.__GetJobId(chat, topic_id, msg_id)
 
-        if not self.IsActiveInChat(chat, msg_id):
+        if not self.IsActiveInChat(chat, topic_id, msg_id):
             self.logger.GetLogger().error(
-                f"Job \"{job_id}\" not active in chat {ChatHelper.GetTitleOrId(chat)}, cannot get message"
+                f"Job '{job_id}' not active in chat {ChatHelper.GetTitleOrId(chat)} ({topic_id}), cannot get message"
             )
             raise PeriodicMsgJobNotExistentError()
 
-        return self.jobs[chat.id][job_id].GetMessage()
+        return self.jobs[job_id].GetMessage()
 
     def SetMessage(self,
                    chat: pyrogram.types.Chat,
+                   topic_id: int,
                    msg_id: str,
                    message: pyrogram.types.Message) -> None:
         """
@@ -260,52 +266,56 @@ class PeriodicMsgScheduler:
 
         Args:
             chat: The chat containing the job
+            topic_id: The topic containing the job
             msg_id: The message ID of the job
             message: The new message to set
 
         Raises:
             PeriodicMsgJobNotExistentError: If job does not exist
         """
-        job_id = self.__GetJobId(chat, msg_id)
+        job_id = self.__GetJobId(chat, topic_id, msg_id)
 
-        if not self.IsActiveInChat(chat, msg_id):
+        if not self.IsActiveInChat(chat, topic_id, msg_id):
             self.logger.GetLogger().error(
-                f"Job \"{job_id}\" not active in chat {ChatHelper.GetTitleOrId(chat)}, cannot set message"
+                f"Job '{job_id}' not active in chat {ChatHelper.GetTitleOrId(chat)} ({topic_id}), cannot set message"
             )
             raise PeriodicMsgJobNotExistentError()
 
         msg = PeriodicMsgParser(self.config).Parse(message)
 
-        self.jobs[chat.id][job_id].SetMessage(msg)
+        self.jobs[job_id].SetMessage(msg)
         self.logger.GetLogger().info(
-            f"Set message to job \"{job_id}\" in chat {ChatHelper.GetTitleOrId(chat)}: {msg}"
+            f"Set message to job '{job_id}' in chat {ChatHelper.GetTitleOrId(chat)} ({topic_id}): {msg}"
         )
 
     def Stop(self,
              chat: pyrogram.types.Chat,
+             topic_id: int,
              msg_id: str) -> None:
         """
         Stop a periodic message job.
 
         Args:
             chat: The chat containing the job
+            topic_id: The topic containing the job
             msg_id: The message ID of the job
 
         Raises:
             PeriodicMsgJobNotExistentError: If job does not exist
         """
-        job_id = self.__GetJobId(chat, msg_id)
+        job_id = self.__GetJobId(chat, topic_id, msg_id)
 
-        if not self.IsActiveInChat(chat, msg_id):
+        if not self.IsActiveInChat(chat, topic_id, msg_id):
             self.logger.GetLogger().error(
-                f"Job \"{job_id}\" not active in chat {ChatHelper.GetTitleOrId(chat)}, cannot stop it"
+                f"Job '{job_id}' not active in chat {ChatHelper.GetTitleOrId(chat)} ({topic_id}), cannot stop it"
             )
             raise PeriodicMsgJobNotExistentError()
 
-        del self.jobs[chat.id][job_id]
         self.scheduler.remove_job(job_id)
+        self.jobs.pop(job_id, None)
+
         self.logger.GetLogger().info(
-            f"Stopped job \"{job_id}\" in chat {ChatHelper.GetTitleOrId(chat)}, "
+            f"Stopped job '{job_id}' in chat {ChatHelper.GetTitleOrId(chat)} ({topic_id}), "
             f"number of active jobs: {self.__GetTotalJobCount()}"
         )
 
@@ -317,18 +327,20 @@ class PeriodicMsgScheduler:
         Args:
             chat: The chat to stop all jobs in
         """
-        if chat.id not in self.jobs:
+        chat_id_str = str(chat.id)
+        job_ids = [job_id for job_id in self.jobs.keys() if job_id.startswith(chat_id_str)]
+        if len(job_ids) == 0:
             self.logger.GetLogger().info(
                 f"No job to stop in chat {ChatHelper.GetTitleOrId(chat)}, exiting..."
             )
             return
 
-        for job_id in self.jobs[chat.id].keys():
+        for job_id in job_ids:
             self.scheduler.remove_job(job_id)
+            self.jobs.pop(job_id, None)
             self.logger.GetLogger().info(
-                f"Stopped job \"{job_id}\" in chat {ChatHelper.GetTitleOrId(chat)}"
+                f"Stopped job '{job_id}' in chat {ChatHelper.GetTitleOrId(chat)}"
             )
-        del self.jobs[chat.id]
         self.logger.GetLogger().info(
             f"Removed all jobs in chat {ChatHelper.GetTitleOrId(chat)}, number of active jobs: {self.__GetTotalJobCount()}"
         )
@@ -348,60 +360,61 @@ class PeriodicMsgScheduler:
 
     def Pause(self,
               chat: pyrogram.types.Chat,
+              topic_id: int,
               msg_id: str) -> None:
         """
         Pause a periodic message job.
 
         Args:
             chat: The chat containing the job
+            topic_id: The topic containing the job
             msg_id: The message ID of the job
 
         Raises:
             PeriodicMsgJobNotExistentError: If job does not exist
         """
-        job_id = self.__GetJobId(chat, msg_id)
+        job_id = self.__GetJobId(chat, topic_id, msg_id)
 
-        if not self.IsActiveInChat(chat, msg_id):
+        if not self.IsActiveInChat(chat, topic_id, msg_id):
             self.logger.GetLogger().error(
-                f"Job \"{job_id}\" not active in chat {ChatHelper.GetTitleOrId(chat)}, cannot pause it"
+                f"Job '{job_id}' not active in chat {ChatHelper.GetTitleOrId(chat)} ({topic_id}), cannot pause it"
             )
             raise PeriodicMsgJobNotExistentError()
 
-        self.jobs[chat.id][job_id].SetRunning(False)
+        self.jobs[job_id].SetRunning(False)
         self.scheduler.pause_job(job_id)
-        self.logger.GetLogger().info(
-            f"Paused job \"{job_id}\" in chat {ChatHelper.GetTitleOrId(chat)}"
-        )
+        self.logger.GetLogger().info(f"Paused job '{job_id}' in chat {ChatHelper.GetTitleOrId(chat)} ({topic_id})")
 
     def Resume(self,
                chat: pyrogram.types.Chat,
+               topic_id: int,
                msg_id: str) -> None:
         """
         Resume a paused periodic message job.
 
         Args:
             chat: The chat containing the job
+            topic_id: The topic containing the job
             msg_id: The message ID of the job
 
         Raises:
             PeriodicMsgJobNotExistentError: If job does not exist
         """
-        job_id = self.__GetJobId(chat, msg_id)
+        job_id = self.__GetJobId(chat, topic_id, msg_id)
 
-        if not self.IsActiveInChat(chat, msg_id):
+        if not self.IsActiveInChat(chat, topic_id, msg_id):
             self.logger.GetLogger().error(
-                f"Job \"{job_id}\" not active in chat {ChatHelper.GetTitleOrId(chat)}, cannot resume it"
+                f"Job '{job_id}' not active in chat {ChatHelper.GetTitleOrId(chat)} ({topic_id}), cannot resume it"
             )
             raise PeriodicMsgJobNotExistentError()
 
-        self.jobs[chat.id][job_id].SetRunning(True)
+        self.jobs[job_id].SetRunning(True)
         self.scheduler.resume_job(job_id)
-        self.logger.GetLogger().info(
-            f"Resumed job \"{job_id}\" in chat {ChatHelper.GetTitleOrId(chat)}"
-        )
+        self.logger.GetLogger().info(f"Resumed job '{job_id}' in chat {ChatHelper.GetTitleOrId(chat)} ({topic_id})")
 
     def DeleteLastSentMessage(self,
                               chat: pyrogram.types.Chat,
+                              topic_id: int,
                               msg_id: str,
                               flag: bool) -> None:
         """
@@ -409,28 +422,30 @@ class PeriodicMsgScheduler:
 
         Args:
             chat: The chat containing the job
+            topic_id: The topic containing the job
             msg_id: The message ID of the job
             flag: True to delete last message, False to keep it
 
         Raises:
             PeriodicMsgJobNotExistentError: If job does not exist
         """
-        job_id = self.__GetJobId(chat, msg_id)
+        job_id = self.__GetJobId(chat, topic_id, msg_id)
 
-        if not self.IsActiveInChat(chat, msg_id):
+        if not self.IsActiveInChat(chat, topic_id, msg_id):
             self.logger.GetLogger().error(
-                f"Job \"{job_id}\" not active in chat {ChatHelper.GetTitleOrId(chat)}"
+                f"Job '{job_id}' not active in chat {ChatHelper.GetTitleOrId(chat)} ({topic_id})"
             )
             raise PeriodicMsgJobNotExistentError()
 
-        self.jobs[chat.id][job_id].DeleteLastSentMessage(flag)
+        self.jobs[job_id].DeleteLastSentMessage(flag)
         self.logger.GetLogger().info(
-            f"Set delete last message to {flag} for job \"{job_id}\" in chat {ChatHelper.GetTitleOrId(chat)}"
+            f"Set delete last message to {flag} for job '{job_id}' in chat {ChatHelper.GetTitleOrId(chat)} ({topic_id})"
         )
 
     def __CreateJob(self,
                     job_id: str,
                     chat: pyrogram.types.Chat,
+                    topic_id: int,
                     period: int,
                     start: int,
                     msg_id: str,
@@ -441,24 +456,22 @@ class PeriodicMsgScheduler:
         Args:
             job_id: Unique job identifier
             chat: The chat for the job
+            topic_id: The topic for the job
             period: Period in hours
             start: Starting hour
             msg_id: Message identifier
             message: The message to send
         """
         msg = PeriodicMsgParser(self.config).Parse(message)
-
-        if chat.id not in self.jobs:
-            self.jobs[chat.id] = {}
-
-        self.jobs[chat.id][job_id] = PeriodicMsgJob(self.client,
-                                                    self.logger,
-                                                    PeriodicMsgJobData(chat, period, start, msg_id))
-        self.jobs[chat.id][job_id].SetMessage(msg)
+        self.jobs[job_id] = PeriodicMsgJob(self.client,
+                                           self.logger,
+                                           PeriodicMsgJobData(chat, topic_id, period, start, msg_id))
+        self.jobs[job_id].SetMessage(msg)
 
     def __AddJob(self,
                  job_id: str,
                  chat: pyrogram.types.Chat,
+                 topic_id: int,
                  period: int,
                  start: int,
                  msg_id: str) -> None:
@@ -468,6 +481,7 @@ class PeriodicMsgScheduler:
         Args:
             job_id: Unique job identifier
             chat: The chat for the job
+            topic_id: The topic for the job
             period: Period in hours
             start: Starting hour
             msg_id: Message identifier
@@ -475,37 +489,39 @@ class PeriodicMsgScheduler:
         is_test_mode = self.config.GetValue(BotConfigTypes.APP_TEST_MODE)
         cron_str = self.__BuildCronString(period, start, is_test_mode)
         if is_test_mode:
-            self.scheduler.add_job(self.jobs[chat.id][job_id].DoJob,
+            self.scheduler.add_job(self.jobs[job_id].DoJob,
                                    "cron",
-                                   args=(chat,),
+                                   args=(chat,topic_id,),
                                    minute=cron_str,
                                    id=job_id)
         else:
-            self.scheduler.add_job(self.jobs[chat.id][job_id].DoJob,
+            self.scheduler.add_job(self.jobs[job_id].DoJob,
                                    "cron",
-                                   args=(chat,),
+                                   args=(chat,topic_id,),
                                    hour=cron_str,
                                    id=job_id)
         per_sym = "minute(s)" if is_test_mode else "hour(s)"
         self.logger.GetLogger().info(
-            f"Started job \"{job_id}\" in chat {ChatHelper.GetTitleOrId(chat)} ({period} {per_sym}, "
+            f"Started job '{job_id}' in chat {ChatHelper.GetTitleOrId(chat)} ({topic_id}) ({period} {per_sym}, "
             f"{msg_id}), number of active jobs: {self.__GetTotalJobCount()}, cron: {cron_str}"
         )
 
     @staticmethod
     def __GetJobId(chat: pyrogram.types.Chat,
+                   topic_id: int,
                    msg_id: str) -> str:
         """
         Generate a unique job ID from chat and message IDs.
 
         Args:
             chat: The chat
+            topic_id: The topic
             msg_id: The message ID
 
         Returns:
             The generated job ID
         """
-        return f"{chat.id}-{msg_id}"
+        return f"{chat.id}-{topic_id}-{msg_id}"
 
     def __GetTotalJobCount(self) -> int:
         """
@@ -514,7 +530,7 @@ class PeriodicMsgScheduler:
         Returns:
             Total number of active jobs
         """
-        return sum([len(jobs) for (_, jobs) in self.jobs.items()])
+        return len(self.jobs)
 
     @staticmethod
     def __BuildCronString(period: int,

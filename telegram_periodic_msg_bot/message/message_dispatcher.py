@@ -107,6 +107,7 @@ class MessageDispatcher:
 
         MessageSender(client, self.logger).SendMessage(
             message.chat,
+            message.message_thread_id,
             self.translator.GetSentence("BOT_WELCOME_MSG")
         )
 
@@ -144,6 +145,7 @@ class MessageDispatcher:
             if member.is_self:
                 MessageSender(client, self.logger).SendMessage(
                     message.chat,
+                    message.message_thread_id,
                     self.translator.GetSentence("BOT_WELCOME_MSG")
                 )
                 break

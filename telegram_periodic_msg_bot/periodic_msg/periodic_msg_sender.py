@@ -64,18 +64,20 @@ class PeriodicMsgSender:
 
     def SendMessage(self,
                     chat: pyrogram.types.Chat,
+                    topic_id: int,
                     msg: str) -> None:
         """
         Send a periodic message to a chat.
 
         Args:
             chat: The chat to send the message to
+            topic_id: The topic to send the message to
             msg: The message text to send
         """
         if self.delete_last_sent_msg:
             self.__DeleteLastSentMessage()
 
-        self.last_sent_msgs = self.message_sender.SendMessage(chat, msg)
+        self.last_sent_msgs = self.message_sender.SendMessage(chat, topic_id, msg)
 
     def __DeleteLastSentMessage(self) -> None:
         """Delete the last sent messages if any exist."""

@@ -23,7 +23,6 @@ from typing import Any
 
 import pyrogram
 from pyrogram.errors import RPCError
-from pyrogram.errors.exceptions.bad_request_400 import BadRequest
 
 from telegram_periodic_msg_bot.command.command_data import CommandData
 from telegram_periodic_msg_bot.config.config_object import ConfigObject
@@ -111,14 +110,7 @@ class CommandBase(ABC):
         Args:
             msg: Message text to send
         """
-        try:
-            self.message_sender.SendMessage(
-                self.cmd_data.Chat(),
-                msg,
-                reply_to_message_id=self.message.reply_to_message_id,
-            )
-        except BadRequest:
-            self.message_sender.SendMessage(self.cmd_data.User(), msg)
+        self.message_sender.SendMessage(self.cmd_data.Chat(), self.message.message_thread_id, msg)
 
     def _IsChannel(self) -> bool:
         """Check if the chat is a channel.

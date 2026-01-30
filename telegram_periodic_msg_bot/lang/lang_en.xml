@@ -7,20 +7,20 @@ welcome to the Telegram Periodic Message Bot.
 
 ℹ️ Here is the list of supported commands.
 
-🔘 **/help** : show this message
-🔘 **/alive** : show if bot is active
-🔘 **/msgbot_set_test_mode** __true/false__ : enable/disable test mode
-🔘 **/msgbot_is_test_mode** : show if test mode is enabled
-🔘 **/msgbot_version** : show the bot version
-🔘 **/msgbot_task_start** __MSG_ID PERIOD_HOURS [START_HOUR] MSG__ : start a message task in the current chat (the message shall be in a new line)
-🔘 **/msgbot_task_stop** __MSG_ID__ : stop the specified message task in the current chat
-🔘 **/msgbot_task_stop_all** : stop all message tasks in the current chat
-🔘 **/msgbot_task_pause** __MSG_ID__ : pause the specified message task in the current chat
-🔘 **/msgbot_task_resume** __MSG_ID__ : resume the specified message task in the current chat
-🔘 **/msgbot_task_get** __MSG_ID__ : show the message set for the specified message task in the current chat
-🔘 **/msgbot_task_set** __MSG_ID MSG__ : set the message of the specified message task in the current chat (the message shall be in a new line)
-🔘 **/msgbot_task_delete_last_msg** __MSG_ID true/false__ : enable/disable the deletion of last messages for the specified message task in the current chat
-🔘 **/msgbot_task_info** : show the list of active message tasks in the current chat
+• **/help** : show this message
+• **/alive** : show if bot is active
+• **/msgbot_set_test_mode** __true/false__ : enable/disable test mode
+• **/msgbot_is_test_mode** : show if test mode is enabled
+• **/msgbot_version** : show the bot version
+• **/msgbot_task_start** __MSG_ID PERIOD_HOURS [START_HOUR] MSG__ : start a message task in the current chat (the message shall be in a new line)
+• **/msgbot_task_stop** __MSG_ID__ : stop the specified message task in the current chat
+• **/msgbot_task_stop_all** : stop all message tasks in the current chat
+• **/msgbot_task_pause** __MSG_ID__ : pause the specified message task in the current chat
+• **/msgbot_task_resume** __MSG_ID__ : resume the specified message task in the current chat
+• **/msgbot_task_get** __MSG_ID__ : show the message set for the specified message task in the current chat
+• **/msgbot_task_set** __MSG_ID MSG__ : set the message of the specified message task in the current chat (the message shall be in a new line)
+• **/msgbot_task_delete_last_msg** __MSG_ID true/false__ : enable/disable the deletion of last messages for the specified message task in the current chat
+• **/msgbot_task_info** : show the list of active message tasks in the current chat
 
 Parameters in square brakets are optional.</sentence>
     <!-- Alive command message -->
@@ -52,9 +52,9 @@ Version: **{version}**</sentence>
 ✅ Message task successfully started.
 
 Parameters:
-- Period: __{period}h__
-- Start: __{start:02d}:00__
-- Message ID: __{msg_id}__</sentence>
+• Period: __{period}h__
+• Start: __{start:02d}:00__
+• Message ID: __{msg_id}__</sentence>
 
     <!-- Stop message task ok message -->
     <sentence id="MESSAGE_TASK_STOP_OK_CMD">**TASK CONTROL**
@@ -138,9 +138,9 @@ Do not forget to **make me administrator of the group** or I won't work properly
     <sentence id="MAX_TASK_ERR_MSG">**ERROR**
 ❌ Maximum number of tasks reached. Stop some tasks to start new ones.</sentence>
     <!-- Single task information message -->
-    <sentence id="SINGLE_TASK_INFO_MSG">- ID: __{msg_id}__, period: __{period}h__, start: __{start:02d}:00__, state: __{state}__</sentence>
+    <sentence id="SINGLE_TASK_INFO_MSG">• ID: __{msg_id}__, topic: __{topic_id}__, period: __{period}h__, start: __{start:02d}:00__, state: __{state}__</sentence>
     <!-- Task running message -->
-    <sentence id="TASK_RUNNING_MSG">runnnig</sentence>
+    <sentence id="TASK_RUNNING_MSG">running</sentence>
     <!-- Task paused message -->
     <sentence id="TASK_PAUSED_MSG">paused</sentence>
 </translation>

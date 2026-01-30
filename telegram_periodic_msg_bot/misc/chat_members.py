@@ -21,9 +21,9 @@
 from typing import Callable, Optional
 
 import pyrogram
+from pyrogram.enums import ChatMembersFilter
 
 from telegram_periodic_msg_bot.misc.helpers import UserHelper
-from telegram_periodic_msg_bot.utils.pyrogram_wrapper import PyrogramWrapper
 from telegram_periodic_msg_bot.utils.wrapped_list import WrappedList
 
 
@@ -123,21 +123,21 @@ class ChatMembersGetter:
     def FilterMembers(self,
                       chat: pyrogram.types.Chat,
                       filter_fct: Optional[Callable[[pyrogram.types.ChatMember], bool]] = None,
-                      filter_str: str = "all") -> ChatMembersList:
+                      filter_type: ChatMembersFilter = ChatMembersFilter.SEARCH) -> ChatMembersList:
         """
         Get a filtered and sorted list of chat members.
 
         Args:
             chat: The chat to get members from
             filter_fct: Optional function to filter members
-            filter_str: Pyrogram filter string (e.g., "all", "administrators")
+            filter_type: Pyrogram filter
 
         Returns:
             Sorted list of filtered chat members
         """
-        filtered_members = list(PyrogramWrapper.GetChatMembers(self.client, chat, filter_str))
+        filtered_members = list(self.client.get_chat_members(chat.id, filter=filter_type))  # type: ignore
         if filter_fct is not None:
-            filtered_members = list(filter(filter_fct, filtered_members))   # type: ignore
+            filtered_members = list(filter(filter_fct, filtered_members))                   # type: ignore
         filtered_members.sort(      # type: ignore
             key=lambda member: member.user.username.lower() if member.user.username is not None else str(member.user.id)
         )
@@ -173,4 +173,4 @@ class ChatMembersGetter:
         """
         return self.FilterMembers(chat,
                                   lambda member: True,
-                                  "administrators")
+                                  ChatMembersFilter.ADMINISTRATORS)

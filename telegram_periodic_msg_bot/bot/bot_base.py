@@ -21,7 +21,7 @@
 from typing import Any
 
 import pyrogram
-from pyrogram import Client
+from pyrogram import Client, idle
 
 from telegram_periodic_msg_bot.bot.bot_config_types import BotConfigTypes
 from telegram_periodic_msg_bot.bot.bot_handlers_config_typing import BotHandlersConfigType
@@ -79,10 +79,11 @@ class BotBase:
         self._SetupHandlers(handlers_config)
         self.logger.GetLogger().info("Bot initialization completed")
 
-    def Run(self) -> None:
+    async def Run(self) -> None:
         """Run the bot and start processing messages."""
         self.logger.GetLogger().info("Bot started!\n")
-        self.client.run()
+        async with self.client:
+            await idle()
 
     def _SetupHandlers(self,
                        handlers_config: BotHandlersConfigType) -> None:
@@ -92,23 +93,20 @@ class BotBase:
             handlers_config: Configuration defining the handlers to set up
         """
         def create_handler(handler_type, handler_cfg):
-            return handler_type(
-                lambda client, message: handler_cfg["callback"](self, client, message),
-                handler_cfg["filters"],
-            )
+            async def async_callback(client, message):
+                return await handler_cfg["callback"](self, client, message)
+            return handler_type(async_callback, handler_cfg["filters"])
 
         for curr_hnd_type, curr_hnd_cfg in handlers_config.items():
             for handler_cfg in curr_hnd_cfg:
-                self.client.add_handler(
-                    create_handler(curr_hnd_type, handler_cfg),
-                )
+                self.client.add_handler(create_handler(curr_hnd_type, handler_cfg))
         self.logger.GetLogger().info("Bot handlers set")
 
-    def DispatchCommand(self,
-                        client: pyrogram.Client,
-                        message: pyrogram.types.Message,
-                        cmd_type: CommandTypes,
-                        **kwargs: Any) -> None:
+    async def DispatchCommand(self,
+                              client: pyrogram.Client,
+                              message: pyrogram.types.Message,
+                              cmd_type: CommandTypes,
+                              **kwargs: Any) -> None:
         """Dispatch a command to the command dispatcher.
 
         Args:
@@ -117,13 +115,13 @@ class BotBase:
             cmd_type: Type of command to dispatch
             **kwargs: Additional arguments to pass to the command handler
         """
-        self.cmd_dispatcher.Dispatch(client, message, cmd_type, **kwargs)
+        await self.cmd_dispatcher.Dispatch(client, message, cmd_type, **kwargs)
 
-    def HandleMessage(self,
-                      client: pyrogram.Client,
-                      message: pyrogram.types.Message,
-                      msg_type: MessageTypes,
-                      **kwargs: Any) -> None:
+    async def HandleMessage(self,
+                            client: pyrogram.Client,
+                            message: pyrogram.types.Message,
+                            msg_type: MessageTypes,
+                            **kwargs: Any) -> None:
         """Handle a message by dispatching it to the message dispatcher.
 
         Args:
@@ -132,4 +130,4 @@ class BotBase:
             msg_type: Type of message to handle
             **kwargs: Additional arguments to pass to the message handler
         """
-        self.msg_dispatcher.Dispatch(client, message, msg_type, **kwargs)
+        await self.msg_dispatcher.Dispatch(client, message, msg_type, **kwargs)

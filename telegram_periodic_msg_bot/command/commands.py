@@ -18,7 +18,7 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 # THE SOFTWARE.
 
-from typing import Any, Callable
+from typing import Any, Callable, Coroutine
 
 from telegram_periodic_msg_bot._version import __version__
 from telegram_periodic_msg_bot.bot.bot_config_types import BotConfigTypes
@@ -35,7 +35,7 @@ from telegram_periodic_msg_bot.periodic_msg.periodic_msg_scheduler import (
 )
 
 
-def GroupChatOnly(exec_cmd_fct: Callable[..., None]) -> Callable[..., None]:
+def GroupChatOnly(exec_cmd_fct: Callable[..., Coroutine]) -> Callable[..., Coroutine]:
     """Decorator for group-only commands.
 
     Args:
@@ -44,11 +44,11 @@ def GroupChatOnly(exec_cmd_fct: Callable[..., None]) -> Callable[..., None]:
     Returns:
         Decorated function that checks for group chat
     """
-    def decorated(self, **kwargs: Any):
+    async def decorated(self, **kwargs: Any):
         if self._IsPrivateChat():
-            self._SendMessage(self.translator.GetSentence("GROUP_ONLY_ERR_MSG"))
+            await self._SendMessage(self.translator.GetSentence("GROUP_ONLY_ERR_MSG"))
         else:
-            exec_cmd_fct(self, **kwargs)
+            await exec_cmd_fct(self, **kwargs)
 
     return decorated
 
@@ -56,10 +56,10 @@ def GroupChatOnly(exec_cmd_fct: Callable[..., None]) -> Callable[..., None]:
 class HelpCmd(CommandBase):
     """Command for displaying help information."""
 
-    def _ExecuteCommand(self,
+    async def _ExecuteCommand(self,
                         **kwargs: Any) -> None:
         """Execute the help command."""
-        self._SendMessage(
+        await self._SendMessage(
             self.translator.GetSentence(
                 "HELP_CMD",
                 name=UserHelper.GetName(self.cmd_data.User()),
@@ -70,51 +70,51 @@ class HelpCmd(CommandBase):
 class AliveCmd(CommandBase):
     """Command for checking if the bot is alive."""
 
-    def _ExecuteCommand(self,
+    async def _ExecuteCommand(self,
                         **kwargs: Any) -> None:
         """Execute the alive command."""
-        self._SendMessage(self.translator.GetSentence("ALIVE_CMD"))
+        await self._SendMessage(self.translator.GetSentence("ALIVE_CMD"))
 
 
 class SetTestModeCmd(CommandBase):
     """Command for setting test mode."""
 
     @GroupChatOnly
-    def _ExecuteCommand(self,
+    async def _ExecuteCommand(self,
                         **kwargs: Any) -> None:
         """Execute the set test mode command."""
         try:
             flag = self.cmd_data.Params().GetAsBool(0)
         except CommandParameterError:
-            self._SendMessage(self.translator.GetSentence("PARAM_ERR_MSG"))
+            await self._SendMessage(self.translator.GetSentence("PARAM_ERR_MSG"))
         else:
             self.config.SetValue(BotConfigTypes.APP_TEST_MODE, flag)
 
             if self.config.GetValue(BotConfigTypes.APP_TEST_MODE):
-                self._SendMessage(self.translator.GetSentence("SET_TEST_MODE_EN_CMD"))
+                await self._SendMessage(self.translator.GetSentence("SET_TEST_MODE_EN_CMD"))
             else:
-                self._SendMessage(self.translator.GetSentence("SET_TEST_MODE_DIS_CMD"))
+                await self._SendMessage(self.translator.GetSentence("SET_TEST_MODE_DIS_CMD"))
 
 
 class IsTestModeCmd(CommandBase):
     """Command for checking if test mode is enabled."""
 
-    def _ExecuteCommand(self,
+    async def _ExecuteCommand(self,
                         **kwargs: Any) -> None:
         """Execute the is test mode command."""
         if self.config.GetValue(BotConfigTypes.APP_TEST_MODE):
-            self._SendMessage(self.translator.GetSentence("IS_TEST_MODE_EN_CMD"))
+            await self._SendMessage(self.translator.GetSentence("IS_TEST_MODE_EN_CMD"))
         else:
-            self._SendMessage(self.translator.GetSentence("IS_TEST_MODE_DIS_CMD"))
+            await self._SendMessage(self.translator.GetSentence("IS_TEST_MODE_DIS_CMD"))
 
 
 class VersionCmd(CommandBase):
     """Command for showing the bot version."""
 
-    def _ExecuteCommand(self,
+    async def _ExecuteCommand(self,
                         **kwargs: Any) -> None:
         """Execute the version command."""
-        self._SendMessage(
+        await self._SendMessage(
             self.translator.GetSentence(
                 "VERSION_CMD",
                 version=__version__,
@@ -126,7 +126,7 @@ class MessageTaskStartCmd(CommandBase):
     """Command for starting a periodic message task."""
 
     @GroupChatOnly
-    def _ExecuteCommand(self,
+    async def _ExecuteCommand(self,
                         **kwargs: Any) -> None:
         """Execute the message task start command."""
         try:
@@ -134,7 +134,7 @@ class MessageTaskStartCmd(CommandBase):
             period_hours = self.cmd_data.Params().GetAsInt(1)
             start_hour = self.cmd_data.Params().GetAsInt(2, 0)
         except CommandParameterError:
-            self._SendMessage(self.translator.GetSentence("PARAM_ERR_MSG"))
+            await self._SendMessage(self.translator.GetSentence("PARAM_ERR_MSG"))
         else:
             try:
                 kwargs["periodic_msg_scheduler"].Start(
@@ -145,7 +145,7 @@ class MessageTaskStartCmd(CommandBase):
                     msg_id,
                     self.message,
                 )
-                self._SendMessage(
+                await self._SendMessage(
                     self.translator.GetSentence(
                         "MESSAGE_TASK_START_OK_CMD",
                         period=period_hours,
@@ -154,22 +154,22 @@ class MessageTaskStartCmd(CommandBase):
                     ),
                 )
             except PeriodicMsgJobInvalidPeriodError:
-                self._SendMessage(self.translator.GetSentence("TASK_PERIOD_ERR_MSG"))
+                await self._SendMessage(self.translator.GetSentence("TASK_PERIOD_ERR_MSG"))
             except PeriodicMsgJobInvalidStartError:
-                self._SendMessage(self.translator.GetSentence("TASK_START_ERR_MSG"))
+                await self._SendMessage(self.translator.GetSentence("TASK_START_ERR_MSG"))
             except PeriodicMsgJobMaxNumError:
-                self._SendMessage(self.translator.GetSentence("MAX_TASK_ERR_MSG"))
+                await self._SendMessage(self.translator.GetSentence("MAX_TASK_ERR_MSG"))
             except PeriodicMsgJobAlreadyExistentError:
-                self._SendMessage(
+                await self._SendMessage(
                     self.translator.GetSentence(
                         "TASK_EXISTENT_ERR_MSG",
                         msg_id=msg_id,
                     ),
                 )
             except PeriodicMsgParserInvalidError:
-                self._SendMessage(self.translator.GetSentence("MESSAGE_INVALID_ERR_MSG"))
+                await self._SendMessage(self.translator.GetSentence("MESSAGE_INVALID_ERR_MSG"))
             except PeriodicMsgParserTooLongError:
-                self._SendMessage(
+                await self._SendMessage(
                     self.translator.GetSentence(
                         "MESSAGE_TOO_LONG_ERR_MSG",
                         msg_max_len=self.config.GetValue(BotConfigTypes.MESSAGE_MAX_LEN),
@@ -181,24 +181,24 @@ class MessageTaskStopCmd(CommandBase):
     """Command for stopping a periodic message task."""
 
     @GroupChatOnly
-    def _ExecuteCommand(self,
+    async def _ExecuteCommand(self,
                         **kwargs: Any) -> None:
         """Execute the message task stop command."""
         try:
             msg_id = self.cmd_data.Params().GetAsString(0)
         except CommandParameterError:
-            self._SendMessage(self.translator.GetSentence("PARAM_ERR_MSG"))
+            await self._SendMessage(self.translator.GetSentence("PARAM_ERR_MSG"))
         else:
             try:
                 kwargs["periodic_msg_scheduler"].Stop(self.cmd_data.Chat(), self.message.message_thread_id, msg_id)
-                self._SendMessage(
+                await self._SendMessage(
                     self.translator.GetSentence(
                         "MESSAGE_TASK_STOP_OK_CMD",
                         msg_id=msg_id,
                     ),
                 )
             except PeriodicMsgJobNotExistentError:
-                self._SendMessage(
+                await self._SendMessage(
                     self.translator.GetSentence(
                         "TASK_NOT_EXISTENT_ERR_MSG",
                         msg_id=msg_id,
@@ -210,11 +210,11 @@ class MessageTaskStopAllCmd(CommandBase):
     """Command for stopping all periodic message tasks in a chat."""
 
     @GroupChatOnly
-    def _ExecuteCommand(self,
+    async def _ExecuteCommand(self,
                         **kwargs: Any) -> None:
         """Execute the message task stop all command."""
         kwargs["periodic_msg_scheduler"].StopAll(self.cmd_data.Chat())
-        self._SendMessage(
+        await self._SendMessage(
             self.translator.GetSentence("MESSAGE_TASK_STOP_ALL_CMD"),
         )
 
@@ -223,24 +223,24 @@ class MessageTaskPauseCmd(CommandBase):
     """Command for pausing a periodic message task."""
 
     @GroupChatOnly
-    def _ExecuteCommand(self,
+    async def _ExecuteCommand(self,
                         **kwargs: Any) -> None:
         """Execute the message task pause command."""
         try:
             msg_id = self.cmd_data.Params().GetAsString(0)
         except CommandParameterError:
-            self._SendMessage(self.translator.GetSentence("PARAM_ERR_MSG"))
+            await self._SendMessage(self.translator.GetSentence("PARAM_ERR_MSG"))
         else:
             try:
                 kwargs["periodic_msg_scheduler"].Pause(self.cmd_data.Chat(), self.message.message_thread_id, msg_id)
-                self._SendMessage(
+                await self._SendMessage(
                     self.translator.GetSentence(
                         "MESSAGE_TASK_PAUSE_OK_CMD",
                         msg_id=msg_id,
                     ),
                 )
             except PeriodicMsgJobNotExistentError:
-                self._SendMessage(
+                await self._SendMessage(
                     self.translator.GetSentence(
                         "TASK_NOT_EXISTENT_ERR_MSG",
                         msg_id=msg_id,
@@ -252,24 +252,24 @@ class MessageTaskResumeCmd(CommandBase):
     """Command for resuming a paused periodic message task."""
 
     @GroupChatOnly
-    def _ExecuteCommand(self,
+    async def _ExecuteCommand(self,
                         **kwargs: Any) -> None:
         """Execute the message task resume command."""
         try:
             msg_id = self.cmd_data.Params().GetAsString(0)
         except CommandParameterError:
-            self._SendMessage(self.translator.GetSentence("PARAM_ERR_MSG"))
+            await self._SendMessage(self.translator.GetSentence("PARAM_ERR_MSG"))
         else:
             try:
                 kwargs["periodic_msg_scheduler"].Resume(self.cmd_data.Chat(), self.message.message_thread_id, msg_id)
-                self._SendMessage(
+                await self._SendMessage(
                     self.translator.GetSentence(
                         "MESSAGE_TASK_RESUME_OK_CMD",
                         msg_id=msg_id,
                     ),
                 )
             except PeriodicMsgJobNotExistentError:
-                self._SendMessage(
+                await self._SendMessage(
                     self.translator.GetSentence(
                         "TASK_NOT_EXISTENT_ERR_MSG",
                         msg_id=msg_id,
@@ -281,13 +281,13 @@ class MessageTaskGetCmd(CommandBase):
     """Command for getting the message of a periodic task."""
 
     @GroupChatOnly
-    def _ExecuteCommand(self,
+    async def _ExecuteCommand(self,
                         **kwargs: Any) -> None:
         """Execute the message task get command."""
         try:
             msg_id = self.cmd_data.Params().GetAsString(0)
         except CommandParameterError:
-            self._SendMessage(self.translator.GetSentence("PARAM_ERR_MSG"))
+            await self._SendMessage(self.translator.GetSentence("PARAM_ERR_MSG"))
         else:
             try:
                 msg = kwargs["periodic_msg_scheduler"].GetMessage(self.cmd_data.Chat(),
@@ -295,7 +295,7 @@ class MessageTaskGetCmd(CommandBase):
                                                                   msg_id)
 
                 if msg != "":
-                    self._SendMessage(
+                    await self._SendMessage(
                         self.translator.GetSentence(
                             "MESSAGE_TASK_GET_OK_CMD",
                             msg_id=msg_id,
@@ -303,14 +303,14 @@ class MessageTaskGetCmd(CommandBase):
                         ),
                     )
                 else:
-                    self._SendMessage(
+                    await self._SendMessage(
                         self.translator.GetSentence(
                             "MESSAGE_TASK_GET_NO_CMD",
                             msg_id=msg_id,
                         ),
                     )
             except PeriodicMsgJobNotExistentError:
-                self._SendMessage(
+                await self._SendMessage(
                     self.translator.GetSentence(
                         "TASK_NOT_EXISTENT_ERR_MSG",
                         msg_id=msg_id,
@@ -322,13 +322,13 @@ class MessageTaskSetCmd(CommandBase):
     """Command for setting the message of a periodic task."""
 
     @GroupChatOnly
-    def _ExecuteCommand(self,
+    async def _ExecuteCommand(self,
                         **kwargs: Any) -> None:
         """Execute the message task set command."""
         try:
             msg_id = self.cmd_data.Params().GetAsString(0)
         except CommandParameterError:
-            self._SendMessage(self.translator.GetSentence("PARAM_ERR_MSG"))
+            await self._SendMessage(self.translator.GetSentence("PARAM_ERR_MSG"))
         else:
             try:
                 kwargs["periodic_msg_scheduler"].SetMessage(
@@ -337,23 +337,23 @@ class MessageTaskSetCmd(CommandBase):
                     msg_id,
                     self.message,
                 )
-                self._SendMessage(
+                await self._SendMessage(
                     self.translator.GetSentence(
                         "MESSAGE_TASK_SET_OK_CMD",
                         msg_id=msg_id,
                     ),
                 )
             except PeriodicMsgJobNotExistentError:
-                self._SendMessage(
+                await self._SendMessage(
                     self.translator.GetSentence(
                         "TASK_NOT_EXISTENT_ERR_MSG",
                         msg_id=msg_id,
                     ),
                 )
             except PeriodicMsgParserInvalidError:
-                self._SendMessage(self.translator.GetSentence("MESSAGE_INVALID_ERR_MSG"))
+                await self._SendMessage(self.translator.GetSentence("MESSAGE_INVALID_ERR_MSG"))
             except PeriodicMsgParserTooLongError:
-                self._SendMessage(
+                await self._SendMessage(
                     self.translator.GetSentence(
                         "MESSAGE_TOO_LONG_ERR_MSG",
                         msg_max_len=self.config.GetValue(BotConfigTypes.MESSAGE_MAX_LEN),
@@ -365,14 +365,14 @@ class MessageTaskDeleteLastMsgCmd(CommandBase):
     """Command for setting whether to delete the last sent message."""
 
     @GroupChatOnly
-    def _ExecuteCommand(self,
+    async def _ExecuteCommand(self,
                         **kwargs: Any) -> None:
         """Execute the message task delete last message command."""
         try:
             msg_id = self.cmd_data.Params().GetAsString(0)
             flag = self.cmd_data.Params().GetAsBool(1)
         except CommandParameterError:
-            self._SendMessage(self.translator.GetSentence("PARAM_ERR_MSG"))
+            await self._SendMessage(self.translator.GetSentence("PARAM_ERR_MSG"))
         else:
             try:
                 kwargs["periodic_msg_scheduler"].DeleteLastSentMessage(
@@ -381,7 +381,7 @@ class MessageTaskDeleteLastMsgCmd(CommandBase):
                     msg_id,
                     flag,
                 )
-                self._SendMessage(
+                await self._SendMessage(
                     self.translator.GetSentence(
                         "MESSAGE_TASK_DELETE_LAST_MSG_OK_CMD",
                         msg_id=msg_id,
@@ -389,7 +389,7 @@ class MessageTaskDeleteLastMsgCmd(CommandBase):
                     ),
                 )
             except PeriodicMsgJobNotExistentError:
-                self._SendMessage(
+                await self._SendMessage(
                     self.translator.GetSentence(
                         "TASK_NOT_EXISTENT_ERR_MSG",
                         msg_id=msg_id,
@@ -401,13 +401,13 @@ class MessageTaskInfoCmd(CommandBase):
     """Command for displaying information about periodic message tasks."""
 
     @GroupChatOnly
-    def _ExecuteCommand(self,
+    async def _ExecuteCommand(self,
                         **kwargs: Any) -> None:
         """Execute the message task info command."""
         jobs_list = kwargs["periodic_msg_scheduler"].GetJobsInChat(self.cmd_data.Chat())
 
         if jobs_list.Any():
-            self._SendMessage(
+            await self._SendMessage(
                 self.translator.GetSentence(
                     "MESSAGE_TASK_INFO_CMD",
                     tasks_num=jobs_list.Count(),
@@ -415,4 +415,4 @@ class MessageTaskInfoCmd(CommandBase):
                 ),
             )
         else:
-            self._SendMessage(self.translator.GetSentence("MESSAGE_TASK_INFO_NO_TASK_CMD"))
+            await self._SendMessage(self.translator.GetSentence("MESSAGE_TASK_INFO_NO_TASK_CMD"))

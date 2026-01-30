@@ -21,7 +21,7 @@
 from typing import Dict
 
 import pyrogram
-from apscheduler.schedulers.background import BackgroundScheduler
+from apscheduler.schedulers.asyncio import AsyncIOScheduler
 
 from telegram_periodic_msg_bot.bot.bot_config_types import BotConfigTypes
 from telegram_periodic_msg_bot.config.config_object import ConfigObject
@@ -116,7 +116,7 @@ class PeriodicMsgScheduler:
     logger: Logger
     translator: TranslationLoader
     jobs: Dict[str, PeriodicMsgJob]
-    scheduler: BackgroundScheduler
+    scheduler: AsyncIOScheduler
 
     def __init__(self,
                  client: pyrogram.Client,
@@ -137,7 +137,7 @@ class PeriodicMsgScheduler:
         self.logger = logger
         self.translator = translator
         self.jobs = {}
-        self.scheduler = BackgroundScheduler()
+        self.scheduler = AsyncIOScheduler()
         self.scheduler.start()
 
     def GetJobsInChat(self,

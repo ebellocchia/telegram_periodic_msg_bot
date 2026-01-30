@@ -62,10 +62,10 @@ class PeriodicMsgSender:
         """
         self.delete_last_sent_msg = flag
 
-    def SendMessage(self,
-                    chat: pyrogram.types.Chat,
-                    topic_id: int,
-                    msg: str) -> None:
+    async def SendMessage(self,
+                          chat: pyrogram.types.Chat,
+                          topic_id: int,
+                          msg: str) -> None:
         """
         Send a periodic message to a chat.
 
@@ -75,13 +75,13 @@ class PeriodicMsgSender:
             msg: The message text to send
         """
         if self.delete_last_sent_msg:
-            self.__DeleteLastSentMessage()
+            await self.__DeleteLastSentMessage()
 
-        self.last_sent_msgs = self.message_sender.SendMessage(chat, topic_id, msg)
+        self.last_sent_msgs = await self.message_sender.SendMessage(chat, topic_id, msg)
 
-    def __DeleteLastSentMessage(self) -> None:
+    async def __DeleteLastSentMessage(self) -> None:
         """Delete the last sent messages if any exist."""
         if self.last_sent_msgs is not None:
-            self.message_deleter.DeleteMessages(self.last_sent_msgs)
+            await self.message_deleter.DeleteMessages(self.last_sent_msgs)
 
         self.last_sent_msgs = None

@@ -120,10 +120,10 @@ class ChatMembersGetter:
         """
         self.client = client
 
-    def FilterMembers(self,
-                      chat: pyrogram.types.Chat,
-                      filter_fct: Optional[Callable[[pyrogram.types.ChatMember], bool]] = None,
-                      filter_type: ChatMembersFilter = ChatMembersFilter.SEARCH) -> ChatMembersList:
+    async def FilterMembers(self,
+                            chat: pyrogram.types.Chat,
+                            filter_fct: Optional[Callable[[pyrogram.types.ChatMember], bool]] = None,
+                            filter_type: ChatMembersFilter = ChatMembersFilter.SEARCH) -> ChatMembersList:
         """
         Get a filtered and sorted list of chat members.
 
@@ -135,7 +135,7 @@ class ChatMembersGetter:
         Returns:
             Sorted list of filtered chat members
         """
-        filtered_members = list(self.client.get_chat_members(chat.id, filter=filter_type))  # type: ignore
+        filtered_members = [member async for member in self.client.get_chat_members(chat.id, filter=filter_type)]  # type: ignore
         if filter_fct is not None:
             filtered_members = list(filter(filter_fct, filtered_members))                   # type: ignore
         filtered_members.sort(      # type: ignore
@@ -147,8 +147,8 @@ class ChatMembersGetter:
 
         return chat_members
 
-    def GetAll(self,
-               chat: pyrogram.types.Chat) -> ChatMembersList:
+    async def GetAll(self,
+                     chat: pyrogram.types.Chat) -> ChatMembersList:
         """
         Get all members of a chat.
 
@@ -158,10 +158,10 @@ class ChatMembersGetter:
         Returns:
             List of all chat members
         """
-        return self.FilterMembers(chat)
+        return await self.FilterMembers(chat)
 
-    def GetAdmins(self,
-                  chat: pyrogram.types.Chat) -> ChatMembersList:
+    async def GetAdmins(self,
+                        chat: pyrogram.types.Chat) -> ChatMembersList:
         """
         Get all administrators of a chat.
 
@@ -171,6 +171,6 @@ class ChatMembersGetter:
         Returns:
             List of chat administrators
         """
-        return self.FilterMembers(chat,
-                                  lambda member: True,
-                                  ChatMembersFilter.ADMINISTRATORS)
+        return await self.FilterMembers(chat,
+                                        lambda member: True,
+                                        ChatMembersFilter.ADMINISTRATORS)

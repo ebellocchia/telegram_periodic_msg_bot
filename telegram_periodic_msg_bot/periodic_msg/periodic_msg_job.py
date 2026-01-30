@@ -18,8 +18,6 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 # THE SOFTWARE.
 
-from threading import Lock
-
 import pyrogram
 
 from telegram_periodic_msg_bot.logger.logger import Logger
@@ -130,7 +128,6 @@ class PeriodicMsgJob:
     data: PeriodicMsgJobData
     logger: Logger
     message: str
-    message_lock: Lock
     message_sender: PeriodicMsgSender
 
     def __init__(self,
@@ -148,7 +145,6 @@ class PeriodicMsgJob:
         self.data = data
         self.logger = logger
         self.message = ""
-        self.message_lock = Lock()
         self.message_sender = PeriodicMsgSender(client, logger)
 
     def Data(self) -> PeriodicMsgJobData:
@@ -197,12 +193,11 @@ class PeriodicMsgJob:
         Args:
             message: The message text to send
         """
-        with self.message_lock:
-            self.message = message
+        self.message = message
 
-    def DoJob(self,
-              chat: pyrogram.types.Chat,
-              topic_id: int) -> None:
+    async def DoJob(self,
+                    chat: pyrogram.types.Chat,
+                    topic_id: int) -> None:
         """
         Execute the job by sending the periodic message.
 
@@ -213,10 +208,7 @@ class PeriodicMsgJob:
         self.logger.GetLogger().info(
             f"Periodic message job started in chat '{ChatHelper.GetTitleOrId(chat)}' ({topic_id})"
         )
-
-        with self.message_lock:
-            if self.message == "":
-                self.logger.GetLogger().info("No message set, exiting...")
-                return
-
-            self.message_sender.SendMessage(chat, topic_id, self.message)
+        if self.message == "":
+            self.logger.GetLogger().info("No message set, exiting...")
+            return
+        await self.message_sender.SendMessage(chat, topic_id, self.message)

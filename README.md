@@ -16,7 +16,7 @@ A single bot instance can be used with multiple periodic messages (with differen
 
 ### Create Telegram app
 
-In order to use the bot, in addition to the bot token you also need an APP ID and hash.\
+In order to use the bot, in addition to the bot token you also need an API ID and hash.\
 To get them, create an app using the following website: [https://my.telegram.org/apps](https://my.telegram.org/apps).
 
 ### Installation
@@ -57,7 +57,7 @@ The list of all possible fields that can be set is shown below.
 |`api_hash`|API hash from [https://my.telegram.org/apps](https://my.telegram.org/apps)|
 |`bot_token`|Bot token from BotFather|
 |**[app]**|Configuration for app|
-|`app_is_test_mode`|True to activate test mode false otherwise|
+|`app_is_test_mode`|True to activate test mode, false otherwise|
 |`app_lang_file`|Language file in XML format (default: English)|
 |**[task]**|Configuration for tasks|
 |`tasks_max_num`|Maximum number of running tasks (totally, in all groups). Default: 20.|
@@ -89,7 +89,7 @@ Parameters:
     - `MSG`: Message to be sent periodically, it shall be on a new line
 - `msgbot_task_stop MSG_ID`: stop the specified message task in the current chat/topic. If the task `MSG_ID` does not exist in the current chat, an error message will be shown.\
 Parameters:
-    - `MSG_ID`: CoinGecko *ID*
+    - `MSG_ID`: Message ID
 - `msgbot_task_stop_all`: stop all message tasks in the current chat (jobs in all topics will be stopped)
 - `msgbot_task_pause MSG_ID`: pause the specified message task in the current chat/topic. If the task `MSG_ID` does not exist in the current chat, an error message will be shown.\
 Parameters:
@@ -136,7 +136,7 @@ Show the message set for the previous task:
 
     /msgbot_task_get test_msg
 
-Set a new message set for the previous task:
+Set a new message for the previous task:
 
     /msgbot_task_set test_msg
     Hello,
@@ -154,8 +154,8 @@ Send a periodical message every 6 hours starting from 10:00 in the current chat:
 
 ## Run the Bot
 
-Since the bot deletes the last sent messages, it'd be better if it's an administrator of the group (otherwise the last messages cannot be deleted).\
-In order to send messages periodically, the bot shall run 24h/24h. So, it's suggested to run it on a VPS (there is no performance requirements, so a cheap VPS will suffice).
+Since the bot deletes the last sent messages, it would be better if it were an administrator of the group (otherwise the last messages cannot be deleted).\
+In order to send messages periodically, the bot must run 24/7. So, it's suggested to run it on a VPS (there are no performance requirements, so a cheap VPS will suffice).
 
 ### Docker
 
@@ -174,7 +174,7 @@ During test mode, the bot will work as usual but the task period will be applied
 
 The messages sent by the bot on Telegram can be translated into different languages (the default language is English) by providing a custom XML file.\
 The XML file path is specified in the configuration file (`app_lang_file` field).\
-An example XML file in italian is provided in the folder *app/lang*.
+An example XML file in Italian is provided in the folder *app/lang*.
 
 # License
 

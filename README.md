@@ -67,7 +67,7 @@ or:
 python bot_start.py --config another_conf.ini
 ```
 
-This allows you to manage different groups easily, each one with its own configuration file.
+This allows you to manage different bots easily, each one with its own configuration file.
 
 ### Code analysis
 

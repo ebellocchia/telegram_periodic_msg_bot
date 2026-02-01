@@ -141,8 +141,8 @@ By default, the bot deletes the last sent message when sending a new one.
 **Scheduling Logic:**
 The task period starts from the specified hour (ensure the VPS time is correct):
 
-- Period of 8h starting at 00:00: sends at 00:00, 08:00, 16:00.
-- Period of 6h starting at 10:00: sends at 10:00, 16:00, 22:00, 04:00.
+- Period of 8h starting at 00:00: sends at 00:00, 08:00, 16:00
+- Period of 6h starting at 10:00: sends at 10:00, 16:00, 22:00, 04:00
 
 **Examples**
 

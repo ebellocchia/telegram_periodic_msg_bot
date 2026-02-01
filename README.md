@@ -55,7 +55,7 @@ python bot_start.py
 
 #### Custom Configuration
 
-When run without parameters, the bot uses **conf/config.ini** as the default configuration file. This allows you to manage different groups easily. To specify a different configuration file, use:
+When run without parameters, the bot uses **conf/config.ini** as the default configuration file. To specify a different configuration file, use:
 
 ```
 python bot_start.py -c another_conf.ini
@@ -66,6 +66,8 @@ or:
 ```
 python bot_start.py --config another_conf.ini
 ```
+
+This allows you to manage different groups easily, each one with its own configuration file.
 
 ### Code analysis
 
@@ -129,7 +131,7 @@ Parameters:
 - `msgbot_task_resume MSG_ID`: resume the specified message task (in the current chat/topic).
 - `msgbot_task_get MSG_ID`: show the message set for the specified task (in the current chat/topic).
 - `msgbot_task_set MSG_ID MSG`: update the message for the specified task (in the current chat/topic).
-- `msgbot_task_delete_last_msg MSG_ID true/false`: enable/disable deletion of the previous message when a new one is sent for the specified task (in the current chat/topic).
+- `msgbot_task_delete_last_msg MSG_ID true/false`: enable/disable deletion of the previous message when a new one is sent for the specified task(in the current chat/topic).
 - `msgbot_task_info`: show the list of active tasks in the current chat (all topics).
 
 Messages support HTML tags (e.g., `<b>`, `<i>`), but Markdown is not supported.

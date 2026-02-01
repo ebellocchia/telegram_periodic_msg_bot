@@ -111,32 +111,35 @@ The list of all configurable fields is shown below.
 ## Supported Commands
 
 List of supported commands:
-
 - `help`: show this message
-- `alive`: check if the bot is active
+- `alive`: show if the bot is active
 - `msgbot_set_test_mode true/false`: enable/disable test mode
 - `msgbot_is_test_mode`: show if test mode is enabled
-- `msgbot_version`: show bot version
-- `msgbot_task_start MSG_ID PERIOD_HOURS [START_HOUR] MSG`: start a message task (in the current chat/topic). If the `MSG_ID` already exists, an error will be shown. To restart it, you must first stop it with `msgbot_task_stop`.
-Parameters:
-  - `MSG_ID`: Message ID
-  - `PERIOD_HOURS`: Task period in hours (between 1 and 24)
-  - `START_HOUR` (optional): Task start hour (between 0 and 23). Default: 0.
-  - `MSG`: Message to be sent (must be on a new line)
-
-
+- `msgbot_version`: show the bot version
+- `msgbot_task_start MSG_ID PERIOD_HOURS [START_HOUR] MSG`: start a message task (in the current chat/topic). If the `MSG_ID` already exists, an error message will be shown. To restart it, you must first stop it with the `msgbot_task_stop` command.
+    - `MSG_ID`: Message ID
+    - `PERIOD_HOURS`: Task period in hours (must be between 1 and 24)
+    - `START_HOUR` (optional): Task start hour (must be between 0 and 23). Default value: 0.
+    - `MSG`: Message to be sent periodically (must be on a new line)
 - `msgbot_task_stop MSG_ID`: stop the specified message task (in the current chat/topic).
-- `msgbot_task_stop_all`: stop all message tasks in the current chat (all topics).
-- `msgbot_task_pause MSG_ID`: pause the specified message task (in the current chat/topic).
+    - `MSG_ID`: Message ID
+- `msgbot_task_stop_all`: stop all message tasks in the current chat (all topics included).
+- `msgbot_task_pause MSG_ID`: pause the specified message task.
+    - `MSG_ID`: Message ID
 - `msgbot_task_resume MSG_ID`: resume the specified message task (in the current chat/topic).
-- `msgbot_task_get MSG_ID`: show the message set for the specified task (in the current chat/topic).
-- `msgbot_task_set MSG_ID MSG`: update the message for the specified task (in the current chat/topic).
-- `msgbot_task_delete_last_msg MSG_ID true/false`: enable/disable deletion of the previous message when a new one is sent for the specified task(in the current chat/topic).
-- `msgbot_task_info`: show the list of active tasks in the current chat (all topics).
+    - `MSG_ID`: Message ID
+- `msgbot_task_get MSG_ID`: show the message content for the specified message task (in the current chat/topic).
+    - `MSG_ID`: Message ID
+- `msgbot_task_set MSG_ID MSG`: update the message for the specified message task (in the current chat/topic).
+    - `MSG_ID`: Message ID
+    - `MSG`: New message to be sent (must be on a new line)
+- `msgbot_task_delete_last_msg MSG_ID true/false`: enable/disable the deletion of the previous message when a new one is sent for the specified message task (in the current chat/topic).
+    - `MSG_ID`: Message ID
+    - `flag`: `true` or `false`
+- `msgbot_task_info`: show the list of active message tasks in the current chat.
 
-Messages support HTML tags (e.g., `<b>`, `<i>`), but Markdown is not supported.
-
-By default, the bot deletes the last sent message when sending a new one.
+Messages can contain HTML tags (e.g., `<b>`, `<i>`), but Markdown is not supported.
+By default, the bot deletes the last sent message when sending a new one. This can be toggled using the `msgbot_task_delete_last_msg` command.
 
 **Scheduling Logic:**
 The task period starts from the specified hour (ensure the VPS time is correct):

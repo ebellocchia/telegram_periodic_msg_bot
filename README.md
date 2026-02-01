@@ -39,7 +39,7 @@ source venv/bin/activate    # On Windows use: venv\Scripts\activate
 pip install telegram_periodic_msg_bot
 ```
 
-**IMPORTANT NOTE:** This bot uses *pyrotgfork*. If you are not using a virtual environment, ensure that the standard *pyrogram* library is not installed in your Python environment.
+**IMPORTANT NOTE:** This bot uses *pyrotgfork*. If you are not using a virtual environment, ensure that the standard *pyrogram* library (or forks) is not installed in your Python environment.
 Since both libraries use the same package name, having both installed will cause conflicts and the bot will not function correctly.
 
 3. **Set up the files:**

@@ -86,19 +86,19 @@ The list of all configurable fields is shown below.
 
 | Name | Description |
 | --- | --- |
-| **[pyrogram]** | Configuration for pyrogram |
+| **[pyrogram]** | *Configuration for pyrogram* |
 | `session_name` | Path of the file used to store the session. |
 | `api_id` | API ID from [https://my.telegram.org/apps](https://my.telegram.org/apps). |
 | `api_hash` | API hash from [https://my.telegram.org/apps](https://my.telegram.org/apps). |
 | `bot_token` | Bot token from *BotFather*. |
-| **[app]** | Configuration for app |
+| **[app]** | *Configuration for app* |
 | `app_is_test_mode` | Set to `true` to activate test mode, `false` otherwise. |
 | `app_lang_file` | Path of custom language file in XML format (default: English). |
-| **[task]** | Configuration for tasks |
-| `tasks_max_num` | Maximum number of running tasks (total, in all groups). Default: `20`. |
-| **[message]** | Configuration for message |
-| `message_max_len` | Maximum message length in characters. Default: `4000`. |
-| **[logging]** | Configuration for logging |
+| **[task]** | *Configuration for tasks* |
+| `tasks_max_num` | Maximum number of total running tasks, across all groups (default: `20`). |
+| **[message]** | *Configuration for message* |
+| `message_max_len` | Maximum message length in characters (default: `4000`). |
+| **[logging]** | *Configuration for logging* |
 | `log_level` | Log level, same as python logging (`DEBUG`, `INFO`, `WARNING`, `ERROR`, `CRITICAL`). Default: `INFO`. |
 | `log_console_enabled` | True to enable logging to console, false otherwise (default: `true`) |
 | `log_file_enabled` | True to enable logging to file, false otherwise (default: `false`). If false, the following fields will be ignored. |

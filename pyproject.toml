@@ -40,7 +40,7 @@ Download = "https://github.com/ebellocchia/telegram_periodic_msg_bot/archive/v{v
 
 [tool.setuptools.packages.find]
 where = ["."]
-exclude = ["app*", "build*", "dist*"]
+exclude = ["app*", "build*", "dist*", "venv*"]
 
 [tool.setuptools.package-data]
 telegram_periodic_msg_bot = ["lang/lang_en.xml"]

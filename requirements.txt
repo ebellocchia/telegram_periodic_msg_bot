@@ -2,3 +2,4 @@ pyrotgfork
 pytgcrypto
 apscheduler
 defusedxml
+typing_extensions

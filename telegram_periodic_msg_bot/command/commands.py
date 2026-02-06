@@ -20,6 +20,8 @@
 
 from typing import Any, Callable, Coroutine
 
+from typing_extensions import override
+
 from telegram_periodic_msg_bot._version import __version__
 from telegram_periodic_msg_bot.bot.bot_config_types import BotConfigTypes
 from telegram_periodic_msg_bot.command.command_base import CommandBase
@@ -56,6 +58,7 @@ def GroupChatOnly(exec_cmd_fct: Callable[..., Coroutine]) -> Callable[..., Corou
 class HelpCmd(CommandBase):
     """Command for displaying help information."""
 
+    @override
     async def _ExecuteCommand(self,
                         **kwargs: Any) -> None:
         """Execute the help command."""
@@ -70,6 +73,7 @@ class HelpCmd(CommandBase):
 class AliveCmd(CommandBase):
     """Command for checking if the bot is alive."""
 
+    @override
     async def _ExecuteCommand(self,
                         **kwargs: Any) -> None:
         """Execute the alive command."""
@@ -79,6 +83,7 @@ class AliveCmd(CommandBase):
 class SetTestModeCmd(CommandBase):
     """Command for setting test mode."""
 
+    @override
     @GroupChatOnly
     async def _ExecuteCommand(self,
                         **kwargs: Any) -> None:
@@ -99,6 +104,7 @@ class SetTestModeCmd(CommandBase):
 class IsTestModeCmd(CommandBase):
     """Command for checking if test mode is enabled."""
 
+    @override
     async def _ExecuteCommand(self,
                         **kwargs: Any) -> None:
         """Execute the is test mode command."""
@@ -111,6 +117,7 @@ class IsTestModeCmd(CommandBase):
 class VersionCmd(CommandBase):
     """Command for showing the bot version."""
 
+    @override
     async def _ExecuteCommand(self,
                         **kwargs: Any) -> None:
         """Execute the version command."""
@@ -125,6 +132,7 @@ class VersionCmd(CommandBase):
 class MessageTaskStartCmd(CommandBase):
     """Command for starting a periodic message task."""
 
+    @override
     @GroupChatOnly
     async def _ExecuteCommand(self,
                         **kwargs: Any) -> None:
@@ -180,6 +188,7 @@ class MessageTaskStartCmd(CommandBase):
 class MessageTaskStopCmd(CommandBase):
     """Command for stopping a periodic message task."""
 
+    @override
     @GroupChatOnly
     async def _ExecuteCommand(self,
                         **kwargs: Any) -> None:
@@ -209,6 +218,7 @@ class MessageTaskStopCmd(CommandBase):
 class MessageTaskStopAllCmd(CommandBase):
     """Command for stopping all periodic message tasks in a chat."""
 
+    @override
     @GroupChatOnly
     async def _ExecuteCommand(self,
                         **kwargs: Any) -> None:
@@ -222,6 +232,7 @@ class MessageTaskStopAllCmd(CommandBase):
 class MessageTaskPauseCmd(CommandBase):
     """Command for pausing a periodic message task."""
 
+    @override
     @GroupChatOnly
     async def _ExecuteCommand(self,
                         **kwargs: Any) -> None:
@@ -251,6 +262,7 @@ class MessageTaskPauseCmd(CommandBase):
 class MessageTaskResumeCmd(CommandBase):
     """Command for resuming a paused periodic message task."""
 
+    @override
     @GroupChatOnly
     async def _ExecuteCommand(self,
                         **kwargs: Any) -> None:
@@ -280,6 +292,7 @@ class MessageTaskResumeCmd(CommandBase):
 class MessageTaskGetCmd(CommandBase):
     """Command for getting the message of a periodic task."""
 
+    @override
     @GroupChatOnly
     async def _ExecuteCommand(self,
                         **kwargs: Any) -> None:
@@ -321,6 +334,7 @@ class MessageTaskGetCmd(CommandBase):
 class MessageTaskSetCmd(CommandBase):
     """Command for setting the message of a periodic task."""
 
+    @override
     @GroupChatOnly
     async def _ExecuteCommand(self,
                         **kwargs: Any) -> None:
@@ -364,6 +378,7 @@ class MessageTaskSetCmd(CommandBase):
 class MessageTaskDeleteLastMsgCmd(CommandBase):
     """Command for setting whether to delete the last sent message."""
 
+    @override
     @GroupChatOnly
     async def _ExecuteCommand(self,
                         **kwargs: Any) -> None:
@@ -400,6 +415,7 @@ class MessageTaskDeleteLastMsgCmd(CommandBase):
 class MessageTaskInfoCmd(CommandBase):
     """Command for displaying information about periodic message tasks."""
 
+    @override
     @GroupChatOnly
     async def _ExecuteCommand(self,
                         **kwargs: Any) -> None:

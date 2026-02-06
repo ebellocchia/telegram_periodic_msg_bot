@@ -22,7 +22,7 @@ from typing import Any, Callable, Dict, List, TypedDict
 
 from typing_extensions import NotRequired
 
-from telegram_payment_bot.config.config_object import ConfigObject, ConfigTypes
+from telegram_periodic_msg_bot.config.config_object import ConfigObject, ConfigTypes
 
 
 class ConfigFieldType(TypedDict):

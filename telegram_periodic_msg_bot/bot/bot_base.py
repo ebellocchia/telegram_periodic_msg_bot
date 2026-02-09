@@ -35,7 +35,8 @@ from telegram_periodic_msg_bot.translator.translation_loader import TranslationL
 
 
 class BotBase:
-    """Base class for the Telegram bot.
+    """
+    Base class for the Telegram bot.
 
     This class handles bot initialization, configuration loading, and setup of
     handlers for processing commands and messages.

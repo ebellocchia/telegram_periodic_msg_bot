@@ -34,7 +34,8 @@ from telegram_periodic_msg_bot.translator.translation_loader import TranslationL
 
 
 class CommandBase(ABC):
-    """Base class for all bot commands.
+    """
+    Base class for all bot commands.
 
     This abstract class provides common functionality for command execution,
     authorization, and message sending.

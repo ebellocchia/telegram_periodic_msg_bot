@@ -53,9 +53,9 @@ class MessageDispatcher:
         Initialize the message dispatcher.
 
         Args:
-            config: Configuration object
-            logger: Logger instance for logging operations
-            translator: Translation loader for localized messages
+            config: Configuration object.
+            logger: Logger instance for logging operations.
+            translator: Translation loader for localized messages.
         """
         self.config = config
         self.logger = logger
@@ -70,13 +70,13 @@ class MessageDispatcher:
         Dispatch a message to the appropriate handler based on message type.
 
         Args:
-            client: Pyrogram client instance
-            message: The message to dispatch
-            msg_type: Type of the message
-            **kwargs: Additional keyword arguments passed to handlers
+            client: Pyrogram client instance.
+            message: The message to dispatch.
+            msg_type: Type of the message.
+            **kwargs: Additional keyword arguments passed to handlers.
 
         Raises:
-            TypeError: If msg_type is not an instance of MessageTypes
+            TypeError: If msg_type is not an instance of MessageTypes.
         """
         if not isinstance(msg_type, MessageTypes):
             raise TypeError("Message type is not an enumerative of MessageTypes")
@@ -98,9 +98,9 @@ class MessageDispatcher:
         Handle a new group chat created event.
 
         Args:
-            client: Pyrogram client instance
-            message: The message associated with the event
-            **kwargs: Additional keyword arguments
+            client: Pyrogram client instance.
+            message: The message associated with the event.
+            **kwargs: Additional keyword arguments.
         """
         if message.chat is None:
             return
@@ -119,9 +119,9 @@ class MessageDispatcher:
         Handle a member leaving the chat event.
 
         Args:
-            client: Pyrogram client instance
-            message: The message associated with the event
-            **kwargs: Additional keyword arguments containing periodic_msg_scheduler
+            client: Pyrogram client instance.
+            message: The message associated with the event.
+            **kwargs: Additional keyword arguments containing periodic_msg_scheduler.
         """
         if message.left_chat_member is not None and message.left_chat_member.is_self:
             kwargs["periodic_msg_scheduler"].ChatLeft(message.chat)
@@ -134,9 +134,9 @@ class MessageDispatcher:
         Handle new members joining the chat event.
 
         Args:
-            client: Pyrogram client instance
-            message: The message associated with the event
-            **kwargs: Additional keyword arguments
+            client: Pyrogram client instance.
+            message: The message associated with the event.
+            **kwargs: Additional keyword arguments.
         """
         if message.new_chat_members is None or message.chat is None:
             return

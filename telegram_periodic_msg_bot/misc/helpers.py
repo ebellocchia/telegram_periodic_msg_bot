@@ -33,10 +33,10 @@ class ChatHelper:
         Check if a chat is a channel.
 
         Args:
-            chat: The chat to check
+            chat: The chat to check.
 
         Returns:
-            True if the chat is a channel, False otherwise
+            True if the chat is a channel, False otherwise.
         """
         return chat.type == ChatType.CHANNEL
 
@@ -46,10 +46,10 @@ class ChatHelper:
         Get the title of a chat.
 
         Args:
-            chat: The chat to get the title from
+            chat: The chat to get the title from.
 
         Returns:
-            The chat title, or empty string if no title is set
+            The chat title, or empty string if no title is set.
         """
         return chat.title if chat.title is not None else ""
 
@@ -59,10 +59,10 @@ class ChatHelper:
         Get a formatted string with chat title and ID, or just ID if no title.
 
         Args:
-            chat: The chat to get the title/ID from
+            chat: The chat to get the title/ID from.
 
         Returns:
-            Formatted string with title and ID, or just ID
+            Formatted string with title and ID, or just ID.
         """
         return f"'{chat.title}' (ID: {chat.id})" if chat.title is not None else f"{chat.id}"
 
@@ -73,11 +73,11 @@ class ChatHelper:
         Check if a chat is a private chat with a specific user.
 
         Args:
-            chat: The chat to check
-            user: The user to check against
+            chat: The chat to check.
+            user: The user to check against.
 
         Returns:
-            True if the chat is a private chat with the user, False otherwise
+            True if the chat is a private chat with the user, False otherwise.
         """
         if ChatHelper.IsChannel(chat):
             return False
@@ -93,10 +93,10 @@ class UserHelper:
         Get a formatted string with user name and ID, or just ID if no name.
 
         Args:
-            user: The user to get information from
+            user: The user to get information from.
 
         Returns:
-            Formatted string with username/name and ID, or "Anonymous user" if user is None
+            Formatted string with username/name and ID, or "Anonymous user" if user is None.
         """
         if user is None:
             return "Anonymous user"
@@ -113,10 +113,10 @@ class UserHelper:
         Get the full name of a user.
 
         Args:
-            user: The user to get the name from
+            user: The user to get the name from.
 
         Returns:
-            The full name (first and last name), or "Anonymous user" if user is None
+            The full name (first and last name), or "Anonymous user" if user is None.
         """
         if user is None:
             return "Anonymous user"

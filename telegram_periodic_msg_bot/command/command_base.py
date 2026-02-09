@@ -53,13 +53,14 @@ class CommandBase(ABC):
                  config: ConfigObject,
                  logger: Logger,
                  translator: TranslationLoader) -> None:
-        """Initialize the command.
+        """
+        Initialize the command.
 
         Args:
-            client: Pyrogram client instance
-            config: Configuration object
-            logger: Logger instance
-            translator: Translation loader instance
+            client: Pyrogram client instance.
+            config: Configuration object.
+            logger: Logger instance.
+            translator: Translation loader instance.
         """
         self.client = client
         self.config = config
@@ -70,11 +71,12 @@ class CommandBase(ABC):
     async def Execute(self,
                       message: pyrogram.types.Message,
                       **kwargs: Any) -> None:
-        """Execute the command with authorization checks.
+        """
+        Execute the command with authorization checks.
 
         Args:
-            message: Message containing the command
-            **kwargs: Additional arguments to pass to the command implementation
+            message: Message containing the command.
+            **kwargs: Additional arguments to pass to the command implementation.
         """
         self.message = message
         self.cmd_data = CommandData(message)
@@ -105,34 +107,38 @@ class CommandBase(ABC):
 
     async def _SendMessage(self,
                            msg: str) -> None:
-        """Send a message to the chat.
+        """
+        Send a message to the chat.
 
         Args:
-            msg: Message text to send
+            msg: Message text to send.
         """
         await self.message_sender.SendMessage(self.cmd_data.Chat(), self.message.message_thread_id, msg)
 
     def _IsChannel(self) -> bool:
-        """Check if the chat is a channel.
+        """
+        Check if the chat is a channel.
 
         Returns:
-            True if the chat is a channel, False otherwise
+            True if the chat is a channel, False otherwise.
         """
         return ChatHelper.IsChannel(self.cmd_data.Chat())
 
     def _IsUserAnonymous(self) -> bool:
-        """Check if the user is anonymous.
+        """
+        Check if the user is anonymous.
 
         Returns:
-            True if the user is anonymous, False otherwise
+            True if the user is anonymous, False otherwise.
         """
         return self.cmd_data.User() is None
 
     async def _IsUserAuthorized(self) -> bool:
-        """Check if the user is authorized to execute the command.
+        """
+        Check if the user is authorized to execute the command.
 
         Returns:
-            True if the user is authorized, False otherwise
+            True if the user is authorized, False otherwise.
         """
         if self._IsChannel():
             return True
@@ -146,10 +152,11 @@ class CommandBase(ABC):
         return any(cmd_user.id == member.user.id for member in admin_members if member.user is not None)
 
     def _IsPrivateChat(self) -> bool:
-        """Check if the chat is a private chat.
+        """
+        Check if the chat is a private chat.
 
         Returns:
-            True if the chat is private, False otherwise
+            True if the chat is private, False otherwise.
         """
         cmd_user = self.cmd_data.User()
         if cmd_user is None:
@@ -165,10 +172,11 @@ class CommandBase(ABC):
     @abstractmethod
     async def _ExecuteCommand(self,
                               **kwargs: Any) -> None:
-        """Execute the command implementation.
+        """
+        Execute the command implementation.
 
         Args:
-            **kwargs: Additional arguments for the command
+            **kwargs: Additional arguments for the command.
 
         Note:
             This method must be implemented by subclasses.

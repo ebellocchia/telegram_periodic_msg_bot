@@ -43,8 +43,8 @@ class PeriodicMsgSender:
         Initialize the periodic message sender.
 
         Args:
-            client: Pyrogram client instance
-            logger: Logger instance for logging operations
+            client: Pyrogram client instance.
+            logger: Logger instance for logging operations.
         """
         self.logger = logger
         self.delete_last_sent_msg = True
@@ -58,7 +58,7 @@ class PeriodicMsgSender:
         Configure whether to delete the last sent message before sending a new one.
 
         Args:
-            flag: True to delete last message, False to keep it
+            flag: True to delete last message, False to keep it.
         """
         self.delete_last_sent_msg = flag
 
@@ -70,9 +70,9 @@ class PeriodicMsgSender:
         Send a periodic message to a chat.
 
         Args:
-            chat: The chat to send the message to
-            topic_id: The topic to send the message to
-            msg: The message text to send
+            chat: The chat to send the message to.
+            topic_id: The topic to send the message to.
+            msg: The message text to send.
         """
         if self.delete_last_sent_msg:
             await self.__DeleteLastSentMessage()

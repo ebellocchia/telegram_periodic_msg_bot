@@ -36,10 +36,10 @@ class ChatMembersList(WrappedList):
         Get a chat member by user ID.
 
         Args:
-            user_id: The user ID to search for
+            user_id: The user ID to search for.
 
         Returns:
-            The chat member if found, None otherwise
+            The chat member if found, None otherwise.
         """
         res = list(filter(lambda member: user_id == member.user.id, self.list_elements))
         return None if len(res) == 0 else res[0]
@@ -50,10 +50,10 @@ class ChatMembersList(WrappedList):
         Get a chat member by username.
 
         Args:
-            username: The username to search for
+            username: The username to search for.
 
         Returns:
-            The chat member if found, None otherwise
+            The chat member if found, None otherwise.
         """
         res = list(filter(lambda member: username == member.user.username, self.list_elements))
         return None if len(res) == 0 else res[0]
@@ -64,10 +64,10 @@ class ChatMembersList(WrappedList):
         Check if a user ID is present in the member list.
 
         Args:
-            user_id: The user ID to check
+            user_id: The user ID to check.
 
         Returns:
-            True if the user ID is present, False otherwise
+            True if the user ID is present, False otherwise.
         """
         return self.GetByUserId(user_id) is not None
 
@@ -77,10 +77,10 @@ class ChatMembersList(WrappedList):
         Check if a username is present in the member list.
 
         Args:
-            username: The username to check
+            username: The username to check.
 
         Returns:
-            True if the username is present, False otherwise
+            True if the username is present, False otherwise.
         """
         return self.GetByUsername(username) is not None
 
@@ -89,7 +89,7 @@ class ChatMembersList(WrappedList):
         Convert the member list to a formatted string.
 
         Returns:
-            A newline-separated list of member names or IDs
+            A newline-separated list of member names or IDs.
         """
         return "\n".join(
             [f"- {UserHelper.GetNameOrId(member.user)}" for member in self.list_elements]
@@ -100,7 +100,7 @@ class ChatMembersList(WrappedList):
         Convert the member list to a string.
 
         Returns:
-            A newline-separated list of member names or IDs
+            A newline-separated list of member names or IDs.
         """
         return self.ToString()
 
@@ -116,7 +116,7 @@ class ChatMembersGetter:
         Initialize the chat members getter.
 
         Args:
-            client: Pyrogram client instance
+            client: Pyrogram client instance.
         """
         self.client = client
 
@@ -128,12 +128,12 @@ class ChatMembersGetter:
         Get a filtered and sorted list of chat members.
 
         Args:
-            chat: The chat to get members from
-            filter_fct: Optional function to filter members
-            filter_type: Pyrogram filter
+            chat: The chat to get members from.
+            filter_fct: Optional function to filter members.
+            filter_type: Pyrogram filter.
 
         Returns:
-            Sorted list of filtered chat members
+            Sorted list of filtered chat members.
         """
         filtered_members = [member async for member in self.client.get_chat_members(chat.id, filter=filter_type)]
         if filter_fct is not None:
@@ -153,10 +153,10 @@ class ChatMembersGetter:
         Get all members of a chat.
 
         Args:
-            chat: The chat to get members from
+            chat: The chat to get members from.
 
         Returns:
-            List of all chat members
+            List of all chat members.
         """
         return await self.FilterMembers(chat)
 
@@ -166,10 +166,10 @@ class ChatMembersGetter:
         Get all administrators of a chat.
 
         Args:
-            chat: The chat to get administrators from
+            chat: The chat to get administrators from.
 
         Returns:
-            List of chat administrators
+            List of chat administrators.
         """
         return await self.FilterMembers(chat,
                                         lambda member: True,

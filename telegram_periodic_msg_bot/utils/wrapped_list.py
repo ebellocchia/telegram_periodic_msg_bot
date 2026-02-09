@@ -38,7 +38,7 @@ class WrappedList(ABC):
         Add a single element to the list.
 
         Args:
-            element: The element to add
+            element: The element to add.
         """
         self.list_elements.append(element)
 
@@ -48,7 +48,7 @@ class WrappedList(ABC):
         Add multiple elements to the list.
 
         Args:
-            elements: List of elements to add
+            elements: List of elements to add.
         """
         self.list_elements.extend(elements)
 
@@ -58,10 +58,10 @@ class WrappedList(ABC):
         Remove a single element from the list.
 
         Args:
-            element: The element to remove
+            element: The element to remove.
 
         Raises:
-            ValueError: If the element is not in the list
+            ValueError: If the element is not in the list.
         """
         self.list_elements.remove(element)
 
@@ -71,10 +71,10 @@ class WrappedList(ABC):
         Check if an element is present in the list.
 
         Args:
-            element: The element to check for
+            element: The element to check for.
 
         Returns:
-            True if the element is in the list, False otherwise
+            True if the element is in the list, False otherwise.
         """
         return element in self.list_elements
 
@@ -87,7 +87,7 @@ class WrappedList(ABC):
         Get the number of elements in the list.
 
         Returns:
-            The number of elements
+            The number of elements.
         """
         return len(self.list_elements)
 
@@ -96,7 +96,7 @@ class WrappedList(ABC):
         Check if the list contains any elements.
 
         Returns:
-            True if the list has at least one element, False otherwise
+            True if the list has at least one element, False otherwise.
         """
         return self.Count() > 0
 
@@ -105,7 +105,7 @@ class WrappedList(ABC):
         Check if the list is empty.
 
         Returns:
-            True if the list is empty, False otherwise
+            True if the list is empty, False otherwise.
         """
         return self.Count() == 0
 
@@ -114,7 +114,7 @@ class WrappedList(ABC):
         Get the underlying list.
 
         Returns:
-            The list of elements
+            The list of elements.
         """
         return self.list_elements
 
@@ -123,6 +123,6 @@ class WrappedList(ABC):
         Get an iterator over the list elements.
 
         Returns:
-            Iterator over the elements
+            Iterator over the elements.
         """
         yield from self.list_elements

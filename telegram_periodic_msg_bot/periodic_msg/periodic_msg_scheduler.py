@@ -73,7 +73,7 @@ class PeriodicMsgJobsList(WrappedList):
         Initialize the jobs list.
 
         Args:
-            translator: Translation loader for localized messages
+            translator: Translation loader for localized messages.
         """
         super().__init__()
         self.translator = translator
@@ -83,7 +83,7 @@ class PeriodicMsgJobsList(WrappedList):
         Convert the jobs list to a formatted string.
 
         Returns:
-            A newline-separated list of job information
+            A newline-separated list of job information.
         """
         return "\n".join(
             [self.translator.GetSentence("SINGLE_TASK_INFO_MSG",
@@ -103,7 +103,7 @@ class PeriodicMsgJobsList(WrappedList):
         Convert the jobs list to a string.
 
         Returns:
-            A newline-separated list of job information
+            A newline-separated list of job information.
         """
         return self.ToString()
 
@@ -127,10 +127,10 @@ class PeriodicMsgScheduler:
         Initialize the periodic message scheduler.
 
         Args:
-            client: Pyrogram client instance
-            config: Configuration object
-            logger: Logger instance for logging operations
-            translator: Translation loader for localized messages
+            client: Pyrogram client instance.
+            config: Configuration object.
+            logger: Logger instance for logging operations.
+            translator: Translation loader for localized messages.
         """
         self.client = client
         self.config = config
@@ -146,10 +146,10 @@ class PeriodicMsgScheduler:
         Get the list of active jobs in a chat.
 
         Args:
-            chat: The chat to get jobs for
+            chat: The chat to get jobs for.
 
         Returns:
-            List of active jobs in the chat
+            List of active jobs in the chat.
         """
         chat_id_str = str(chat.id)
 
@@ -166,12 +166,12 @@ class PeriodicMsgScheduler:
         Check if a job is active in a chat.
 
         Args:
-            chat: The chat to check
-            topic_id: The topic to check
-            msg_id: The message ID of the job
+            chat: The chat to check.
+            topic_id: The topic to check.
+            msg_id: The message ID of the job.
 
         Returns:
-            True if the job is active, False otherwise
+            True if the job is active, False otherwise.
         """
         job_id = self.__GetJobId(chat, topic_id, msg_id)
         return job_id in self.jobs and self.scheduler.get_job(job_id) is not None
@@ -187,18 +187,18 @@ class PeriodicMsgScheduler:
         Start a new periodic message job.
 
         Args:
-            chat: The chat to start the job in
-            topic_id: The topic to start the job in
-            period_hours: Period in hours between messages
-            start_hour: Starting hour for the job
-            msg_id: Unique identifier for the message
-            message: The message to send periodically
+            chat: The chat to start the job in.
+            topic_id: The topic to start the job in.
+            period_hours: Period in hours between messages.
+            start_hour: Starting hour for the job.
+            msg_id: Unique identifier for the message.
+            message: The message to send periodically.
 
         Raises:
-            PeriodicMsgJobAlreadyExistentError: If job already exists
-            PeriodicMsgJobInvalidPeriodError: If period is invalid
-            PeriodicMsgJobInvalidStartError: If start hour is invalid
-            PeriodicMsgJobMaxNumError: If maximum number of jobs reached
+            PeriodicMsgJobAlreadyExistentError: If job already exists.
+            PeriodicMsgJobInvalidPeriodError: If period is invalid.
+            PeriodicMsgJobInvalidStartError: If start hour is invalid.
+            PeriodicMsgJobMaxNumError: If maximum number of jobs reached.
         """
         job_id = self.__GetJobId(chat, topic_id, msg_id)
 
@@ -236,15 +236,15 @@ class PeriodicMsgScheduler:
         Get the message for a job.
 
         Args:
-            chat: The chat containing the job
-            topic_id: The topic containing the job
-            msg_id: The message ID of the job
+            chat: The chat containing the job.
+            topic_id: The topic containing the job.
+            msg_id: The message ID of the job.
 
         Returns:
-            The job's message text
+            The job's message text.
 
         Raises:
-            PeriodicMsgJobNotExistentError: If job does not exist
+            PeriodicMsgJobNotExistentError: If job does not exist.
         """
         job_id = self.__GetJobId(chat, topic_id, msg_id)
 
@@ -265,13 +265,13 @@ class PeriodicMsgScheduler:
         Set the message for a job.
 
         Args:
-            chat: The chat containing the job
-            topic_id: The topic containing the job
-            msg_id: The message ID of the job
-            message: The new message to set
+            chat: The chat containing the job.
+            topic_id: The topic containing the job.
+            msg_id: The message ID of the job.
+            message: The new message to set.
 
         Raises:
-            PeriodicMsgJobNotExistentError: If job does not exist
+            PeriodicMsgJobNotExistentError: If job does not exist.
         """
         job_id = self.__GetJobId(chat, topic_id, msg_id)
 
@@ -296,12 +296,12 @@ class PeriodicMsgScheduler:
         Stop a periodic message job.
 
         Args:
-            chat: The chat containing the job
-            topic_id: The topic containing the job
-            msg_id: The message ID of the job
+            chat: The chat containing the job.
+            topic_id: The topic containing the job.
+            msg_id: The message ID of the job.
 
         Raises:
-            PeriodicMsgJobNotExistentError: If job does not exist
+            PeriodicMsgJobNotExistentError: If job does not exist.
         """
         job_id = self.__GetJobId(chat, topic_id, msg_id)
 
@@ -325,7 +325,7 @@ class PeriodicMsgScheduler:
         Stop all jobs in a chat.
 
         Args:
-            chat: The chat to stop all jobs in
+            chat: The chat to stop all jobs in.
         """
         chat_id_str = str(chat.id)
         job_ids = [job_id for job_id in self.jobs.keys() if job_id.startswith(chat_id_str)]
@@ -351,7 +351,7 @@ class PeriodicMsgScheduler:
         Handle bot leaving a chat by stopping all jobs.
 
         Args:
-            chat: The chat that was left
+            chat: The chat that was left.
         """
         self.logger.GetLogger().info(
             f"Left chat {ChatHelper.GetTitleOrId(chat)}, stopping all jobs..."
@@ -366,12 +366,12 @@ class PeriodicMsgScheduler:
         Pause a periodic message job.
 
         Args:
-            chat: The chat containing the job
-            topic_id: The topic containing the job
-            msg_id: The message ID of the job
+            chat: The chat containing the job.
+            topic_id: The topic containing the job.
+            msg_id: The message ID of the job.
 
         Raises:
-            PeriodicMsgJobNotExistentError: If job does not exist
+            PeriodicMsgJobNotExistentError: If job does not exist.
         """
         job_id = self.__GetJobId(chat, topic_id, msg_id)
 
@@ -393,12 +393,12 @@ class PeriodicMsgScheduler:
         Resume a paused periodic message job.
 
         Args:
-            chat: The chat containing the job
-            topic_id: The topic containing the job
-            msg_id: The message ID of the job
+            chat: The chat containing the job.
+            topic_id: The topic containing the job.
+            msg_id: The message ID of the job.
 
         Raises:
-            PeriodicMsgJobNotExistentError: If job does not exist
+            PeriodicMsgJobNotExistentError: If job does not exist.
         """
         job_id = self.__GetJobId(chat, topic_id, msg_id)
 
@@ -421,13 +421,13 @@ class PeriodicMsgScheduler:
         Configure whether to delete the last sent message for a job.
 
         Args:
-            chat: The chat containing the job
-            topic_id: The topic containing the job
-            msg_id: The message ID of the job
-            flag: True to delete last message, False to keep it
+            chat: The chat containing the job.
+            topic_id: The topic containing the job.
+            msg_id: The message ID of the job.
+            flag: True to delete last message, False to keep it.
 
         Raises:
-            PeriodicMsgJobNotExistentError: If job does not exist
+            PeriodicMsgJobNotExistentError: If job does not exist.
         """
         job_id = self.__GetJobId(chat, topic_id, msg_id)
 
@@ -454,13 +454,13 @@ class PeriodicMsgScheduler:
         Create a new job instance and store it.
 
         Args:
-            job_id: Unique job identifier
-            chat: The chat for the job
-            topic_id: The topic for the job
-            period: Period in hours
-            start: Starting hour
-            msg_id: Message identifier
-            message: The message to send
+            job_id: Unique job identifier.
+            chat: The chat for the job.
+            topic_id: The topic for the job.
+            period: Period in hours.
+            start: Starting hour.
+            msg_id: Message identifier.
+            message: The message to send.
         """
         msg = PeriodicMsgParser(self.config).Parse(message)
         self.jobs[job_id] = PeriodicMsgJob(self.client,
@@ -479,12 +479,12 @@ class PeriodicMsgScheduler:
         Add a job to the scheduler with cron configuration.
 
         Args:
-            job_id: Unique job identifier
-            chat: The chat for the job
-            topic_id: The topic for the job
-            period: Period in hours
-            start: Starting hour
-            msg_id: Message identifier
+            job_id: Unique job identifier.
+            chat: The chat for the job.
+            topic_id: The topic for the job.
+            period: Period in hours.
+            start: Starting hour.
+            msg_id: Message identifier.
         """
         is_test_mode = self.config.GetValue(BotConfigTypes.APP_TEST_MODE)
         cron_str = self.__BuildCronString(period, start, is_test_mode)
@@ -514,12 +514,12 @@ class PeriodicMsgScheduler:
         Generate a unique job ID from chat and message IDs.
 
         Args:
-            chat: The chat
-            topic_id: The topic
-            msg_id: The message ID
+            chat: The chat.
+            topic_id: The topic.
+            msg_id: The message ID.
 
         Returns:
-            The generated job ID
+            The generated job ID.
         """
         return f"{chat.id}-{topic_id}-{msg_id}"
 
@@ -528,7 +528,7 @@ class PeriodicMsgScheduler:
         Get the total number of active jobs across all chats.
 
         Returns:
-            Total number of active jobs
+            Total number of active jobs.
         """
         return len(self.jobs)
 
@@ -540,12 +540,12 @@ class PeriodicMsgScheduler:
         Build a cron string for the job schedule.
 
         Args:
-            period: Period between executions
-            start_val: Starting value
-            is_test_mode: True for minute-based testing, False for hour-based
+            period: Period between executions.
+            start_val: Starting value.
+            is_test_mode: True for minute-based testing, False for hour-based.
 
         Returns:
-            Comma-separated cron schedule string
+            Comma-separated cron schedule string.
         """
         max_val = 24 if not is_test_mode else 60
 

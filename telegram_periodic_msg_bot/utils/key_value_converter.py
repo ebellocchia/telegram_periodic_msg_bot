@@ -32,7 +32,7 @@ class KeyValueConverter:
         Initialize the key-value converter.
 
         Args:
-            kv_dict: Dictionary to use for key-value conversions
+            kv_dict: Dictionary to use for key-value conversions.
         """
         self.kv_dict = kv_dict
 
@@ -42,13 +42,13 @@ class KeyValueConverter:
         Convert a key to its corresponding value.
 
         Args:
-            key: The key to convert
+            key: The key to convert.
 
         Returns:
-            The value associated with the key
+            The value associated with the key.
 
         Raises:
-            KeyError: If the key is not found in the dictionary
+            KeyError: If the key is not found in the dictionary.
         """
         return self.kv_dict[key]
 
@@ -58,13 +58,13 @@ class KeyValueConverter:
         Convert a value to its corresponding key.
 
         Args:
-            value: The value to convert
+            value: The value to convert.
 
         Returns:
-            The key associated with the value
+            The key associated with the value.
 
         Raises:
-            ValueError: If the value is not found in the dictionary
+            ValueError: If the value is not found in the dictionary.
         """
         idx = list(self.kv_dict.values()).index(value)
         return list(self.kv_dict.keys())[idx]

@@ -41,14 +41,14 @@ class ConfigObject:
         Retrieve the value for a given configuration type.
 
         Args:
-            config_type: The configuration type to retrieve
+            config_type: The configuration type to retrieve.
 
         Returns:
-            The value associated with the configuration type
+            The value associated with the configuration type.
 
         Raises:
-            TypeError: If config_type is not an instance of ConfigTypes
-            KeyError: If the configuration type has not been set
+            TypeError: If config_type is not an instance of ConfigTypes.
+            KeyError: If the configuration type has not been set.
         """
         if not isinstance(config_type, ConfigTypes):
             raise TypeError("BotConfig type is not an enumerative of ConfigTypes")
@@ -61,11 +61,11 @@ class ConfigObject:
         Set the value for a given configuration type.
 
         Args:
-            config_type: The configuration type to set
-            value: The value to associate with the configuration type
+            config_type: The configuration type to set.
+            value: The value to associate with the configuration type.
 
         Raises:
-            TypeError: If config_type is not an instance of ConfigTypes
+            TypeError: If config_type is not an instance of ConfigTypes.
         """
         if not isinstance(config_type, ConfigTypes):
             raise TypeError("BotConfig type is not an enumerative of ConfigTypes")
@@ -77,9 +77,9 @@ class ConfigObject:
         Check if a value has been set for a given configuration type.
 
         Args:
-            config_type: The configuration type to check
+            config_type: The configuration type to check.
 
         Returns:
-            True if the configuration type has been set, False otherwise
+            True if the configuration type has been set, False otherwise.
         """
         return config_type in self.config

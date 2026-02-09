@@ -39,8 +39,8 @@ class MessageDeleter:
         Initialize the message deleter.
 
         Args:
-            client: Pyrogram client instance
-            logger: Logger instance for logging operations
+            client: Pyrogram client instance.
+            logger: Logger instance for logging operations.
         """
         self.client = client
         self.logger = logger
@@ -51,10 +51,10 @@ class MessageDeleter:
         Delete a single message from a chat.
 
         Args:
-            message: The message to delete
+            message: The message to delete.
 
         Returns:
-            True if the message was successfully deleted, False otherwise
+            True if the message was successfully deleted, False otherwise.
         """
         try:
             if message.chat is not None:
@@ -70,7 +70,7 @@ class MessageDeleter:
         Delete multiple messages from chats.
 
         Args:
-            messages: List of messages to delete
+            messages: List of messages to delete.
         """
         for message in messages:
             await self.DeleteMessage(message)

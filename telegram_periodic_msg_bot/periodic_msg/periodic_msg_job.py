@@ -45,11 +45,11 @@ class PeriodicMsgJobData:
         Initialize the job data.
 
         Args:
-            chat: The chat where the job runs
-            topic_id: The topic where the job runs
-            period_hours: Period in hours between message sends
-            start_hour: Starting hour for the job
-            msg_id: Unique identifier for the message
+            chat: The chat where the job runs.
+            topic_id: The topic where the job runs.
+            period_hours: Period in hours between message sends.
+            start_hour: Starting hour for the job.
+            msg_id: Unique identifier for the message.
         """
         self.chat = chat
         self.topic_id = topic_id
@@ -63,15 +63,16 @@ class PeriodicMsgJobData:
         Get the chat associated with this job.
 
         Returns:
-            The chat object
+            The chat object.
         """
         return self.chat
 
     def TopicId(self) -> int:
-        """Get the topic associated with this job.
+        """
+        Get the topic associated with this job.
 
         Returns:
-            The Telegram topic ID
+            The Telegram topic ID.
         """
         return self.topic_id
 
@@ -80,7 +81,7 @@ class PeriodicMsgJobData:
         Get the period in hours.
 
         Returns:
-            The period in hours
+            The period in hours.
         """
         return self.period_hours
 
@@ -89,7 +90,7 @@ class PeriodicMsgJobData:
         Get the starting hour.
 
         Returns:
-            The starting hour
+            The starting hour.
         """
         return self.start_hour
 
@@ -98,7 +99,7 @@ class PeriodicMsgJobData:
         Get the message ID.
 
         Returns:
-            The message ID
+            The message ID.
         """
         return self.msg_id
 
@@ -108,7 +109,7 @@ class PeriodicMsgJobData:
         Set the running state of the job.
 
         Args:
-            flag: True to set job as running, False otherwise
+            flag: True to set job as running, False otherwise.
         """
         self.running = flag
 
@@ -162,7 +163,7 @@ class PeriodicMsgJob:
         Set the running state of the job.
 
         Args:
-            flag: True to set job as running, False otherwise
+            flag: True to set job as running, False otherwise.
         """
         self.data.SetRunning(flag)
 

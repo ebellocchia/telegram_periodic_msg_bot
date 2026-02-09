@@ -38,13 +38,14 @@ from telegram_periodic_msg_bot.periodic_msg.periodic_msg_scheduler import (
 
 
 def GroupChatOnly(exec_cmd_fct: Callable[..., Coroutine]) -> Callable[..., Coroutine]:
-    """Decorator for group-only commands.
+    """
+    Decorator for group-only commands.
 
     Args:
-        exec_cmd_fct: Command execution function
+        exec_cmd_fct: Command execution function.
 
     Returns:
-        Decorated function that checks for group chat
+        Decorated function that checks for group chat.
     """
     async def decorated(self, **kwargs: Any):
         if self._IsPrivateChat():

@@ -47,7 +47,7 @@ class Logger:
         Initialize the logger with the provided configuration.
 
         Args:
-            config: Configuration object containing logger settings
+            config: Configuration object containing logger settings.
         """
         self.config = config
         self.logger = logging.getLogger(LoggerConst.LOGGER_NAME)
@@ -58,7 +58,7 @@ class Logger:
         Get the configured logger instance.
 
         Returns:
-            The configured logging.Logger instance
+            The configured logging.Logger instance.
         """
         return self.logger
 
@@ -108,7 +108,7 @@ class Logger:
         Create the directory for the log file if it doesn't exist.
 
         Args:
-            file_name: Path to the log file
+            file_name: Path to the log file.
         """
         try:
             os.makedirs(os.path.dirname(file_name))

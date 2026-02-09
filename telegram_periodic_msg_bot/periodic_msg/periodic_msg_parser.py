@@ -43,7 +43,7 @@ class PeriodicMsgParser:
         Initialize the message parser.
 
         Args:
-            config: Configuration object containing message constraints
+            config: Configuration object containing message constraints.
         """
         self.config = config
 
@@ -53,14 +53,14 @@ class PeriodicMsgParser:
         Parse and validate a periodic message.
 
         Args:
-            message: The message to parse
+            message: The message to parse.
 
         Returns:
-            The extracted and validated message text
+            The extracted and validated message text.
 
         Raises:
-            PeriodicMsgParserInvalidError: If the message is invalid or empty
-            PeriodicMsgParserTooLongError: If the message exceeds maximum length
+            PeriodicMsgParserInvalidError: If the message is invalid or empty.
+            PeriodicMsgParserTooLongError: If the message exceeds maximum length.
         """
         if message.text is None:
             raise PeriodicMsgParserInvalidError()

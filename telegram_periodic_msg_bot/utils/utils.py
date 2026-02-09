@@ -28,13 +28,13 @@ class Utils:
         Convert a string to a boolean value.
 
         Args:
-            s: String to convert (accepts: true/on/yes/y or false/off/no/n, case-insensitive)
+            s: String to convert (accepts: true/on/yes/y or false/off/no/n, case-insensitive).
 
         Returns:
-            True or False based on the string value
+            True or False based on the string value.
 
         Raises:
-            ValueError: If the string is not a recognized boolean value
+            ValueError: If the string is not a recognized boolean value.
         """
         s = s.lower()
         if s in ["true", "on", "yes", "y"]:
@@ -51,13 +51,13 @@ class Utils:
         Convert a string to an integer.
 
         Args:
-            s: String to convert
+            s: String to convert.
 
         Returns:
-            Integer value
+            Integer value.
 
         Raises:
-            ValueError: If the string cannot be converted to an integer
+            ValueError: If the string cannot be converted to an integer.
         """
         return int(s)
 
@@ -67,12 +67,12 @@ class Utils:
         Convert a string to a float.
 
         Args:
-            s: String to convert
+            s: String to convert.
 
         Returns:
-            Float value
+            Float value.
 
         Raises:
-            ValueError: If the string cannot be converted to a float
+            ValueError: If the string cannot be converted to a float.
         """
         return float(s)

@@ -46,7 +46,7 @@ class TranslationLoader:
         Initialize the translation loader.
 
         Args:
-            logger: Logger instance for logging operations
+            logger: Logger instance for logging operations.
         """
         self.logger = logger
         self.sentences = {}

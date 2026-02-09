@@ -52,12 +52,13 @@ class BotBase:
                  config_file: str,
                  config_sections: ConfigSectionsType,
                  handlers_config: BotHandlersConfigType) -> None:
-        """Initialize the bot.
+        """
+        Initialize the bot.
 
         Args:
-            config_file: Path to the configuration file
-            config_sections: Configuration sections definition
-            handlers_config: Handlers configuration for the bot
+            config_file: Path to the configuration file.
+            config_sections: Configuration sections definition.
+            handlers_config: Handlers configuration for the bot.
         """
         self.config = ConfigFileSectionsLoader.Load(config_file, config_sections)
         # Initialize logger
@@ -87,10 +88,11 @@ class BotBase:
 
     def _SetupHandlers(self,
                        handlers_config: BotHandlersConfigType) -> None:
-        """Set up message handlers for the bot.
+        """
+        Set up message handlers for the bot.
 
         Args:
-            handlers_config: Configuration defining the handlers to set up
+            handlers_config: Configuration defining the handlers to set up.
         """
         def create_handler(handler_type, handler_cfg):
             async def async_callback(client, message):
@@ -107,13 +109,14 @@ class BotBase:
                               message: pyrogram.types.Message,
                               cmd_type: CommandTypes,
                               **kwargs: Any) -> None:
-        """Dispatch a command to the command dispatcher.
+        """
+        Dispatch a command to the command dispatcher.
 
         Args:
-            client: Pyrogram client instance
-            message: Message containing the command
-            cmd_type: Type of command to dispatch
-            **kwargs: Additional arguments to pass to the command handler
+            client: Pyrogram client instance.
+            message: Message containing the command.
+            cmd_type: Type of command to dispatch.
+            **kwargs: Additional arguments to pass to the command handler.
         """
         await self.cmd_dispatcher.Dispatch(client, message, cmd_type, **kwargs)
 
@@ -122,12 +125,13 @@ class BotBase:
                             message: pyrogram.types.Message,
                             msg_type: MessageTypes,
                             **kwargs: Any) -> None:
-        """Handle a message by dispatching it to the message dispatcher.
+        """
+        Handle a message by dispatching it to the message dispatcher.
 
         Args:
-            client: Pyrogram client instance
-            message: Message to handle
-            msg_type: Type of message to handle
-            **kwargs: Additional arguments to pass to the message handler
+            client: Pyrogram client instance.
+            message: Message to handle.
+            msg_type: Type of message to handle.
+            **kwargs: Additional arguments to pass to the message handler.
         """
         await self.msg_dispatcher.Dispatch(client, message, msg_type, **kwargs)

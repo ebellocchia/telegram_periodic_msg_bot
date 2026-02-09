@@ -46,8 +46,8 @@ class MessageSender:
         Initialize the message sender.
 
         Args:
-            client: Pyrogram client instance
-            logger: Logger instance for logging operations
+            client: Pyrogram client instance.
+            logger: Logger instance for logging operations.
         """
         self.client = client
         self.logger = logger
@@ -61,13 +61,13 @@ class MessageSender:
         Send a message to a chat or user, splitting it if necessary.
 
         Args:
-            receiver: The chat or user to send the message to
-            topic_id: Topic to send message to
-            msg: The message text to send
-            **kwargs: Additional keyword arguments passed to send_message
+            receiver: The chat or user to send the message to.
+            topic_id: Topic to send message to.
+            msg: The message text to send.
+            **kwargs: Additional keyword arguments passed to send_message.
 
         Returns:
-            List of sent message objects
+            List of sent message objects.
         """
         self.logger.GetLogger().info(f"Sending message (length: {len(msg)}):\n{msg}")
         return await self.__SendSplitMessage(receiver, topic_id, self.__SplitMessage(msg), **kwargs)
@@ -81,13 +81,13 @@ class MessageSender:
         Send multiple message parts to a receiver.
 
         Args:
-            receiver: The chat or user to send the messages to
-            topic_id: Topic to send messages to
-            split_msg: List of message parts to send
-            **kwargs: Additional keyword arguments passed to send_message
+            receiver: The chat or user to send the messages to.
+            topic_id: Topic to send messages to.
+            split_msg: List of message parts to send.
+            **kwargs: Additional keyword arguments passed to send_message.
 
         Returns:
-            List of sent message objects
+            List of sent message objects.
         """
         sent_msgs = []
 
@@ -105,10 +105,10 @@ class MessageSender:
         Attempts to split at newline characters when possible to maintain message formatting.
 
         Args:
-            msg: The message to split
+            msg: The message to split.
 
         Returns:
-            List of message parts
+            List of message parts.
         """
         msg_parts = []
 
